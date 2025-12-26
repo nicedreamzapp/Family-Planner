@@ -1,5 +1,7 @@
 # Family Planner Dashboard
 
+![Family Planner Screenshot](screenshot.png)
+
 **A Skylight Calendar-inspired family command center with voice control, OCR document scanning, AI assistant, and dynamic seasonal themes.**
 
 > Built this because commercial family calendars cost $200+ and can't do half of what this does. Now my family hub runs on a spare iPad and does everything - voice commands, document scanning, meal planning, chore tracking with celebrations, and even has a screensaver with ocean videos.
@@ -281,10 +283,6 @@ This runs locally, works offline, and does exactly what my family needs.
 MIT - Do whatever you want with it.
 
 ---
-
-## Screenshots
-
-*Coming soon - the app looks better in motion with the video backgrounds!*
 
 ---
 
