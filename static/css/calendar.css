@@ -1,0 +1,1337 @@
+/* ==============================================
+   Calendar Styles - VIEWPORT-FIT, NO SCROLL
+   Family Planner Application
+   ============================================== */
+
+/* Month Section - fills available space */
+.month-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+    height: 100%;
+}
+
+.month-header {
+    font-size: var(--fs-xl);
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-base);
+    background: linear-gradient(90deg, rgba(255,255,255,0.9), transparent);
+    border-left: 4px solid var(--accent-orange);
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    flex-shrink: 0;
+    text-shadow: var(--text-glow);
+}
+
+/* ==============================================
+   Calendar Grid - FILLS AVAILABLE SPACE
+   ============================================== */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: auto repeat(6, 1fr);
+    border: 4px solid #B8860B;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,255,255,0.5);
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    backdrop-filter: blur(8px);
+}
+
+.day-header-row {
+    display: contents;
+}
+
+.day-header-cell {
+    padding: var(--spacing-sm);
+    text-align: center;
+    background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(240,240,240,0.95));
+    border-bottom: 3px solid #B8860B;
+    font-size: calc(var(--fs-xs) * 1.1);
+    text-transform: uppercase;
+    letter-spacing: clamp(0.5px, 0.1vmin, 1px);
+    color: #333;
+    font-weight: 800;
+    min-width: 0;
+    overflow: hidden;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+}
+
+.day-header-cell.weekend {
+    background: linear-gradient(180deg, rgba(255,245,242,0.95), rgba(255,232,224,0.95));
+    color: #D84315;
+    font-weight: 800;
+}
+
+/* ==============================================
+   Calendar Day Cells - FLEX TO FIT
+   ============================================== */
+.calendar-day {
+    min-width: 0;
+    min-height: 0;
+    padding: var(--cell-padding);
+    border-right: 2px solid rgba(180, 160, 130, 0.5);
+    border-bottom: 2px solid rgba(180, 160, 130, 0.5);
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.88);
+}
+
+.calendar-day:nth-child(7n) {
+    border-right: none;
+}
+
+.calendar-day:hover {
+    background: rgba(255, 250, 240, 0.95);
+}
+
+.calendar-day.other-month {
+    background: rgba(240, 240, 240, 0.7);
+    opacity: 0.6;
+}
+
+.calendar-day.today {
+    background: rgba(255, 245, 242, 0.98);
+    box-shadow: inset 0 0 0 3px var(--accent-orange);
+}
+
+.calendar-day.weekend {
+    background: rgba(255, 251, 250, 0.9);
+}
+
+/* Day Header - Number and Moon Phase */
+.day-header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-sm);
+    flex-shrink: 0;
+}
+
+.day-num {
+    font-size: calc(var(--fs-base) * 1.15);
+    font-weight: 800;
+    color: #1a1a1a;
+    line-height: 1;
+    text-shadow:
+        0 1px 0 rgba(255,255,255,0.9),
+        0 0 4px rgba(255,255,255,0.8);
+}
+
+.moon-phase {
+    font-size: clamp(10px, 1.2vmin, 16px);
+    opacity: 0.7;
+    cursor: help;
+    filter: grayscale(30%);
+    transition: all 0.2s;
+}
+
+.moon-phase:hover {
+    opacity: 1;
+    filter: grayscale(0%);
+    transform: scale(1.3);
+}
+
+/* Weather Card - Between day number and moon */
+.day-weather-card {
+    display: flex;
+    align-items: center;
+    gap: clamp(2px, 0.3vmin, 4px);
+    background: linear-gradient(135deg, rgba(135, 206, 250, 0.3), rgba(176, 224, 230, 0.3));
+    border-radius: clamp(4px, 0.5vmin, 8px);
+    padding: clamp(1px, 0.2vmin, 3px) clamp(3px, 0.4vmin, 6px);
+    border: 1px solid rgba(135, 206, 250, 0.5);
+    box-shadow: 0 1px 3px rgba(0, 105, 148, 0.15);
+}
+
+.day-weather-card .weather-emoji {
+    font-size: clamp(10px, 1.2vmin, 16px);
+    line-height: 1;
+}
+
+.day-weather-card .weather-temps {
+    font-size: clamp(8px, 1vmin, 12px);
+    font-weight: 700;
+    color: #0277BD;
+    line-height: 1;
+}
+
+.day-weather-card .rain-chance {
+    font-size: clamp(7px, 0.8vmin, 10px);
+    color: #0288D1;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.calendar-day.today .day-num {
+    background: var(--accent-orange);
+    color: white;
+    width: var(--day-num-size);
+    height: var(--day-num-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: var(--fs-sm);
+}
+
+.calendar-day.other-month .day-num {
+    color: var(--text-muted);
+}
+
+/* ==============================================
+   Day Events Container - SCROLLABLE IF NEEDED
+   ============================================== */
+.day-events {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1px, 0.2vmin, 4px);
+    flex: 1;
+    overflow: hidden;
+    min-width: 0;
+    min-height: 0;
+}
+
+/* Event Pills - BRIGHT & VISIBLE */
+.event-pill {
+    padding: var(--pill-padding-v) var(--pill-padding-h);
+    padding-right: clamp(18px, 2vmin, 24px); /* Space for delete button */
+    border-radius: clamp(4px, 0.5vmin, 8px);
+    font-size: var(--pill-font);
+    position: relative;
+    font-weight: 700;
+    color: white;
+    min-width: 0;
+    flex-shrink: 1;
+    line-height: 1.2;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.3) inset;
+    border: 2px solid rgba(255,255,255,0.4);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4), 0 0 4px rgba(0,0,0,0.2);
+    cursor: pointer;
+    /* Text handling - truncate with ellipsis */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.event-pill.matt { background: linear-gradient(135deg, #2196F3, #1565C0); border-color: rgba(255,255,255,0.5); }
+.event-pill.melanie { background: linear-gradient(135deg, #EC407A, #C2185B); border-color: rgba(255,255,255,0.5); }
+.event-pill.liv { background: linear-gradient(135deg, #AB47BC, #7B1FA2); border-color: rgba(255,255,255,0.5); }
+.event-pill.jane { background: linear-gradient(135deg, #FF7043, #E65100); border-color: rgba(255,255,255,0.5); }
+.event-pill.family { background: linear-gradient(135deg, #66BB6A, #2E7D32); border-color: rgba(255,255,255,0.5); }
+
+.event-pill:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    filter: brightness(1.15);
+}
+
+.event-pill .pill-delete {
+    position: absolute;
+    right: 1px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: clamp(12px, 1.5vmin, 18px);
+    height: clamp(12px, 1.5vmin, 18px);
+    border-radius: 50%;
+    background: rgba(0,0,0,0.3);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: clamp(8px, 1vmin, 12px);
+    line-height: 1;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.15s;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.event-pill:hover .pill-delete {
+    opacity: 1;
+}
+
+.event-pill .pill-delete:hover {
+    background: rgba(0,0,0,0.6);
+}
+
+/* ==============================================
+   Holiday Pills - Simple Text with White Outline
+   ============================================== */
+.holiday-pill {
+    font-size: var(--pill-font);
+    font-weight: 700;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: clamp(2px, 0.2vmin, 4px);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* White outline for legibility */
+    text-shadow:
+        -1px -1px 0 #fff,
+        1px -1px 0 #fff,
+        -1px 1px 0 #fff,
+        1px 1px 0 #fff,
+        0 0 3px rgba(255,255,255,0.8);
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 1px;
+}
+
+.holiday-pill .emoji {
+    font-size: var(--fs-sm);
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 2px white);
+}
+
+/* Holiday Text Colors - Simple text with white outline */
+.holiday-pill.christmas,
+.holiday-pill.christmas-eve { color: #C62828; }
+
+.holiday-pill.winter-solstice { color: #0277BD; }
+
+.holiday-pill.new-years { color: #E65100; }
+
+.holiday-pill.valentines { color: #C2185B; }
+
+.holiday-pill.halloween { color: #E65100; }
+
+.holiday-pill.thanksgiving { color: #BF360C; }
+
+.holiday-pill.easter { color: #7B1FA2; }
+
+.holiday-pill.stpatricks { color: #2E7D32; }
+
+.holiday-pill.july4th,
+.holiday-pill.memorial-day,
+.holiday-pill.veterans-day,
+.holiday-pill.labor-day { color: #1565C0; }
+
+.holiday-pill.hanukkah { color: #1976D2; }
+
+.holiday-pill.kwanzaa { color: #6A1B9A; }
+
+.holiday-pill.mothers-day { color: #C2185B; }
+.holiday-pill.fathers-day { color: #1565C0; }
+
+/* Moon Phases - Clean text */
+.holiday-pill.full-moon {
+    color: #F57C00;
+    font-weight: 800;
+}
+
+.holiday-pill.new-moon {
+    color: #455A64;
+}
+
+/* Quarter Moons */
+.holiday-pill.quarter-moon {
+    color: #607D8B;
+}
+
+/* Equinoxes and Solstices */
+.holiday-pill.spring-equinox { color: #43A047; }
+.holiday-pill.summer-solstice { color: #FF8F00; }
+.holiday-pill.fall-equinox { color: #E65100; }
+
+/* Other Holidays */
+.holiday-pill.chinese-new-year { color: #C62828; }
+.holiday-pill.super-bowl { color: #2E7D32; }
+.holiday-pill.mardi-gras { color: #7B1FA2; }
+.holiday-pill.mlk-day { color: #1565C0; }
+.holiday-pill.tax-day { color: #455A64; }
+
+/* Election Day */
+.holiday-pill.election-day { color: #1565C0; }
+
+/* ==============================================
+   School Meals - Single Green Block, Two Lines
+   ============================================== */
+.school-meals-block {
+    background: linear-gradient(135deg, #C8E6C9, #A5D6A7);
+    border-radius: clamp(4px, 0.5vmin, 8px);
+    padding: clamp(2px, 0.3vmin, 4px) clamp(4px, 0.5vmin, 6px);
+    border: 1px solid #66BB6A;
+    margin-top: clamp(2px, 0.3vmin, 4px);
+    box-shadow: 0 1px 3px rgba(76, 175, 80, 0.3);
+    flex-shrink: 1;
+    overflow: hidden;
+}
+
+.school-meals-block .meal-line {
+    font-size: var(--pill-font);
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.school-meals-block .meal-line.breakfast {
+    color: #1565C0;
+}
+
+.school-meals-block .meal-line.lunch {
+    color: #BF360C;
+}
+
+/* ==============================================
+   SMART CALENDAR SIZING - Viewport Proportional
+   ============================================== */
+
+/* ALL PAST DAYS - grayed but readable */
+.calendar-day.distant-past,
+.calendar-day.past-week,
+.calendar-day.recent-past,
+.calendar-day.yesterday {
+    background: rgba(245, 245, 245, 0.95);
+}
+
+.calendar-day.distant-past .day-events,
+.calendar-day.past-week .day-events,
+.calendar-day.recent-past .day-events,
+.calendar-day.yesterday .day-events {
+    filter: grayscale(50%);
+    opacity: 0.75;
+}
+
+.calendar-day.distant-past .day-events .event-pill,
+.calendar-day.distant-past .day-events .holiday-pill,
+.calendar-day.past-week .day-events .event-pill,
+.calendar-day.past-week .day-events .holiday-pill,
+.calendar-day.recent-past .day-events .event-pill,
+.calendar-day.recent-past .day-events .holiday-pill,
+.calendar-day.yesterday .day-events .event-pill,
+.calendar-day.yesterday .day-events .holiday-pill {
+    font-size: var(--pill-font);
+    padding: var(--pill-padding-v) var(--pill-padding-h);
+    background: #BBB !important;
+    color: #444 !important;
+}
+
+.calendar-day.distant-past .day-num,
+.calendar-day.past-week .day-num,
+.calendar-day.recent-past .day-num,
+.calendar-day.yesterday .day-num {
+    font-size: var(--fs-sm);
+    color: #777;
+}
+
+/* Hide school meals in past to save space */
+.calendar-day.distant-past .school-meals,
+.calendar-day.past-week .school-meals,
+.calendar-day.recent-past .school-meals,
+.calendar-day.yesterday .school-meals {
+    display: none;
+}
+
+/* TODAY - highlighted and enlarged with GLOW */
+.calendar-day.today {
+    background: linear-gradient(135deg, rgba(255, 243, 224, 0.98), rgba(255, 213, 153, 0.98)) !important;
+    box-shadow:
+        inset 0 0 0 4px #FF5722,
+        0 0 20px rgba(255, 87, 34, 0.5),
+        0 0 40px rgba(255, 152, 0, 0.3),
+        0 8px 25px rgba(216, 67, 21, 0.4) !important;
+    z-index: 2;
+    transform: scale(1.02);
+    animation: todayPulse 3s ease-in-out infinite;
+}
+
+@keyframes todayPulse {
+    0%, 100% { box-shadow: inset 0 0 0 4px #FF5722, 0 0 20px rgba(255, 87, 34, 0.5), 0 0 40px rgba(255, 152, 0, 0.3), 0 8px 25px rgba(216, 67, 21, 0.4); }
+    50% { box-shadow: inset 0 0 0 4px #FF5722, 0 0 30px rgba(255, 87, 34, 0.7), 0 0 50px rgba(255, 152, 0, 0.4), 0 8px 25px rgba(216, 67, 21, 0.5); }
+}
+
+.calendar-day.today .day-num {
+    font-size: calc(var(--fs-lg) * 1.1);
+    font-weight: 800;
+}
+
+.calendar-day.today .event-pill,
+.calendar-day.today .holiday-pill,
+.calendar-day.today .lunch-pill {
+    font-size: calc(var(--pill-font) + 1px);
+    padding: calc(var(--pill-padding-v) + 1px) calc(var(--pill-padding-h) + 2px);
+}
+
+/* TOMORROW - highlighted as part of current week */
+.calendar-day.tomorrow {
+    background: linear-gradient(135deg, rgba(255, 248, 235, 0.98), rgba(255, 238, 210, 0.98));
+    box-shadow: inset 0 0 0 2px #FFB74D;
+}
+
+.calendar-day.tomorrow .day-num {
+    font-size: var(--fs-base);
+    font-weight: 600;
+    color: #E65100;
+}
+
+/* NEAR FUTURE CLOSE (2-3 days) - current week */
+.calendar-day.near-future-close {
+    background: rgba(255, 253, 240, 0.97);
+    box-shadow: inset 0 0 0 1px #FFE082;
+}
+
+/* NEAR FUTURE (4-7 days) - could be current week */
+.calendar-day.near-future {
+    background: rgba(255, 255, 250, 0.96);
+    box-shadow: inset 0 0 0 1px #FFF59D;
+}
+
+/* FAR FUTURE (8-14 days) */
+.calendar-day.far-future {
+    /* default styling */
+}
+
+.calendar-day.far-future .day-events .event-pill,
+.calendar-day.far-future .day-events .holiday-pill {
+    font-size: var(--pill-font);
+    padding: var(--pill-padding-v) var(--pill-padding-h);
+}
+
+/* DISTANT FUTURE (more than 14 days) */
+.calendar-day.distant-future {
+    /* default styling */
+}
+
+/* ==============================================
+   Today's Chores in Calendar Cell
+   ============================================== */
+.today-chores-container {
+    display: none;
+}
+
+.chore-column {
+    flex: 1;
+    background: rgba(255,255,255,0.8);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.chore-column-header {
+    font-size: var(--fs-xxs);
+    font-weight: 700;
+    text-align: center;
+    padding: var(--spacing-sm);
+    border-radius: 4px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.chore-column.liv .chore-column-header {
+    background: var(--liv);
+    color: white;
+}
+
+.chore-column.jane .chore-column-header {
+    background: var(--jane);
+    color: white;
+}
+
+.chore-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--fs-xxs);
+    padding: var(--spacing-sm);
+    border-radius: 4px;
+    margin-bottom: var(--spacing-sm);
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.chore-item:hover {
+    background: #E8F5E9;
+}
+
+.chore-item.done {
+    background: #C8E6C9;
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.chore-checkbox {
+    width: clamp(10px, 1.2vmin, 16px);
+    height: clamp(10px, 1.2vmin, 16px);
+    border: 2px solid #ccc;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--fs-xxs);
+    flex-shrink: 0;
+}
+
+.chore-item.done .chore-checkbox {
+    background: #4CAF50;
+    border-color: #4CAF50;
+    color: white;
+}
+
+/* Reward animation */
+.reward-animation {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(40px, 8vmin, 80px);
+    z-index: 9999;
+    animation: celebrateReward 0.8s ease-out;
+    pointer-events: none;
+}
+
+/* ==============================================
+   4-Day Preview Section - Hidden by default to save space
+   ============================================== */
+.preview-section {
+    display: none;
+    margin-bottom: var(--spacing-sm);
+    flex-shrink: 0;
+}
+
+.preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
+}
+
+.preview-title {
+    font-size: var(--fs-md);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-sm);
+}
+
+.preview-day {
+    background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(248,250,252,0.9));
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    min-height: clamp(50px, 8vh, 120px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.preview-day:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.preview-day.today {
+    background: linear-gradient(145deg, #FFF3E0, #FFE0B2);
+    border: 2px solid var(--accent-orange);
+}
+
+.preview-day.tomorrow {
+    background: linear-gradient(145deg, #E8F5E9, #C8E6C9);
+    border: 2px solid #81C784;
+}
+
+.preview-day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.preview-day-name {
+    font-size: var(--fs-xxs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #666;
+}
+
+.preview-day-num {
+    font-size: var(--fs-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.preview-day.today .preview-day-num {
+    color: var(--accent-orange);
+}
+
+.preview-day.tomorrow .preview-day-num {
+    color: #4CAF50;
+}
+
+.preview-events {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1px, 0.2vmin, 4px);
+}
+
+.preview-event {
+    font-size: var(--fs-xxs);
+    padding: var(--pill-padding-v) var(--pill-padding-h);
+    border-radius: var(--border-radius);
+    background: rgba(99, 102, 241, 0.15);
+    color: #4338CA;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.preview-event.holiday {
+    background: linear-gradient(135deg, #FEE2E2, #FECACA);
+    color: #DC2626;
+}
+
+.preview-event.birthday {
+    background: linear-gradient(135deg, #FCE7F3, #FBCFE8);
+    color: #BE185D;
+}
+
+/* ==============================================
+   Collapsed/Expanded Month Views
+   ============================================== */
+.collapsed-month {
+    background: white;
+    border: 2px solid var(--border-light);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm) var(--spacing-base);
+    margin-bottom: var(--spacing-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.collapsed-month:hover {
+    border-color: var(--border-gold);
+    box-shadow: 0 2px 10px var(--shadow);
+}
+
+.collapsed-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.collapsed-name {
+    font-size: var(--fs-base);
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.collapsed-info {
+    flex: 1;
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.event-badge {
+    font-size: var(--fs-xxs);
+    background: var(--accent-orange);
+    color: white;
+    padding: var(--pill-padding-v) var(--pill-padding-h);
+    border-radius: clamp(6px, 0.8vmin, 10px);
+}
+
+.holiday-badge {
+    font-size: var(--fs-sm);
+}
+
+.expand-arrow {
+    color: var(--text-muted);
+    font-size: var(--fs-xs);
+}
+
+/* Mini Calendar for collapsed months */
+.mini-calendar {
+    margin-top: var(--spacing-sm);
+}
+
+.mini-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+}
+
+.mini-header {
+    font-size: var(--fs-xxs);
+    text-align: center;
+    color: var(--text-muted);
+    padding: var(--spacing-sm);
+}
+
+.mini-day {
+    font-size: var(--fs-xxs);
+    text-align: center;
+    padding: var(--spacing-sm);
+    border-radius: 3px;
+    color: var(--text-dark);
+}
+
+.mini-day.empty {
+    color: transparent;
+}
+
+.mini-day.today {
+    background: var(--accent-orange);
+    color: white;
+    font-weight: 600;
+}
+
+.mini-day.has-event {
+    background: #E3F2FD;
+    font-weight: 500;
+}
+
+.mini-day.has-holiday {
+    background: #FFF3E0;
+    color: #E65100;
+}
+
+/* Expanded Month */
+.expanded-month {
+    background: rgba(255, 255, 255, 0.97);
+    border: 3px solid var(--border-gold);
+    border-radius: var(--border-radius);
+    padding: 2px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+}
+
+.expanded-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    padding: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    border-radius: var(--border-radius);
+}
+
+.expanded-header .month-title {
+    font-size: var(--fs-lg);
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    text-shadow: var(--text-glow);
+}
+
+.nav-arrow {
+    width: clamp(20px, 2.5vmin, 32px);
+    height: clamp(20px, 2.5vmin, 32px);
+    border-radius: 50%;
+    border: 2px solid var(--border-gold);
+    background: white;
+    color: var(--border-gold);
+    font-size: var(--fs-xs);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-arrow:hover {
+    background: var(--border-gold);
+    color: white;
+}
+
+/* ==============================================
+   New Year Sparkles Animation (January)
+   ============================================== */
+.new-year-sparkles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.sparkle {
+    position: absolute;
+    top: -30px;
+    animation: sparkleFloat linear infinite;
+    filter: drop-shadow(0 0 6px gold);
+}
+
+@keyframes sparkleFloat {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg) scale(0.3);
+        opacity: 0;
+    }
+}
+
+/* ==============================================
+   January Theme - Fresh & Vibrant New Year Colors
+   ============================================== */
+.january-theme .calendar-grid {
+    background: linear-gradient(145deg,
+        rgba(255, 255, 255, 0.95),
+        rgba(230, 240, 255, 0.92),
+        rgba(255, 245, 235, 0.92)
+    );
+    border-color: #5C6BC0;
+}
+
+.january-theme .calendar-day {
+    background: linear-gradient(145deg,
+        rgba(255, 255, 255, 0.92),
+        rgba(248, 250, 255, 0.88)
+    );
+    transition: all 0.3s ease;
+}
+
+.january-theme .calendar-day:hover {
+    background: linear-gradient(145deg,
+        rgba(255, 248, 225, 0.98),
+        rgba(255, 253, 240, 0.95)
+    );
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+}
+
+.january-theme .calendar-day.weekend {
+    background: linear-gradient(145deg,
+        rgba(255, 253, 250, 0.95),
+        rgba(255, 245, 238, 0.92)
+    );
+}
+
+/* Colorful day numbers for January */
+.january-theme .calendar-day .day-num {
+    color: #283593;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.9);
+}
+
+.january-theme .calendar-day:nth-child(7n+1) .day-num { color: #C62828; } /* Sunday - Red */
+.january-theme .calendar-day:nth-child(7n+2) .day-num { color: #6A1B9A; } /* Monday - Purple */
+.january-theme .calendar-day:nth-child(7n+3) .day-num { color: #1565C0; } /* Tuesday - Blue */
+.january-theme .calendar-day:nth-child(7n+4) .day-num { color: #00695C; } /* Wednesday - Teal */
+.january-theme .calendar-day:nth-child(7n+5) .day-num { color: #E65100; } /* Thursday - Orange */
+.january-theme .calendar-day:nth-child(7n+6) .day-num { color: #AD1457; } /* Friday - Pink */
+.january-theme .calendar-day:nth-child(7n) .day-num { color: #2E7D32; } /* Saturday - Green */
+
+/* Subtle gradient backgrounds for variety */
+.january-theme .calendar-day:nth-child(odd):not(.today):not(.tomorrow):not(.other-month) {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.95),
+        rgba(232, 245, 253, 0.9)
+    );
+}
+
+.january-theme .calendar-day:nth-child(even):not(.today):not(.tomorrow):not(.other-month) {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.95),
+        rgba(253, 243, 232, 0.9)
+    );
+}
+
+/* Vibrant borders for the grid */
+.january-theme .calendar-day {
+    border-color: rgba(92, 107, 192, 0.3);
+}
+
+/* Enhanced header for January */
+.january-theme .day-header-cell {
+    background: linear-gradient(180deg,
+        rgba(63, 81, 181, 0.15),
+        rgba(92, 107, 192, 0.1)
+    );
+    color: #283593;
+    border-bottom-color: #5C6BC0;
+}
+
+.january-theme .day-header-cell.weekend {
+    background: linear-gradient(180deg,
+        rgba(233, 30, 99, 0.15),
+        rgba(255, 64, 129, 0.1)
+    );
+    color: #C2185B;
+}
+
+/* Fresh New Year month title */
+.january-theme .month-title {
+    background: linear-gradient(90deg, #5C6BC0, #7E57C2, #AB47BC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Glowing effect for special days */
+.january-theme .calendar-day:has(.holiday-pill.new-years) {
+    background: linear-gradient(145deg,
+        rgba(255, 248, 225, 0.98),
+        rgba(255, 235, 180, 0.95)
+    ) !important;
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.4);
+}
+
+.january-theme .calendar-day:has(.holiday-pill.full-moon) {
+    background: linear-gradient(145deg,
+        rgba(255, 253, 240, 0.98),
+        rgba(255, 248, 225, 0.95)
+    ) !important;
+}
+
+/* ==============================================
+   February Theme - Imbolc, Brigid, Love
+   Soft pinks, purples - goddess energy
+   ============================================== */
+.february-theme .calendar-grid {
+    background: linear-gradient(145deg, rgba(252, 228, 236, 0.95), rgba(243, 229, 245, 0.92));
+    border-color: #E91E63;
+}
+
+.february-theme .calendar-day {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(252, 228, 236, 0.9));
+    border-color: rgba(233, 30, 99, 0.2);
+}
+
+.february-theme .calendar-day:hover {
+    background: linear-gradient(145deg, rgba(252, 228, 236, 0.98), rgba(243, 229, 245, 0.95));
+    box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+}
+
+.february-theme .day-header-cell {
+    background: linear-gradient(180deg, rgba(233, 30, 99, 0.15), rgba(156, 39, 176, 0.1));
+    color: #AD1457;
+    border-bottom-color: #E91E63;
+}
+
+.february-theme .month-title {
+    background: linear-gradient(90deg, #E91E63, #9C27B0, #673AB7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==============================================
+   March Theme - Ostara, Spring Equinox, Rebirth
+   Fresh greens, spring blossoms
+   ============================================== */
+.march-theme .calendar-grid {
+    background: linear-gradient(145deg, rgba(232, 245, 233, 0.95), rgba(241, 248, 233, 0.92));
+    border-color: #4CAF50;
+}
+
+.march-theme .calendar-day {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(232, 245, 233, 0.9));
+    border-color: rgba(76, 175, 80, 0.2);
+}
+
+.march-theme .calendar-day:hover {
+    background: linear-gradient(145deg, rgba(232, 245, 233, 0.98), rgba(200, 230, 201, 0.95));
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.march-theme .day-header-cell {
+    background: linear-gradient(180deg, rgba(76, 175, 80, 0.15), rgba(139, 195, 74, 0.1));
+    color: #2E7D32;
+    border-bottom-color: #4CAF50;
+}
+
+.march-theme .month-title {
+    background: linear-gradient(90deg, #4CAF50, #8BC34A, #CDDC39);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==============================================
+   April Theme - Earth Day, Spring Showers
+   Fresh rain, growing earth
+   ============================================== */
+.april-theme .calendar-grid {
+    background: linear-gradient(145deg, rgba(232, 245, 233, 0.95), rgba(225, 245, 254, 0.92));
+    border-color: #43A047;
+}
+
+.april-theme .calendar-day {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(225, 245, 254, 0.9));
+    border-color: rgba(67, 160, 71, 0.2);
+}
+
+.april-theme .calendar-day:hover {
+    background: linear-gradient(145deg, rgba(225, 245, 254, 0.98), rgba(179, 229, 252, 0.95));
+    box-shadow: 0 4px 15px rgba(3, 169, 244, 0.3);
+}
+
+.april-theme .day-header-cell {
+    background: linear-gradient(180deg, rgba(67, 160, 71, 0.15), rgba(102, 187, 106, 0.1));
+    color: #2E7D32;
+    border-bottom-color: #43A047;
+}
+
+.april-theme .month-title {
+    background: linear-gradient(90deg, #43A047, #26A69A, #00BCD4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==============================================
+   May Theme - Beltane, Flower Moon, Fertility
+   Warm florals, fire energy
+   ============================================== */
+.may-theme .calendar-grid {
+    background: linear-gradient(145deg, rgba(255, 243, 224, 0.95), rgba(252, 228, 236, 0.92));
+    border-color: #E91E63;
+}
+
+.may-theme .calendar-day {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 243, 224, 0.9));
+    border-color: rgba(233, 30, 99, 0.2);
+}
+
+.may-theme .calendar-day:hover {
+    background: linear-gradient(145deg, rgba(255, 243, 224, 0.98), rgba(255, 224, 178, 0.95));
+    box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3);
+}
+
+.may-theme .day-header-cell {
+    background: linear-gradient(180deg, rgba(233, 30, 99, 0.15), rgba(255, 87, 34, 0.1));
+    color: #C2185B;
+    border-bottom-color: #E91E63;
+}
+
+.may-theme .month-title {
+    background: linear-gradient(90deg, #E91E63, #FF5722, #FF9800);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==============================================
+   June Theme - Summer Solstice, Litha, Ocean
+   Sun and sea, warm coastal vibes
+   ============================================== */
+.june-theme .calendar-grid {
+    background: linear-gradient(145deg, rgba(224, 247, 250, 0.95), rgba(255, 248, 225, 0.92));
+    border-color: #00BCD4;
+}
+
+.june-theme .calendar-day {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(224, 247, 250, 0.9));
+    border-color: rgba(0, 188, 212, 0.2);
+}
+
+.june-theme .calendar-day:hover {
+    background: linear-gradient(145deg, rgba(224, 247, 250, 0.98), rgba(178, 235, 242, 0.95));
+    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+}
+
+.june-theme .day-header-cell {
+    background: linear-gradient(180deg, rgba(0, 188, 212, 0.15), rgba(255, 179, 0, 0.1));
+    color: #00838F;
+    border-bottom-color: #00BCD4;
+}
+
+.june-theme .month-title {
+    background: linear-gradient(90deg, #00BCD4, #26C6DA, #FFB300);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==============================================
+   July Theme - Self-Care, Buck Moon, Warmth
+   Golden warmth, sunflowers
+   ============================================== */
+.july-theme .calendar-grid {
+    background: linear-gradient(145deg, rgba(255, 248, 225, 0.95), rgba(255, 243, 224, 0.92));
+    border-color: #FF9800;
+}
+
+.july-theme .calendar-day {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 248, 225, 0.9));
+    border-color: rgba(255, 152, 0, 0.2);
+}
+
+.july-theme .calendar-day:hover {
+    background: linear-gradient(145deg, rgba(255, 248, 225, 0.98), rgba(255, 236, 179, 0.95));
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+}
+
+.july-theme .day-header-cell {
+    background: linear-gradient(180deg, rgba(255, 152, 0, 0.15), rgba(245, 124, 0, 0.1));
+    color: #E65100;
+    border-bottom-color: #FF9800;
+}
+
+.july-theme .month-title {
+    background: linear-gradient(90deg, #FF9800, #FFC107, #FFEB3B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==============================================
+   August Theme - Lughnasadh, First Harvest
+   Golden wheat, harvest abundance
+   ============================================== */
+.august-theme .calendar-grid {
+    background: linear-gradient(145deg, rgba(255, 243, 224, 0.95), rgba(255, 224, 178, 0.92));
+    border-color: #FF6F00;
+}
+
+.august-theme .calendar-day {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 243, 224, 0.9));
+    border-color: rgba(255, 111, 0, 0.2);
+}
+
+.august-theme .calendar-day:hover {
+    background: linear-gradient(145deg, rgba(255, 243, 224, 0.98), rgba(255, 224, 178, 0.95));
+    box-shadow: 0 4px 15px rgba(255, 111, 0, 0.3);
+}
+
+.august-theme .day-header-cell {
+    background: linear-gradient(180deg, rgba(255, 111, 0, 0.15), rgba(230, 81, 0, 0.1));
+    color: #E65100;
+    border-bottom-color: #FF6F00;
+}
+
+.august-theme .month-title {
+    background: linear-gradient(90deg, #FF6F00, #FF8F00, #FFA000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==============================================
+   September Theme - Mabon, Harvest Moon
+   Rich autumn harvest colors
+   ============================================== */
+.september-theme .calendar-grid {
+    background: linear-gradient(145deg, rgba(251, 233, 231, 0.95), rgba(255, 224, 178, 0.92));
+    border-color: #FF5722;
+}
+
+.september-theme .calendar-day {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(251, 233, 231, 0.9));
+    border-color: rgba(255, 87, 34, 0.2);
+}
+
+.september-theme .calendar-day:hover {
+    background: linear-gradient(145deg, rgba(251, 233, 231, 0.98), rgba(255, 204, 188, 0.95));
+    box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3);
+}
+
+.september-theme .day-header-cell {
+    background: linear-gradient(180deg, rgba(255, 87, 34, 0.15), rgba(191, 54, 12, 0.1));
+    color: #BF360C;
+    border-bottom-color: #FF5722;
+}
+
+.september-theme .month-title {
+    background: linear-gradient(90deg, #FF5722, #FF7043, #FF8A65);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==============================================
+   October Theme - Samhain, Halloween, Ancestors
+   Orange and purple, mystical veil
+   ============================================== */
+.october-theme .calendar-grid {
+    background: linear-gradient(145deg, rgba(255, 243, 224, 0.95), rgba(243, 229, 245, 0.92));
+    border-color: #FF6F00;
+}
+
+.october-theme .calendar-day {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 243, 224, 0.9));
+    border-color: rgba(255, 111, 0, 0.2);
+}
+
+.october-theme .calendar-day:hover {
+    background: linear-gradient(145deg, rgba(255, 243, 224, 0.98), rgba(243, 229, 245, 0.95));
+    box-shadow: 0 4px 15px rgba(106, 27, 154, 0.3);
+}
+
+.october-theme .day-header-cell {
+    background: linear-gradient(180deg, rgba(255, 111, 0, 0.15), rgba(106, 27, 154, 0.1));
+    color: #E65100;
+    border-bottom-color: #FF6F00;
+}
+
+.october-theme .month-title {
+    background: linear-gradient(90deg, #FF6F00, #9C27B0, #6A1B9A);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==============================================
+   November Theme - Cailleach, Ancestors, Gratitude
+   Deep browns, earth tones, gratitude
+   ============================================== */
+.november-theme .calendar-grid {
+    background: linear-gradient(145deg, rgba(239, 235, 233, 0.95), rgba(215, 204, 200, 0.92));
+    border-color: #795548;
+}
+
+.november-theme .calendar-day {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(239, 235, 233, 0.9));
+    border-color: rgba(121, 85, 72, 0.2);
+}
+
+.november-theme .calendar-day:hover {
+    background: linear-gradient(145deg, rgba(239, 235, 233, 0.98), rgba(215, 204, 200, 0.95));
+    box-shadow: 0 4px 15px rgba(121, 85, 72, 0.3);
+}
+
+.november-theme .day-header-cell {
+    background: linear-gradient(180deg, rgba(121, 85, 72, 0.15), rgba(93, 64, 55, 0.1));
+    color: #4E342E;
+    border-bottom-color: #795548;
+}
+
+.november-theme .month-title {
+    background: linear-gradient(90deg, #795548, #8D6E63, #A1887F);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}

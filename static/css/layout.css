@@ -1,0 +1,555 @@
+/* ==============================================
+   Layout Styles - VIEWPORT-FIT, NO SCROLL
+   Family Planner Application
+   ============================================== */
+
+/* Prevent ALL scrolling - viewport fit */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+/* Main Layout Container - fills viewport exactly */
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+/* ==============================================
+   Left Sidebar - Smart Auto-Adjust
+   ============================================== */
+.sidebar {
+    width: clamp(180px, 20vw, 320px);
+    min-width: 180px;
+    max-width: 320px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,249,250,0.95) 100%);
+    backdrop-filter: blur(12px);
+    border-right: 3px solid #B8860B;
+    padding: clamp(8px, 1.5vmin, 16px);
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    z-index: 100;
+    box-shadow: 2px 0 25px rgba(0,0,0,0.12);
+    gap: clamp(8px, 1.2vmin, 16px);
+}
+
+.sidebar-header {
+    text-align: center;
+    position: relative;
+    padding-bottom: clamp(8px, 1vmin, 16px);
+    border-bottom: 2px solid rgba(184, 134, 11, 0.2);
+}
+
+.current-time {
+    font-size: clamp(28px, 5vmin, 56px);
+    font-weight: 300;
+    color: #1a1a1a;
+    line-height: 1.1;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.current-date {
+    font-size: clamp(12px, 1.5vmin, 18px);
+    color: #333;
+    margin-top: clamp(4px, 0.5vmin, 8px);
+    font-weight: 600;
+}
+
+.family-name {
+    font-size: clamp(9px, 1vmin, 13px);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #B8860B;
+    margin-top: clamp(4px, 0.5vmin, 8px);
+    font-weight: 700;
+}
+
+/* Jump to Month - Quick Nav */
+.month-nav {
+    margin-bottom: var(--spacing-sm);
+}
+
+.month-nav-title {
+    font-size: var(--fs-xxs);
+    text-transform: uppercase;
+    letter-spacing: clamp(1px, 0.15vmin, 2px);
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-sm);
+}
+
+.month-btn {
+    padding: var(--spacing-sm);
+    border: 2px solid rgba(184, 134, 11, 0.4);
+    border-radius: var(--border-radius);
+    background: rgba(255, 255, 255, 0.9);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    color: #333;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+}
+
+.month-btn:hover {
+    border-color: #B8860B;
+    background: rgba(255, 248, 220, 0.95);
+    transform: scale(1.05);
+}
+
+.month-btn.current {
+    background: linear-gradient(135deg, #FF5722, #E64A19);
+    color: white;
+    border-color: #FF5722;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 8px rgba(255, 87, 34, 0.4);
+}
+
+/* Today's Events Section */
+.today-section {
+    margin-bottom: var(--spacing-sm);
+}
+
+.section-title {
+    font-size: var(--fs-xxs);
+    text-transform: uppercase;
+    letter-spacing: clamp(1px, 0.15vmin, 2px);
+    color: #333;
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-weight: 700;
+    text-shadow: var(--text-outline);
+}
+
+.section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-light);
+}
+
+.today-event {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-base);
+    background: white;
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-sm);
+    border-left: 3px solid var(--accent-orange);
+    box-shadow: 0 2px 6px var(--shadow);
+    font-size: var(--fs-sm);
+}
+
+.today-event .event-time {
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+    width: clamp(30px, 4vmin, 50px);
+}
+
+.today-event .event-title {
+    flex: 1;
+    font-weight: 500;
+}
+
+/* Weather Widget */
+.weather-widget {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    text-align: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+    margin-bottom: var(--spacing-sm);
+    border: 2px solid rgba(184, 134, 11, 0.3);
+}
+
+.weather-location {
+    font-size: var(--fs-xxs);
+    color: #666;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.weather-temp {
+    font-size: clamp(18px, 2.5vmin, 36px);
+    font-weight: 600;
+    color: #1a1a1a;
+    text-shadow: var(--text-glow);
+}
+
+.weather-desc {
+    font-size: var(--fs-xxs);
+    color: #333;
+    font-weight: 600;
+    text-shadow: var(--text-outline);
+}
+
+.weather-forecast {
+    margin-top: var(--spacing-sm);
+    border-top: 1px solid var(--border-light);
+    padding-top: var(--spacing-sm);
+}
+
+.forecast-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--fs-xxs);
+    margin-bottom: var(--spacing-sm);
+}
+
+.forecast-day {
+    font-weight: 700;
+    width: clamp(35px, 4vmin, 55px);
+    color: #333;
+    text-shadow: var(--text-outline);
+}
+
+.forecast-icon {
+    font-size: var(--fs-sm);
+    filter: drop-shadow(0 0 3px rgba(255,255,255,0.8));
+}
+
+.forecast-temps {
+    color: #333;
+    font-size: var(--fs-xxs);
+    font-weight: 600;
+    text-shadow: var(--text-outline);
+}
+
+.rain-alert {
+    font-size: var(--fs-xxs);
+    color: #1565C0;
+    background: #E3F2FD;
+    padding: 1px 4px;
+    border-radius: 4px;
+    margin-left: 2px;
+    display: inline-block;
+}
+
+/* Quick Actions */
+.quick-actions {
+    margin-top: auto;
+}
+
+.quick-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-base);
+    background: white;
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius);
+    color: var(--text-dark);
+    font-size: var(--fs-xs);
+    cursor: pointer;
+    margin-bottom: var(--spacing-sm);
+    transition: all 0.2s;
+}
+
+.quick-btn:hover {
+    border-color: var(--border-gold);
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.quick-btn .icon {
+    font-size: var(--fs-md);
+}
+
+/* ==============================================
+   Main Content Area - FILLS REMAINING VIEWPORT
+   ============================================== */
+.main-content {
+    flex: 1;
+    height: 100vh;
+    padding: 0 4px 0 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* Year Header - Compact */
+.year-header {
+    background: transparent;
+    z-index: 50;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-gold);
+    margin-bottom: 0;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    gap: 2px;
+}
+
+.year-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* Compact Voice Controls in Header */
+.header-voice {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(135deg, #FFFBF5, #FFF8E1);
+    border: 1px solid var(--border-gold);
+    border-radius: 20px;
+    padding: 2px 6px;
+}
+
+.header-mic {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, var(--accent-orange), #E55D3A);
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+
+.header-mic:hover {
+    transform: scale(1.1);
+}
+
+.header-mic.recording {
+    background: linear-gradient(135deg, #E53935, #C62828);
+    animation: pulse 1s ease-in-out infinite;
+}
+
+.header-voice-input {
+    width: clamp(100px, 12vw, 180px);
+    padding: 3px 8px;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    font-size: 11px;
+    background: white;
+    outline: none;
+}
+
+.header-voice-input:focus {
+    border-color: var(--accent-orange);
+}
+
+.header-voice-input::placeholder {
+    color: #aaa;
+    font-size: 11px;
+}
+
+.header-voice-go {
+    padding: 3px 10px;
+    background: linear-gradient(135deg, #4CAF50, #388E3C);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.header-voice-go:hover {
+    transform: scale(1.05);
+}
+
+.year-title {
+    font-size: var(--fs-xl);
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+    text-shadow: var(--text-glow);
+}
+
+.page-title {
+    font-size: var(--fs-xl);
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.year-arrow {
+    width: clamp(20px, 2.5vmin, 36px);
+    height: clamp(20px, 2.5vmin, 36px);
+    border-radius: 50%;
+    border: 2px solid var(--border-gold);
+    background: white;
+    color: var(--border-gold);
+    font-size: var(--fs-xs);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.year-arrow:hover {
+    background: var(--border-gold);
+    color: white;
+}
+
+.header-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+    flex: 1;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.action-pill {
+    padding: 2px 8px;
+    border-radius: clamp(12px, 2vmin, 20px);
+    border: none;
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    color: #333;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    white-space: nowrap;
+}
+
+.action-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    background: linear-gradient(145deg, #fff, #f8f8f8);
+}
+
+.action-pill.ocean {
+    background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+    color: #1565C0;
+}
+
+.action-pill.ocean:hover {
+    background: linear-gradient(135deg, #BBDEFB, #90CAF9);
+}
+
+.action-pill.news {
+    background: linear-gradient(135deg, #FFCDD2, #EF9A9A);
+    color: #C62828;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.action-pill.news:hover {
+    background: linear-gradient(135deg, #EF9A9A, #E57373);
+}
+
+.action-pill.pandora {
+    background: linear-gradient(135deg, #224099, #3355CC);
+    color: #FFFFFF;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.action-pill.pandora:hover {
+    background: linear-gradient(135deg, #3355CC, #4466DD);
+}
+
+.today-btn {
+    padding: 2px 8px;
+    background: var(--accent-orange);
+    border: none;
+    border-radius: clamp(12px, 2vmin, 20px);
+    color: white;
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.today-btn:hover {
+    background: #E55D3A;
+    transform: scale(1.02);
+}
+
+/* Navigation Items */
+.nav-item:hover {
+    background: var(--bg-warm);
+}
+
+.nav-item.active {
+    color: var(--accent-orange);
+    background: #FFF5F2;
+}
+
+.nav-item .icon {
+    font-size: var(--fs-lg);
+}
+
+/* Panels */
+.panel {
+    display: none;
+}
+
+.panel.active {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* Calendar Panel - specific ID targeting */
+#calendarPanel.active {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* Voice command bar in calendar */
+#calendarPanel .voice-command-bar {
+    flex-shrink: 0;
+}
+
+/* Preview section should not grow */
+#calendarPanel .preview-section {
+    flex-shrink: 0;
+}
+
+/* Year calendar container fills remaining space */
+#yearCalendar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}

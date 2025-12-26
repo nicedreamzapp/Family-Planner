@@ -1,0 +1,74 @@
+/* ==============================================
+   CSS Variables - Global Design Tokens
+   Family Planner Application
+   VIEWPORT-RESPONSIVE SCALING
+   ============================================== */
+
+:root {
+    /* ===== Color Palette ===== */
+    /* Background Colors */
+    --bg-cream: #FFFFFF;
+    --bg-warm: #F8F9FA;
+
+    /* Text Colors */
+    --text-dark: #1A1A1A;
+    --text-muted: #4A4A4A;
+
+    /* Border Colors */
+    --border-gold: #C9A66B;
+    --border-light: #D4D4D4;
+
+    /* Accent Colors */
+    --accent-orange: #D84315;
+    --accent-pink: #C2185B;
+    --accent-teal: #00838F;
+    --accent-purple: #7B1FA2;
+    --accent-blue: #1565C0;
+    --accent-green: #2E7D32;
+    --accent-yellow: #F9A825;
+
+    /* Shadow */
+    --shadow: rgba(0,0,0,0.12);
+
+    /* ===== Family Member Colors - BRIGHT & SATURATED ===== */
+    --matt: #1E88E5;
+    --melanie: #E91E63;
+    --liv: #9C27B0;
+    --jane: #FF6D00;
+    --family: #43A047;
+
+    /* ===== Text Outline for Readability ===== */
+    --text-outline:
+        -1px -1px 0 rgba(255,255,255,0.9),
+        1px -1px 0 rgba(255,255,255,0.9),
+        -1px 1px 0 rgba(255,255,255,0.9),
+        1px 1px 0 rgba(255,255,255,0.9),
+        0 0 8px rgba(255,255,255,0.8);
+    --text-glow: 0 0 10px rgba(255,255,255,0.9), 0 0 20px rgba(255,255,255,0.6);
+
+    /* ===== VIEWPORT-BASED TYPOGRAPHY ===== */
+    /* Using vmin with READABLE minimums - never go below 9px */
+    --fs-xxs: clamp(9px, 1vmin, 14px);
+    --fs-xs: clamp(10px, 1.1vmin, 16px);
+    --fs-sm: clamp(11px, 1.3vmin, 18px);
+    --fs-base: clamp(12px, 1.5vmin, 22px);
+    --fs-md: clamp(13px, 1.7vmin, 24px);
+    --fs-lg: clamp(14px, 2vmin, 28px);
+    --fs-xl: clamp(16px, 2.4vmin, 34px);
+    --fs-xxl: clamp(20px, 3vmin, 50px);
+    --fs-huge: clamp(28px, 4.5vmin, 70px);
+
+    /* ===== VIEWPORT-BASED LAYOUT ===== */
+    --sidebar-width: clamp(120px, 18vw, 350px);
+    --spacing-base: clamp(5px, 1vmin, 20px);
+    --spacing-sm: clamp(2px, 0.5vmin, 10px);
+    --spacing-lg: clamp(8px, 1.5vmin, 30px);
+
+    /* Calendar cell sizing based on available viewport */
+    --cell-padding: clamp(3px, 0.5vmin, 10px);
+    --day-num-size: clamp(18px, 2.5vmin, 40px);
+    --pill-padding-v: clamp(2px, 0.4vmin, 8px);
+    --pill-padding-h: clamp(4px, 0.6vmin, 12px);
+    --pill-font: clamp(9px, 1vmin, 14px);
+    --border-radius: clamp(6px, 0.8vmin, 14px);
+}

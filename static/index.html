@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#FF5722">
+    <link rel="manifest" href="/static/manifest.json">
+    <title>Family Planner Dashboard</title>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/static/css/variables.css">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/layout.css">
+    <link rel="stylesheet" href="/static/css/calendar.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/themes.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+    <!-- Screensaver -->
+    <div class="screensaver" id="screensaver">
+        <video id="screensaverVideo" muted playsinline>
+            <source src="" type="video/mp4">
+        </video>
+        <div class="pixel-overlay" id="pixelOverlay"></div>
+    </div>
+
+    <!-- Monthly Video Preview -->
+    <div class="monthly-preview" id="monthlyPreview">
+        <video id="monthlyPreviewVideo" muted loop playsinline></video>
+        <div class="monthly-preview-close" onclick="closeMonthlyPreview()">✕ Close</div>
+    </div>
+
+    <div class="app-container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="current-time" id="currentTime">12:00</div>
+                <div class="current-date" id="currentDate">Monday, Dec 9</div>
+                <div class="family-name">Our Family</div>
+            </div>
+
+            <!-- Jump to Month -->
+            <div class="month-nav">
+                <div class="month-nav-title">Jump to Month</div>
+                <div class="month-grid" id="monthNav"></div>
+            </div>
+
+            <div class="today-section">
+                <div class="section-title">Today</div>
+                <div id="todayEvents"></div>
+            </div>
+
+
+            <!-- Family Helpers Widget -->
+            <div class="helpers-widget">
+                <div class="helpers-title">&#127775; Family Helpers &#127775;</div>
+                <div class="helpers-kids">
+                    <div class="helper-kid kid1" onclick="showPanel('kids'); selectKid('kid1');">
+                        <div class="kid-avatar">&#128103;</div>
+                        <div class="kid-name">Emma</div>
+                        <div class="kid-status" id="kid1Status">Ready to help!</div>
+                    </div>
+                    <div class="helper-kid kid2" onclick="showPanel('kids'); selectKid('kid2');">
+                        <div class="kid-avatar">&#128103;</div>
+                        <div class="kid-name">Sophie</div>
+                        <div class="kid-status" id="kid2Status">Ready to help!</div>
+                    </div>
+                </div>
+                <div class="helpers-motto">"We all help because we're family!"</div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Global Header -->
+            <div class="year-header">
+                <div class="year-nav" id="calendarNav">
+                    <button class="year-arrow" onclick="changeYear(-1)">&#9664;</button>
+                    <h1 class="year-title" id="yearTitle">2025</h1>
+                    <button class="year-arrow" onclick="changeYear(1)">&#9654;</button>
+                </div>
+                <h1 class="page-title" id="pageTitle" style="display:none;"></h1>
+                <!-- Compact Voice Controls in Header -->
+                <div class="header-voice" id="headerVoice">
+                    <button class="header-mic" id="calendarMic" onclick="startSmartVoice(this)">&#127908;</button>
+                    <button class="header-mic" id="calendarCamera" onclick="openCameraModal()">&#128247;</button>
+                    <input type="text" class="header-voice-input" id="calendarVoiceInput" placeholder="Events, chores, shopping, meals..." onkeypress="if(event.key==='Enter')processSmartTextCommand(this.value)">
+                    <button class="header-voice-go" onclick="processSmartTextCommand(document.getElementById('calendarVoiceInput').value)">Go</button>
+                </div>
+                <div class="header-actions" id="headerActions">
+                    <button class="action-pill" id="navCalendar" onclick="showPanel('calendar')" style="display:none;">&#128197; Calendar</button>
+                    <button class="action-pill" id="navMeals" onclick="showPanel('meals')">&#127869; Meals</button>
+                    <button class="action-pill" id="navEvent" onclick="showAddEvent()">&#10133; Event</button>
+                    <button class="action-pill" id="navShopping" onclick="showPanel('shopping')">&#128722; Shop</button>
+                    <button class="action-pill" id="navKids" onclick="showPanel('kids')">&#11088; Kids</button>
+                    <a class="action-pill news" href="https://www.redwoodnews.tv/video/" target="_blank">📺 News</a>
+                    <a class="action-pill pandora" href="https://www.pandora.com/collection" target="_blank">🎵 Pandora</a>
+                    <button class="action-pill ocean" id="navOcean" onclick="showMonthlyPreview()">🎬 ScrSvr</button>
+                    <button class="action-pill" id="navFullscreen" onclick="toggleFullscreen()">&#9974; Fullscreen</button>
+                </div>
+            </div>
+
+            <!-- Calendar Panel (Default) -->
+            <div id="calendarPanel" class="panel active">
+                <!-- Preview Grid -->
+                <div class="preview-section">
+                    <div class="preview-grid" id="previewGrid"></div>
+                </div>
+
+                <div id="yearCalendar"></div>
+            </div>
+
+            <!-- Shopping Panel -->
+            <div id="shoppingPanel" class="panel">
+                <div style="display:flex; gap:10px; margin-bottom:20px;">
+                    <div style="position:relative; flex:1;">
+                        <input type="text" id="newItem" placeholder="Add item..." onkeypress="if(event.key==='Enter')addShoppingItem()" style="padding-right: 50px; margin-bottom:0; width:100%; padding:12px 16px; border:2px solid var(--border-light); border-radius:10px; font-size:15px;">
+                        <button onclick="startVoiceCommand('shopping', this)" style="position:absolute; right:5px; top:50%; transform:translateY(-50%); width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, var(--accent-orange), #E55D3A); border:2px solid var(--accent-orange); font-size:16px; cursor:pointer; color:white; display:flex; align-items:center; justify-content:center;">&#127908;</button>
+                    </div>
+                    <button class="btn-primary" style="width:auto; padding:12px 20px;" onclick="addShoppingItem()">+</button>
+                </div>
+                <div id="shoppingList" style="display:grid; gap:10px;"></div>
+            </div>
+
+            <!-- Meals Panel -->
+            <div id="mealsPanel" class="panel">
+                <!-- Voice Command Bar for Meals -->
+                <div class="voice-command-bar" id="mealsVoiceBar">
+                    <button class="mic-btn" id="mealsMic" onclick="startVoiceCommand('meals', this)">&#127908;</button>
+                    <div class="voice-input-area">
+                        <input type="text" class="voice-input" id="mealsVoiceInput" placeholder='Say: "Plan tacos for Friday"' onkeypress="if(event.key==='Enter')processTextCommand('meals', this.value)">
+                        <div class="voice-status-text" id="mealsVoiceStatus"></div>
+                    </div>
+                    <button class="voice-submit-btn" onclick="processTextCommand('meals', document.getElementById('mealsVoiceInput').value)">Set</button>
+                </div>
+
+                <div class="meal-week" id="mealWeek"></div>
+            </div>
+
+            <!-- Kids Panel -->
+            <div id="kidsPanel" class="panel">
+                <!-- Voice Command Bar for Kids -->
+                <div class="voice-command-bar" id="kidsVoiceBar">
+                    <button class="mic-btn" id="kidsMic" onclick="startVoiceCommand('chores', this)">&#127908;</button>
+                    <div class="voice-input-area">
+                        <input type="text" class="voice-input" id="kidsVoiceInput" placeholder='Say: "Emma made her bed"' onkeypress="if(event.key==='Enter')processTextCommand('chores', this.value)">
+                        <div class="voice-status-text" id="kidsVoiceStatus"></div>
+                    </div>
+                    <button class="voice-submit-btn" onclick="processTextCommand('chores', document.getElementById('kidsVoiceInput').value)">Done</button>
+                </div>
+
+                <div class="kids-header">
+                    <div class="kid-card kid1 selected" id="kid1Card" onclick="selectKid('kid1')">
+                        <span class="emoji">&#128103;</span>
+                        <div class="name">Emma</div>
+                        <div class="task-status" id="kid1TaskStatus">Ready to help!</div>
+                    </div>
+                    <div class="kid-card kid2" id="kid2Card" onclick="selectKid('kid2')">
+                        <span class="emoji">&#128103;</span>
+                        <div class="name">Sophie</div>
+                        <div class="task-status" id="kid2TaskStatus">Ready to help!</div>
+                    </div>
+                </div>
+
+                <div class="section-title" style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>Today's Tasks</span>
+                    <button onclick="resetChores()" style="padding:6px 12px; background:rgba(255,107,107,0.2); border:2px solid #FF6B6B; border-radius:8px; color:#FF6B6B; font-size:12px; font-weight:600; cursor:pointer;">Reset</button>
+                </div>
+                <div class="chore-grid" id="choreGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div class="modal" id="eventModal">
+        <div class="modal-content">
+            <h2>Add Event</h2>
+            <div style="position:relative; margin-bottom:15px;">
+                <input type="text" id="eventTitle" placeholder="Event Name" style="margin-bottom:0; padding-right:50px;">
+                <button onclick="startVoiceCommand('calendar', this)" style="position:absolute; right:5px; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, var(--accent-orange), #E55D3A); border:2px solid var(--accent-orange); font-size:18px; cursor:pointer; color:white; display:flex; align-items:center; justify-content:center;">&#127908;</button>
+            </div>
+            <input type="date" id="eventDate">
+            <input type="time" id="eventTime">
+            <div id="personGrid" class="person-grid"></div>
+            <div class="modal-btns">
+                <button class="btn-secondary" onclick="closeModal('eventModal')">Cancel</button>
+                <button class="btn-primary" onclick="saveEvent()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day Detail Modal -->
+    <div class="modal" id="dayModal">
+        <div class="modal-content day-events-modal">
+            <h2 id="dayModalTitle">December 9</h2>
+            <div id="dayModalContent"></div>
+            <div class="modal-btns">
+                <button class="btn-secondary" onclick="closeModal('dayModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div class="modal" id="celebrationModal">
+        <div class="modal-content">
+            <div class="celebration-header">
+                <h2>&#127881; Great Job, <span id="celebrationKidName">Helper</span>! &#127881;</h2>
+            </div>
+            <div class="celebration-game-picker">
+                <button class="game-pick-btn" onclick="startSlotGame()" title="Slot Machine">&#127920;</button>
+                <button class="game-pick-btn" onclick="startConfettiGame()" title="Confetti Cannon">&#127882;</button>
+                <button class="game-pick-btn" onclick="startBubbleGame()" title="Bubble Pop">&#129531;</button>
+            </div>
+            <div id="celebrationGames">
+                <div style="text-align:center; color:white; padding:40px;">
+                    <div style="font-size:60px; margin-bottom:20px;">&#127881;</div>
+                    <div style="font-size:20px;">Pick a game above to celebrate!</div>
+                </div>
+            </div>
+            <div class="celebration-close">
+                <button onclick="closeCelebrationModal()">All Done!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meal Modal -->
+    <div class="modal" id="mealModal">
+        <div class="modal-content">
+            <h2 id="mealDayTitle">Pick Meal</h2>
+            <div id="mealPicker" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;"></div>
+            <div style="position:relative; margin-bottom:15px;">
+                <input type="text" id="customMeal" placeholder="Custom meal..." style="margin-bottom:0; padding-right:50px;">
+                <button onclick="startVoiceCommand('meals', this)" style="position:absolute; right:5px; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, var(--accent-orange), #E55D3A); border:2px solid var(--accent-orange); font-size:18px; cursor:pointer; color:white; display:flex; align-items:center; justify-content:center;">&#127908;</button>
+            </div>
+            <div class="modal-btns">
+                <button class="btn-secondary" onclick="closeModal('mealModal')">Cancel</button>
+                <button class="btn-primary" onclick="saveCustomMeal()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Status Modal -->
+    <div class="voice-status" id="voiceStatus">
+        <div class="listening-icon">&#127908;</div>
+        <div class="status-text">Listening...</div>
+        <div class="command-preview" id="voicePreview">Speak now</div>
+    </div>
+
+    <!-- Fia Chat Modal -->
+    <div class="modal" id="fiaModal">
+        <div class="modal-content fia-chat-modal">
+            <div class="fia-header">
+                <div class="fia-avatar">
+                    <span class="fia-icon">&#129302;</span>
+                    <span class="fia-pulse"></span>
+                </div>
+                <div class="fia-title">
+                    <h2>Fia</h2>
+                    <span class="fia-status">Family Assistant</span>
+                </div>
+                <button class="fia-close" onclick="closeModal('fiaModal')">&#10005;</button>
+            </div>
+
+            <div class="fia-messages" id="fiaMessages">
+                <div class="fia-message fia-response">
+                    <div class="message-avatar">&#129302;</div>
+                    <div class="message-bubble">
+                        Hi! I'm Fia, your family assistant. I can help with the calendar, shopping list, meal planning, and kids' chores. What can I help you with?
+                    </div>
+                </div>
+            </div>
+
+            <div class="fia-input-container">
+                <button class="fia-mic-btn" id="fiaChatMic" onclick="toggleFiaMic()">
+                    <span class="mic-icon">&#127908;</span>
+                </button>
+                <input type="text" id="fiaInput" placeholder="Type or tap mic to speak..." onkeypress="if(event.key==='Enter')sendFiaMessage()">
+                <button class="fia-send-btn" onclick="sendFiaMessage()">
+                    <span>&#10148;</span>
+                </button>
+            </div>
+
+            <div class="fia-quick-actions">
+                <button onclick="sendQuickFia('What\'s on the calendar today?')">&#128197; Today</button>
+                <button onclick="sendQuickFia('What\'s for dinner?')">&#127869; Dinner</button>
+                <button onclick="sendQuickFia('What\'s on the shopping list?')">&#128722; Shopping</button>
+                <button onclick="sendQuickFia('How are the kids doing with chores?')">&#11088; Chores</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera/OCR Modal -->
+    <div class="modal" id="cameraModal">
+        <div class="modal-content camera-modal">
+            <div class="camera-header">
+                <h2>&#128247; Scan Document</h2>
+                <button class="camera-close" onclick="closeCameraModal()">&#10005;</button>
+            </div>
+
+            <div class="camera-status" id="cameraStatus">Position document and tap capture</div>
+
+            <!-- Camera View -->
+            <div id="cameraView" class="camera-view">
+                <video id="cameraVideo" autoplay playsinline></video>
+                <canvas id="cameraCanvas" style="display:none;"></canvas>
+                <button class="camera-toggle-btn" id="cameraToggleBtn" onclick="toggleCamera()">&#128247; Rear</button>
+                <button class="capture-btn" onclick="capturePhoto()">
+                    <span class="capture-icon">&#9679;</span>
+                </button>
+            </div>
+
+            <!-- Preview View -->
+            <div id="previewView" class="preview-view" style="display:none;">
+                <img id="capturePreview" alt="Captured image">
+                <div class="preview-buttons">
+                    <button class="btn-secondary" id="retakePhotoBtn" onclick="retakePhoto()">&#128260; Retake</button>
+                    <button class="btn-primary" id="acceptPhotoBtn" onclick="acceptPhoto()">&#10003; Accept</button>
+                </div>
+            </div>
+
+            <!-- Results View -->
+            <div id="resultsView" class="results-view" style="display:none;">
+                <div id="ocrEventsList" class="ocr-events-list"></div>
+                <div class="results-buttons">
+                    <button class="btn-secondary" onclick="retakePhoto()">&#128260; Scan Another</button>
+                    <button class="btn-primary" onclick="addSelectedEvents()">&#10133; Add Selected</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/calendar.js"></script>
+    <script src="/static/js/chores.js"></script>
+    <script src="/static/js/meals.js"></script>
+    <script src="/static/js/shopping.js"></script>
+    <script src="/static/js/celebrations.js"></script>
+    <script src="/static/js/voice.js"></script>
+    <script src="/static/js/themes.js"></script>
+    <script src="/static/js/screensaver.js"></script>
+    <script src="/static/js/ocr.js"></script>
+</body>
+</html>
