@@ -4,7 +4,7 @@
 
 **A Skylight Calendar-inspired family command center with voice control, OCR document scanning, AI assistant, and dynamic seasonal themes.**
 
-> Built this because commercial family calendars cost $200+ and can't do half of what this does. Now my family hub runs on a spare iPad and does everything - voice commands, document scanning, meal planning, chore tracking with celebrations, and even has a screensaver with ocean videos.
+> Built this because I wanted a fully customizable family hub that I control. Runs on a spare iPad and does everything - voice commands, document scanning, meal planning, chore tracking with celebrations, and ambient video screensavers. No subscriptions, no cloud dependency.
 
 ---
 
@@ -267,14 +267,12 @@ Each theme adjusts:
 
 ## Why I Built This
 
-Commercial options like Skylight Calendar ($160+) are:
-- Cloud-dependent (subscription fees)
-- Limited customization
-- No voice commands
-- No OCR for school flyers
-- No chore system
-
-This runs locally, works offline, and does exactly what my family needs.
+I wanted full control over my family's command center:
+- **Self-hosted** - runs locally, no cloud dependency
+- **Fully customizable** - change anything in the code
+- **AI-powered** - Claude for OCR and chat, Whisper for voice
+- **No subscriptions** - one-time setup, runs forever
+- **Open source** - learn from it, modify it, make it yours
 
 ---
 
