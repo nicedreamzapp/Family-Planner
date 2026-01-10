@@ -258,22 +258,15 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             self.send_json({"url": "", "error": str(e)})
 
     def _serve_video_list(self):
-        """Scan for ocean video files in root and static folders."""
+        """Scan for ocean video files in root folder only (not monthly backgrounds)."""
         try:
             base_path = os.path.dirname(os.path.abspath(__file__))
             video_files = []
 
-            # Check root directory for screensaver videos
+            # Check root directory for ocean screensaver videos only
             for file in os.listdir(base_path):
-                if file.lower().endswith(".mp4") and not file.startswith("._"):
+                if file.lower().endswith(".mp4") and not file.startswith("._") and "ocean" in file.lower():
                     video_files.append(file)
-
-            # Also check static folder
-            static_path = os.path.join(base_path, "static")
-            if os.path.exists(static_path):
-                for file in os.listdir(static_path):
-                    if file.lower().endswith(".mp4") and not file.startswith("._"):
-                        video_files.append(file)
 
             video_files.sort()
             self.send_json({"videos": video_files})
