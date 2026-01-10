@@ -188,16 +188,15 @@ html, body {
     font-size: clamp(14px, 1.8vmin, 20px);
 }
 
-/* Header Actions - Single row, buttons shrink to fit */
+/* Header Actions - Wrap to multiple lines if needed */
 .header-actions {
     display: flex;
     gap: clamp(4px, 0.8vmin, 10px);
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     flex: 1;
     max-width: 100%;
-    overflow: hidden;
 }
 
 .action-pill {
@@ -882,12 +881,11 @@ html, body {
         font-size: clamp(14px, 4vh, 22px) !important;
     }
 
-    /* Landscape phone - single row, buttons shrink */
+    /* Landscape phone - wrap if needed */
     .header-actions {
         display: flex !important;
-        flex-wrap: nowrap !important;
+        flex-wrap: wrap !important;
         gap: 4px !important;
-        overflow: hidden;
     }
 
     .action-pill {
@@ -943,9 +941,8 @@ html, body {
     }
 
     .header-actions {
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         gap: 12px;
-        overflow: hidden;
     }
 
     /* Large buttons on big screens */
@@ -953,8 +950,6 @@ html, body {
         padding: 12px 24px !important;
         font-size: 18px !important;
         border-radius: 18px !important;
-        flex-shrink: 1;
-        min-width: 0;
     }
 
     .action-pill.kid-btn {
@@ -969,21 +964,18 @@ html, body {
 }
 
 /* ==============================================
-   TABLET - Medium buttons, single row shrink
+   TABLET - Medium buttons, wrap if needed
    ============================================== */
 @media (min-width: 768px) and (max-width: 1399px) {
     .header-actions {
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         gap: 8px;
-        overflow: hidden;
     }
 
     .action-pill {
         padding: 8px 14px !important;
         font-size: 14px !important;
         border-radius: 14px !important;
-        flex-shrink: 1;
-        min-width: 0;
     }
 
     .action-pill.kid-btn {

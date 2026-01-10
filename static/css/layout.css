@@ -405,9 +405,8 @@ html, body {
     align-items: center;
     flex: 1;
     justify-content: center;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     max-width: 100%;
-    overflow: hidden;
 }
 
 .action-pill {
