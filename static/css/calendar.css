@@ -38,9 +38,10 @@
     overflow: hidden;
     background: rgba(255, 255, 255, 0.92);
     box-shadow: 0 4px 30px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,255,255,0.5);
-    flex: 1;
+    flex: 1 1 0;
     min-height: 0;
     height: 100%;
+    max-height: 100%;
     backdrop-filter: blur(8px);
 }
 
@@ -75,6 +76,7 @@
 .calendar-day {
     min-width: 0;
     min-height: 0;
+    height: 100%;
     padding: var(--cell-padding);
     border-right: 2px solid rgba(180, 160, 130, 0.5);
     border-bottom: 2px solid rgba(180, 160, 130, 0.5);
@@ -101,8 +103,7 @@
 }
 
 .calendar-day.today {
-    background: rgba(255, 245, 242, 0.98);
-    box-shadow: inset 0 0 0 3px var(--accent-orange);
+    background: rgba(255, 255, 245, 0.98);
 }
 
 .calendar-day.weekend {
@@ -119,7 +120,7 @@
 }
 
 .day-num {
-    font-size: calc(var(--fs-base) * 1.15);
+    font-size: clamp(14px, 2vmin, 28px);
     font-weight: 800;
     color: #1a1a1a;
     line-height: 1;
@@ -174,15 +175,8 @@
 }
 
 .calendar-day.today .day-num {
-    background: var(--accent-orange);
-    color: white;
-    width: var(--day-num-size);
-    height: var(--day-num-size);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    font-size: var(--fs-sm);
+    color: #333;
+    font-weight: 700;
 }
 
 .calendar-day.other-month .day-num {
@@ -218,10 +212,10 @@
     border: 2px solid rgba(255,255,255,0.4);
     text-shadow: 0 1px 2px rgba(0,0,0,0.4), 0 0 4px rgba(0,0,0,0.2);
     cursor: pointer;
-    /* Text handling - truncate with ellipsis */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    /* Text handling - allow wrapping for readability */
+    overflow: visible;
+    white-space: normal;
+    word-wrap: break-word;
     max-width: 100%;
 }
 
@@ -393,23 +387,24 @@
 }
 
 /* ==============================================
-   SMART CALENDAR SIZING - Viewport Proportional
+   SMART CALENDAR SIZING - Past weeks SMALLER, Current/Future BIGGER
    ============================================== */
 
-/* ALL PAST DAYS - grayed but readable */
+/* ALL PAST DAYS - COMPACT and de-emphasized */
 .calendar-day.distant-past,
 .calendar-day.past-week,
 .calendar-day.recent-past,
 .calendar-day.yesterday {
-    background: rgba(245, 245, 245, 0.95);
+    background: rgba(240, 240, 240, 0.9);
+    padding: 2px !important;
 }
 
 .calendar-day.distant-past .day-events,
 .calendar-day.past-week .day-events,
 .calendar-day.recent-past .day-events,
 .calendar-day.yesterday .day-events {
-    filter: grayscale(50%);
-    opacity: 0.75;
+    filter: grayscale(60%);
+    opacity: 0.6;
 }
 
 .calendar-day.distant-past .day-events .event-pill,
@@ -420,49 +415,146 @@
 .calendar-day.recent-past .day-events .holiday-pill,
 .calendar-day.yesterday .day-events .event-pill,
 .calendar-day.yesterday .day-events .holiday-pill {
-    font-size: var(--pill-font);
-    padding: var(--pill-padding-v) var(--pill-padding-h);
+    font-size: clamp(8px, 0.9vmin, 11px) !important;
+    padding: 1px 3px !important;
     background: #BBB !important;
-    color: #444 !important;
+    color: #555 !important;
 }
 
 .calendar-day.distant-past .day-num,
 .calendar-day.past-week .day-num,
 .calendar-day.recent-past .day-num,
 .calendar-day.yesterday .day-num {
-    font-size: var(--fs-sm);
-    color: #777;
+    font-size: clamp(10px, 1.2vmin, 14px) !important;
+    color: #888;
 }
 
 /* Hide school meals in past to save space */
 .calendar-day.distant-past .school-meals,
 .calendar-day.past-week .school-meals,
 .calendar-day.recent-past .school-meals,
-.calendar-day.yesterday .school-meals {
+.calendar-day.yesterday .school-meals,
+.calendar-day.distant-past .day-weather-card,
+.calendar-day.past-week .day-weather-card,
+.calendar-day.recent-past .day-weather-card,
+.calendar-day.yesterday .day-weather-card {
     display: none;
 }
 
-/* TODAY - highlighted and enlarged with GLOW */
-.calendar-day.today {
-    background: linear-gradient(135deg, rgba(255, 243, 224, 0.98), rgba(255, 213, 153, 0.98)) !important;
+/* CURRENT & NEXT WEEK - BIG and emphasized */
+.calendar-day.today,
+.calendar-day.tomorrow,
+.calendar-day.near-future-close,
+.calendar-day.near-future,
+.calendar-day.far-future {
+    padding: clamp(4px, 0.8vmin, 10px) !important;
+}
+
+.calendar-day.today .day-num,
+.calendar-day.tomorrow .day-num,
+.calendar-day.near-future-close .day-num,
+.calendar-day.near-future .day-num {
+    font-size: clamp(20px, 3vmin, 38px) !important;
+    font-weight: 800;
+}
+
+.calendar-day.far-future .day-num,
+.calendar-day.distant-future .day-num {
+    font-size: clamp(16px, 2.4vmin, 32px) !important;
+    font-weight: 700;
+}
+
+.calendar-day.today .event-pill,
+.calendar-day.today .holiday-pill,
+.calendar-day.tomorrow .event-pill,
+.calendar-day.tomorrow .holiday-pill,
+.calendar-day.near-future-close .event-pill,
+.calendar-day.near-future-close .holiday-pill,
+.calendar-day.near-future .event-pill,
+.calendar-day.near-future .holiday-pill {
+    font-size: clamp(12px, 1.5vmin, 18px) !important;
+    padding: clamp(4px, 0.6vmin, 8px) clamp(8px, 1vmin, 14px) !important;
+    font-weight: 600;
+}
+
+/* TODAY - bright white with BLACK border and rainbow glow animation */
+.calendar-day.today,
+.calendar-day.today.priority-row,
+.calendar-day.today.near-future,
+.calendar-day.today.near-future-close,
+.january-theme .calendar-day.today,
+.january-theme .calendar-day.today:nth-child(odd),
+.january-theme .calendar-day.today:nth-child(even) {
+    background: #FFFFFF !important;
+    background-image: none !important;
+    position: relative;
+    overflow: visible;
+    border: 6px solid #000000 !important;
+    border-radius: 12px !important;
     box-shadow:
-        inset 0 0 0 4px #FF5722,
-        0 0 20px rgba(255, 87, 34, 0.5),
-        0 0 40px rgba(255, 152, 0, 0.3),
-        0 8px 25px rgba(216, 67, 21, 0.4) !important;
-    z-index: 2;
-    transform: scale(1.02);
-    animation: todayPulse 3s ease-in-out infinite;
+        0 0 0 3px #FFD700,
+        0 0 30px rgba(255, 215, 0, 0.6),
+        0 0 60px rgba(255, 215, 0, 0.3) !important;
+    animation: todayPulse 1.5s ease-in-out infinite;
+    z-index: 10;
 }
 
 @keyframes todayPulse {
-    0%, 100% { box-shadow: inset 0 0 0 4px #FF5722, 0 0 20px rgba(255, 87, 34, 0.5), 0 0 40px rgba(255, 152, 0, 0.3), 0 8px 25px rgba(216, 67, 21, 0.4); }
-    50% { box-shadow: inset 0 0 0 4px #FF5722, 0 0 30px rgba(255, 87, 34, 0.7), 0 0 50px rgba(255, 152, 0, 0.4), 0 8px 25px rgba(216, 67, 21, 0.5); }
+    0%, 100% {
+        box-shadow:
+            0 0 0 3px #FFD700,
+            0 0 30px rgba(255, 215, 0, 0.6),
+            0 0 60px rgba(255, 215, 0, 0.3);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow:
+            0 0 0 5px #FFA500,
+            0 0 50px rgba(255, 165, 0, 0.8),
+            0 0 80px rgba(255, 215, 0, 0.5);
+        transform: scale(1.02);
+    }
 }
 
-.calendar-day.today .day-num {
-    font-size: calc(var(--fs-lg) * 1.1);
-    font-weight: 800;
+/* Animated border shimmer */
+.calendar-day.today::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    background: linear-gradient(45deg,
+        #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000);
+    background-size: 400% 400%;
+    border-radius: 16px;
+    z-index: -1;
+    animation: rainbowBorder 3s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes rainbowBorder {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.calendar-day.today .day-num,
+.january-theme .calendar-day.today .day-num {
+    font-size: clamp(24px, 3.5vmin, 42px) !important;
+    font-weight: 900;
+    color: #000000 !important;
+    position: relative;
+    z-index: 1;
+    text-shadow:
+        0 0 10px rgba(255, 215, 0, 0.8),
+        0 2px 4px rgba(0,0,0,0.3);
+}
+
+.calendar-day.today .day-events,
+.calendar-day.today .day-header-info {
+    position: relative;
+    z-index: 1;
 }
 
 .calendar-day.today .event-pill,
@@ -472,16 +564,23 @@
     padding: calc(var(--pill-padding-v) + 1px) calc(var(--pill-padding-h) + 2px);
 }
 
-/* TOMORROW - highlighted as part of current week */
+/* TOMORROW - subtle light highlight */
 .calendar-day.tomorrow {
-    background: linear-gradient(135deg, rgba(255, 248, 235, 0.98), rgba(255, 238, 210, 0.98));
-    box-shadow: inset 0 0 0 2px #FFB74D;
+    background: rgba(255, 255, 255, 0.95) !important;
+    box-shadow: inset 0 0 0 2px rgba(200, 200, 200, 0.5) !important;
+    filter: none !important;
+    opacity: 1 !important;
 }
 
 .calendar-day.tomorrow .day-num {
-    font-size: var(--fs-base);
-    font-weight: 600;
-    color: #E65100;
+    font-size: clamp(18px, 2.5vmin, 32px) !important;
+    font-weight: 700;
+    color: #333;
+}
+
+.calendar-day.tomorrow .day-events {
+    filter: none !important;
+    opacity: 1 !important;
 }
 
 /* NEAR FUTURE CLOSE (2-3 days) - current week */
@@ -814,12 +913,12 @@
     border: 3px solid var(--border-gold);
     border-radius: var(--border-radius);
     padding: 2px;
-    flex: 1;
+    flex: 1 1 0;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     min-height: 0;
-    height: 100%;
+    max-height: 100%;
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 20px rgba(0,0,0,0.12);
 }
@@ -1334,4 +1433,25 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+/* ==============================================
+   Priority Row Styling (Current & Next Week)
+   ============================================== */
+.calendar-day.priority-row .day-num {
+    font-size: clamp(18px, 2.5vmin, 32px) !important;
+}
+
+.calendar-day.priority-row .event-pill,
+.calendar-day.priority-row .holiday-pill,
+.calendar-day.priority-row .lunch-pill {
+    font-size: clamp(11px, 1.4vmin, 16px) !important;
+}
+
+.calendar-day.priority-row .day-weather-card {
+    font-size: clamp(10px, 1.2vmin, 14px) !important;
+}
+
+.calendar-day.priority-row .moon-phase {
+    font-size: clamp(10px, 1.2vmin, 16px) !important;
 }

@@ -12,6 +12,7 @@ import json
 import os
 import tempfile
 import subprocess
+import time
 from datetime import datetime
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 import urllib.parse
@@ -19,6 +20,10 @@ import urllib.request
 
 # OpenAI API key for Whisper transcription
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
+
+# Weather cache (30 minute TTL)
+WEATHER_CACHE = {"data": None, "timestamp": 0}
+WEATHER_CACHE_TTL = 1800  # 30 minutes in seconds
 
 # Import from modules
 from data import (
@@ -180,11 +185,19 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             self.send_error(500, str(e))
 
     def _serve_weather(self):
-        """Fetch and serve weather data from Open-Meteo API."""
+        """Fetch and serve weather data from Open-Meteo API with caching."""
+        global WEATHER_CACHE
+
+        # Check cache first
+        now = time.time()
+        if WEATHER_CACHE["data"] and (now - WEATHER_CACHE["timestamp"]) < WEATHER_CACHE_TTL:
+            self.send_json(WEATHER_CACHE["data"])
+            return
+
         try:
             # Trinidad, CA coordinates
             url = "https://api.open-meteo.com/v1/forecast?latitude=41.0593&longitude=-124.1431&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max&current_weather=true&temperature_unit=fahrenheit&timezone=America%2FLos_Angeles&forecast_days=3"
-            with urllib.request.urlopen(url) as response:
+            with urllib.request.urlopen(url, timeout=10) as response:
                 data = json.loads(response.read().decode())
 
             def get_weather_emoji(code):
@@ -216,10 +229,18 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                     "emoji": get_weather_emoji(data["daily"]["weathercode"][i])
                 })
 
+            # Update cache
+            WEATHER_CACHE["data"] = weather
+            WEATHER_CACHE["timestamp"] = now
+
             self.send_json(weather)
         except Exception as e:
             print(f"Weather error: {e}")
-            self.send_json({"error": "Failed to fetch weather"})
+            # Return cached data if available, even if stale
+            if WEATHER_CACHE["data"]:
+                self.send_json(WEATHER_CACHE["data"])
+            else:
+                self.send_json({"error": "Failed to fetch weather"})
 
     def _serve_fia_config(self):
         """Return Fia server configuration."""
@@ -306,6 +327,11 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             self._handle_ocr(content_length, content_type)
             return
 
+        # Handle Fia chat endpoint (proxy to Mac via tunnel)
+        if self.path == "/api/fia-chat":
+            self._handle_fia_chat(content_length, content_type)
+            return
+
         # Regular JSON endpoints
         post_data = self.rfile.read(content_length)
         data = json.loads(post_data.decode())
@@ -335,6 +361,8 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         # Shopping endpoints
         elif self.path == "/api/shopping/add" or self.path == "/api/shopping":
             self._handle_shopping_add(data)
+        elif self.path == "/api/shopping/batch":
+            self._handle_shopping_batch(data)
         elif self.path == "/api/shopping/toggle":
             self._handle_shopping_toggle(data)
         elif self.path == "/api/shopping/clear":
@@ -420,6 +448,29 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         except Exception as e:
             print(f"OCR error: {e}")
             self.send_json({"error": f"OCR failed: {str(e)}"})
+
+    def _handle_fia_chat(self, content_length, content_type):
+        """Forward chat message to Fia brain (via SSH tunnel from Mac)."""
+        try:
+            post_data = self.rfile.read(content_length)
+
+            import http.client
+            conn = http.client.HTTPConnection("localhost", 8765, timeout=60)
+            conn.request("POST", "/api/chat", post_data, {
+                'Content-Type': 'application/json',
+                'Content-Length': str(len(post_data))
+            })
+            response = conn.getresponse()
+            result = json.loads(response.read().decode())
+            conn.close()
+
+            self.send_json(result)
+
+        except ConnectionRefusedError:
+            self.send_json({"status": "error", "response": "Fia not connected. Make sure Launch Family Planner is running on your Mac."})
+        except Exception as e:
+            print(f"Fia chat error: {e}")
+            self.send_json({"status": "error", "response": f"Chat failed: {str(e)}"})
 
     def _parse_ocr_for_events(self, ocr_text):
         """Parse OCR text to extract calendar events with dates."""
@@ -661,8 +712,9 @@ class DashboardHandler(SimpleHTTPRequestHandler):
 
     def _handle_shopping_add(self, data):
         shopping = get_shopping()
+        max_id = max([i.get("id", 0) for i in shopping["items"]], default=0)
         item = {
-            "id": len(shopping["items"]) + 1,
+            "id": max_id + 1,
             "name": data.get("name", data.get("item", "")),
             "category": data.get("category", "Other"),
             "quantity": data.get("quantity", 1),
@@ -671,6 +723,27 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         shopping["items"].append(item)
         save_json(SHOPPING_FILE, shopping)
         self.send_json({"success": True, "item": item})
+
+    def _handle_shopping_batch(self, data):
+        """Add multiple shopping items in one request."""
+        shopping = get_shopping()
+        items = data.get("items", [])
+        added = []
+        max_id = max([i.get("id", 0) for i in shopping["items"]], default=0)
+        for item_data in items:
+            max_id += 1
+            name = item_data if isinstance(item_data, str) else item_data.get("name", "")
+            item = {
+                "id": max_id,
+                "name": name,
+                "category": item_data.get("category", "Other") if isinstance(item_data, dict) else "Other",
+                "quantity": item_data.get("quantity", 1) if isinstance(item_data, dict) else 1,
+                "checked": False
+            }
+            shopping["items"].append(item)
+            added.append(item)
+        save_json(SHOPPING_FILE, shopping)
+        self.send_json({"success": True, "items": added, "count": len(added)})
 
     def _handle_shopping_toggle(self, data):
         shopping = get_shopping()

@@ -40,7 +40,7 @@ function updateRewardsDisplay() {
 function showRewardsModal(kid) {
     selectedKid = kid;
     const points = data.rewards?.[kid] || 0;
-    const name = kid === 'kid1' ? 'Emma' : 'Sophie';
+    const name = kid === 'kid1' ? 'Liv' : 'Jane';
 
     document.getElementById('rewardsModalTitle').textContent = `⭐ ${name}'s Stars ⭐`;
     document.getElementById('rewardsAvatar').textContent = '👧';
@@ -116,7 +116,7 @@ async function redeemPrize(cost, prizeName) {
     }
 
     // Confirm redemption
-    const name = selectedKid === 'kid1' ? 'Emma' : 'Sophie';
+    const name = selectedKid === 'kid1' ? 'Liv' : 'Jane';
     if (!confirm(`${name} wants to redeem "${prizeName}" for ${cost} stars?`)) {
         return;
     }

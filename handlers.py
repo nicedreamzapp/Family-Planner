@@ -6,6 +6,9 @@ import os
 
 # Data file paths
 DATA_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Cache for JSON files - avoids disk reads on every request
+_FILE_CACHE = {}  # {filepath: {"data": ..., "mtime": ...}}
 CALENDAR_FILE = os.path.join(DATA_DIR, "calendar.json")
 CHORES_FILE = os.path.join(DATA_DIR, "chores.json")
 REWARDS_FILE = os.path.join(DATA_DIR, "rewards.json")
@@ -16,18 +19,33 @@ NOTES_FILE = os.path.join(DATA_DIR, "notes.json")
 
 
 def load_json(filepath, default):
-    if os.path.exists(filepath):
-        try:
-            with open(filepath, 'r') as f:
-                return json.load(f)
-        except:
-            pass
-    return default
+    """Load JSON with caching - only reads disk if file changed."""
+    if not os.path.exists(filepath):
+        return default
+
+    try:
+        mtime = os.path.getmtime(filepath)
+        cached = _FILE_CACHE.get(filepath)
+
+        # Return cached data if file hasn't been modified
+        if cached and cached["mtime"] == mtime:
+            return cached["data"]
+
+        # Read from disk and cache
+        with open(filepath, 'r') as f:
+            data = json.load(f)
+        _FILE_CACHE[filepath] = {"data": data, "mtime": mtime}
+        return data
+    except:
+        return default
 
 
 def save_json(filepath, data):
+    """Save JSON and update cache."""
     with open(filepath, 'w') as f:
         json.dump(data, f, indent=2)
+    # Update cache with new data and mtime
+    _FILE_CACHE[filepath] = {"data": data, "mtime": os.path.getmtime(filepath)}
 
 
 def get_calendar():

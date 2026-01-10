@@ -10,14 +10,19 @@
     <link rel="manifest" href="/static/manifest.json">
     <title>Family Planner Dashboard</title>
 
+    <!-- Fun Kids Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <!-- CSS Files -->
-    <link rel="stylesheet" href="/static/css/variables.css">
-    <link rel="stylesheet" href="/static/css/base.css">
-    <link rel="stylesheet" href="/static/css/layout.css">
-    <link rel="stylesheet" href="/static/css/calendar.css">
-    <link rel="stylesheet" href="/static/css/components.css">
-    <link rel="stylesheet" href="/static/css/themes.css">
-    <link rel="stylesheet" href="/static/css/responsive.css">
+    <link rel="stylesheet" href="/static/css/variables.css?v=6">
+    <link rel="stylesheet" href="/static/css/base.css?v=7">
+    <link rel="stylesheet" href="/static/css/layout.css?v=7">
+    <link rel="stylesheet" href="/static/css/calendar.css?v=13">
+    <link rel="stylesheet" href="/static/css/components.css?v=8">
+    <link rel="stylesheet" href="/static/css/themes.css?v=22">
+    <link rel="stylesheet" href="/static/css/responsive.css?v=19">
 </head>
 <body>
     <!-- Screensaver -->
@@ -59,14 +64,14 @@
             <div class="helpers-widget">
                 <div class="helpers-title">&#127775; Family Helpers &#127775;</div>
                 <div class="helpers-kids">
-                    <div class="helper-kid kid1" onclick="showPanel('kids'); selectKid('kid1');">
+                    <div class="helper-kid kid1" onclick="showKidPanel('liv')">
                         <div class="kid-avatar">&#128103;</div>
-                        <div class="kid-name">Emma</div>
+                        <div class="kid-name">Liv</div>
                         <div class="kid-status" id="kid1Status">Ready to help!</div>
                     </div>
-                    <div class="helper-kid kid2" onclick="showPanel('kids'); selectKid('kid2');">
+                    <div class="helper-kid kid2" onclick="showKidPanel('jane')">
                         <div class="kid-avatar">&#128103;</div>
-                        <div class="kid-name">Sophie</div>
+                        <div class="kid-name">Jane</div>
                         <div class="kid-status" id="kid2Status">Ready to help!</div>
                     </div>
                 </div>
@@ -78,12 +83,43 @@
         <div class="main-content">
             <!-- Global Header -->
             <div class="year-header">
+                <!-- Left: Compact Time, Date, Weather -->
+                <div class="header-info">
+                    <div class="header-time-date">
+                        <div class="header-time" id="headerTime">12:00</div>
+                        <div class="header-date" id="headerDate">Mon, Dec 9</div>
+                    </div>
+                    <a href="https://www.wunderground.com/forecast/us/ca/trinidad/95570" target="_blank" class="header-weather" id="headerWeather">
+                        <span class="header-weather-icon" id="headerWeatherIcon">☀️</span>
+                        <span class="header-weather-temp" id="headerWeatherTemp">--°</span>
+                    </a>
+                </div>
+
                 <div class="year-nav" id="calendarNav">
                     <button class="year-arrow" onclick="changeYear(-1)">&#9664;</button>
                     <h1 class="year-title" id="yearTitle">2025</h1>
                     <button class="year-arrow" onclick="changeYear(1)">&#9654;</button>
                 </div>
                 <h1 class="page-title" id="pageTitle" style="display:none;"></h1>
+
+                <!-- Month Skip Dropdown -->
+                <div class="month-select-wrapper" id="monthSelectWrapper">
+                    <select class="month-select" id="monthSelect" onchange="jumpToMonth(this.value)">
+                        <option value="0">Jan</option>
+                        <option value="1">Feb</option>
+                        <option value="2">Mar</option>
+                        <option value="3">Apr</option>
+                        <option value="4">May</option>
+                        <option value="5">Jun</option>
+                        <option value="6">Jul</option>
+                        <option value="7">Aug</option>
+                        <option value="8">Sep</option>
+                        <option value="9">Oct</option>
+                        <option value="10">Nov</option>
+                        <option value="11">Dec</option>
+                    </select>
+                </div>
+
                 <!-- Compact Voice Controls in Header -->
                 <div class="header-voice" id="headerVoice">
                     <button class="header-mic" id="calendarMic" onclick="startSmartVoice(this)">&#127908;</button>
@@ -96,8 +132,9 @@
                     <button class="action-pill" id="navMeals" onclick="showPanel('meals')">&#127869; Meals</button>
                     <button class="action-pill" id="navEvent" onclick="showAddEvent()">&#10133; Event</button>
                     <button class="action-pill" id="navShopping" onclick="showPanel('shopping')">&#128722; Shop</button>
-                    <button class="action-pill" id="navKids" onclick="showPanel('kids')">&#11088; Kids</button>
-                    <a class="action-pill news" href="https://www.redwoodnews.tv/video/" target="_blank">📺 News</a>
+                    <button class="action-pill kid-btn liv" id="navLiv" onclick="showKidPanel('liv')">Liv</button>
+                    <button class="action-pill kid-btn jane" id="navJane" onclick="showKidPanel('jane')">Jane</button>
+                    <button class="action-pill news" onclick="openDirectTV()">📺 TV</button>
                     <a class="action-pill pandora" href="https://www.pandora.com/collection" target="_blank">🎵 Pandora</a>
                     <button class="action-pill ocean" id="navOcean" onclick="showMonthlyPreview()">🎬 ScrSvr</button>
                     <button class="action-pill" id="navFullscreen" onclick="toggleFullscreen()">&#9974; Fullscreen</button>
@@ -147,7 +184,7 @@
                 <div class="voice-command-bar" id="kidsVoiceBar">
                     <button class="mic-btn" id="kidsMic" onclick="startVoiceCommand('chores', this)">&#127908;</button>
                     <div class="voice-input-area">
-                        <input type="text" class="voice-input" id="kidsVoiceInput" placeholder='Say: "Emma made her bed"' onkeypress="if(event.key==='Enter')processTextCommand('chores', this.value)">
+                        <input type="text" class="voice-input" id="kidsVoiceInput" placeholder='Say: "Liv made her bed"' onkeypress="if(event.key==='Enter')processTextCommand('chores', this.value)">
                         <div class="voice-status-text" id="kidsVoiceStatus"></div>
                     </div>
                     <button class="voice-submit-btn" onclick="processTextCommand('chores', document.getElementById('kidsVoiceInput').value)">Done</button>
@@ -156,12 +193,12 @@
                 <div class="kids-header">
                     <div class="kid-card kid1 selected" id="kid1Card" onclick="selectKid('kid1')">
                         <span class="emoji">&#128103;</span>
-                        <div class="name">Emma</div>
+                        <div class="name">Liv</div>
                         <div class="task-status" id="kid1TaskStatus">Ready to help!</div>
                     </div>
                     <div class="kid-card kid2" id="kid2Card" onclick="selectKid('kid2')">
                         <span class="emoji">&#128103;</span>
-                        <div class="name">Sophie</div>
+                        <div class="name">Jane</div>
                         <div class="task-status" id="kid2TaskStatus">Ready to help!</div>
                     </div>
                 </div>
@@ -334,15 +371,16 @@
     </div>
 
     <!-- JavaScript Files -->
-    <script src="/static/js/app.js"></script>
-    <script src="/static/js/calendar.js"></script>
-    <script src="/static/js/chores.js"></script>
-    <script src="/static/js/meals.js"></script>
-    <script src="/static/js/shopping.js"></script>
-    <script src="/static/js/celebrations.js"></script>
-    <script src="/static/js/voice.js"></script>
-    <script src="/static/js/themes.js"></script>
-    <script src="/static/js/screensaver.js"></script>
-    <script src="/static/js/ocr.js"></script>
+    <script src="/static/js/app.js?v=6"></script>
+    <script src="/static/js/calendar.js?v=6"></script>
+    <script src="/static/js/chores.js?v=2"></script>
+    <script src="/static/js/rewards.js?v=2"></script>
+    <script src="/static/js/meals.js?v=2"></script>
+    <script src="/static/js/shopping.js?v=2"></script>
+    <script src="/static/js/celebrations.js?v=2"></script>
+    <script src="/static/js/voice.js?v=3"></script>
+    <script src="/static/js/themes.js?v=2"></script>
+    <script src="/static/js/screensaver.js?v=2"></script>
+    <script src="/static/js/ocr.js?v=2"></script>
 </body>
 </html>

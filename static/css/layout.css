@@ -21,25 +21,10 @@ html, body {
 }
 
 /* ==============================================
-   Left Sidebar - Smart Auto-Adjust
+   Left Sidebar - HIDDEN for full-width calendar
    ============================================== */
 .sidebar {
-    width: clamp(180px, 20vw, 320px);
-    min-width: 180px;
-    max-width: 320px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,249,250,0.95) 100%);
-    backdrop-filter: blur(12px);
-    border-right: 3px solid #B8860B;
-    padding: clamp(8px, 1.5vmin, 16px);
-    height: 100vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    z-index: 100;
-    box-shadow: 2px 0 25px rgba(0,0,0,0.12);
-    gap: clamp(8px, 1.2vmin, 16px);
+    display: none;
 }
 
 .sidebar-header {
@@ -499,6 +484,141 @@ html, body {
     transform: scale(1.02);
 }
 
+/* ==============================================
+   Header Compact Info Section (Time, Date, Weather)
+   ============================================== */
+.header-info {
+    display: flex;
+    align-items: center;
+    gap: clamp(20px, 4vw, 60px);
+    padding: 0 8px;
+}
+
+.header-time-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.1;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 8px 16px;
+    border-radius: 16px;
+    border: 3px solid rgba(184, 134, 11, 0.6);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.header-time {
+    font-size: clamp(28px, 5vmin, 48px);
+    font-weight: 700;
+    color: #1a1a1a;
+    text-shadow:
+        -1px -1px 0 rgba(255,255,255,0.9),
+        1px -1px 0 rgba(255,255,255,0.9),
+        -1px 1px 0 rgba(255,255,255,0.9),
+        1px 1px 0 rgba(255,255,255,0.9),
+        0 0 8px rgba(255,255,255,0.8);
+}
+
+.header-date {
+    font-size: clamp(14px, 2vmin, 22px);
+    color: #333;
+    font-weight: 600;
+    text-shadow:
+        -1px -1px 0 rgba(255,255,255,0.9),
+        1px -1px 0 rgba(255,255,255,0.9),
+        -1px 1px 0 rgba(255,255,255,0.9),
+        1px 1px 0 rgba(255,255,255,0.9);
+}
+
+.header-weather {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.45), rgba(240,248,255,0.4));
+    padding: 10px 18px;
+    border-radius: 20px;
+    border: 3px solid rgba(30, 144, 255, 0.5);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.3);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.header-weather:hover {
+    transform: scale(1.05);
+    border-color: rgba(30, 144, 255, 0.8);
+    box-shadow: 0 6px 20px rgba(30, 144, 255, 0.3), 0 0 0 1px rgba(255,255,255,0.5);
+}
+
+.header-weather-temp {
+    font-size: clamp(22px, 3vmin, 36px);
+    font-weight: 700;
+    color: #1a1a1a;
+    text-shadow: var(--text-outline);
+}
+
+.header-weather-icon {
+    font-size: clamp(28px, 4vmin, 48px);
+}
+
+/* Month Select Dropdown in Header */
+.month-select-wrapper {
+    position: relative;
+}
+
+.month-select {
+    padding: 6px 28px 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    background: white;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.month-select-wrapper::after {
+    content: '▼';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 8px;
+    pointer-events: none;
+    color: #666;
+}
+
+/* Kid Buttons - 30% Bigger than other pills */
+.action-pill.kid-btn {
+    padding: 6px 16px;
+    font-size: calc(var(--fs-xs) * 1.3);
+    font-weight: 700;
+}
+
+.action-pill.kid-btn.liv {
+    background: linear-gradient(135deg, #F3E5F5, #E1BEE7);
+    color: #7B1FA2;
+}
+
+.action-pill.kid-btn.liv:hover {
+    background: linear-gradient(135deg, #E1BEE7, #CE93D8);
+    transform: translateY(-2px);
+}
+
+.action-pill.kid-btn.jane {
+    background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+    color: #E65100;
+}
+
+.action-pill.kid-btn.jane:hover {
+    background: linear-gradient(135deg, #FFE0B2, #FFCC80);
+    transform: translateY(-2px);
+}
+
 /* Navigation Items */
 .nav-item:hover {
     background: var(--bg-warm);
@@ -552,4 +672,128 @@ html, body {
     flex-direction: column;
     overflow: hidden;
     min-height: 0;
+}
+
+/* ==============================================
+   Fia Confirmation Modal
+   ============================================== */
+.fia-confirm-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    backdrop-filter: blur(4px);
+}
+
+.fia-confirm-modal.show {
+    display: flex;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fia-confirm-content {
+    background: linear-gradient(135deg, #FFFBF5, #FFF8E1);
+    border: 2px solid var(--border-gold, #DAA520);
+    border-radius: 20px;
+    padding: 24px 32px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.fia-confirm-message {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 20px;
+    white-space: pre-wrap;
+}
+
+.fia-confirm-message .fia-emoji {
+    font-size: 18px;
+}
+
+.fia-confirm-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.fia-confirm-yes {
+    background: linear-gradient(135deg, #4CAF50, #388E3C);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.fia-confirm-yes:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.fia-confirm-mic {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white;
+    border: none;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.fia-confirm-mic:hover {
+    transform: scale(1.1);
+}
+
+.fia-confirm-mic.recording {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    animation: pulse 1s ease-in-out infinite;
+}
+
+.fia-confirm-no {
+    background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+    color: #666;
+    border: 1px solid #ddd;
+    padding: 14px 32px;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.fia-confirm-no:hover {
+    background: linear-gradient(135deg, #e0e0e0, #ccc);
+}
+
+/* Smart Voice Status - processing state */
+.smart-voice-status.processing {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    animation: pulse 1.5s ease-in-out infinite;
 }

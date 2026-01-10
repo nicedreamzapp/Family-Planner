@@ -93,22 +93,9 @@ def get_dashboard_html():
             overflow: hidden;
         }
 
-        /* Left Sidebar - Sticky */
+        /* Left Sidebar - Hidden */
         .sidebar {
-            width: var(--sidebar-width);
-            background: var(--bg-warm);
-            border-right: 2px solid var(--border-gold);
-            padding: 12px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            height: 100dvh;
-            height: var(--vh, 100vh);
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            z-index: 100;
+            display: none;
         }
 
         .sidebar-header {
@@ -313,11 +300,11 @@ def get_dashboard_html():
             font-size: 18px;
         }
 
-        /* Main Calendar Area */
+        /* Main Calendar Area - Full Width */
         .main-content {
             position: absolute;
             top: 0;
-            left: var(--sidebar-width);
+            left: 0;
             right: 0;
             bottom: 0;
             padding: 10px 15px 10px;
@@ -432,6 +419,106 @@ def get_dashboard_html():
         .today-btn:hover {
             background: #E55D3A;
             transform: scale(1.02);
+        }
+
+        /* Header Compact Info Section */
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 0 10px;
+        }
+
+        .header-time-date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.1;
+        }
+
+        .header-time {
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--text-dark);
+        }
+
+        .header-date {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .header-weather {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            box-shadow: 0 2px 6px var(--shadow);
+        }
+
+        .header-weather-temp {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .header-weather-icon {
+            font-size: 18px;
+        }
+
+        /* Month Select Dropdown in Header */
+        .month-select-wrapper {
+            position: relative;
+        }
+
+        .month-select {
+            padding: 8px 30px 8px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            background: white;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .month-select-wrapper::after {
+            content: '▼';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            pointer-events: none;
+            color: var(--text-muted);
+        }
+
+        /* Kid Buttons - 30% Bigger than other pills */
+        .action-pill.kid-btn {
+            padding: 18px 32px;
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .action-pill.kid-btn.liv {
+            background: linear-gradient(135deg, #F3E5F5, #E1BEE7);
+            color: var(--liv);
+        }
+
+        .action-pill.kid-btn.liv:hover {
+            background: linear-gradient(135deg, #E1BEE7, #CE93D8);
+            transform: translateY(-2px);
+        }
+
+        .action-pill.kid-btn.jane {
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            color: var(--jane);
+        }
+
+        .action-pill.kid-btn.jane:hover {
+            background: linear-gradient(135deg, #FFE0B2, #FFCC80);
+            transform: translateY(-2px);
         }
 
         /* Month Section */
@@ -2645,18 +2732,50 @@ def get_dashboard_html():
         <div class="main-content">
             <!-- Global Header - Shows on all panels -->
             <div class="year-header">
+                <!-- Left: Time, Date, Weather -->
+                <div class="header-info">
+                    <div class="header-time-date">
+                        <div class="header-time" id="headerTime">12:00</div>
+                        <div class="header-date" id="headerDate">Mon, Dec 9</div>
+                    </div>
+                    <div class="header-weather" id="headerWeather">
+                        <span class="header-weather-icon" id="headerWeatherIcon">☀️</span>
+                        <span class="header-weather-temp" id="headerWeatherTemp">--°</span>
+                    </div>
+                </div>
+
                 <div class="year-nav" id="calendarNav">
                     <button class="year-arrow" onclick="changeYear(-1)">◀</button>
                     <h1 class="year-title" id="yearTitle">2025</h1>
                     <button class="year-arrow" onclick="changeYear(1)">▶</button>
                 </div>
                 <h1 class="page-title" id="pageTitle" style="display:none;"></h1>
+
+                <!-- Month Skip Dropdown -->
+                <div class="month-select-wrapper" id="monthSelectWrapper">
+                    <select class="month-select" id="monthSelect" onchange="jumpToMonth(this.value)">
+                        <option value="0">Jan</option>
+                        <option value="1">Feb</option>
+                        <option value="2">Mar</option>
+                        <option value="3">Apr</option>
+                        <option value="4">May</option>
+                        <option value="5">Jun</option>
+                        <option value="6">Jul</option>
+                        <option value="7">Aug</option>
+                        <option value="8">Sep</option>
+                        <option value="9">Oct</option>
+                        <option value="10">Nov</option>
+                        <option value="11">Dec</option>
+                    </select>
+                </div>
+
                 <div class="header-actions" id="headerActions">
                     <button class="action-pill" id="navCalendar" onclick="showPanel('calendar')" style="display:none;">📅 Calendar</button>
                     <button class="action-pill" id="navMeals" onclick="showPanel('meals')">🍽️ Meals</button>
                     <button class="action-pill" id="navEvent" onclick="showAddEvent()">➕ Event</button>
                     <button class="action-pill" id="navShopping" onclick="showPanel('shopping')">🛒 Shop</button>
-                    <button class="action-pill" id="navKids" onclick="showPanel('kids')">⭐ Kids</button>
+                    <button class="action-pill kid-btn liv" id="navLiv" onclick="showKidPanel('liv')">Liv</button>
+                    <button class="action-pill kid-btn jane" id="navJane" onclick="showKidPanel('jane')">Jane</button>
                     <button class="action-pill ocean" id="navOcean" onclick="startScreensaver()">🌊 Ocean</button>
                 </div>
                 <button class="today-btn" id="todayBtn" onclick="scrollToToday()">Today</button>
@@ -3366,22 +3485,37 @@ def get_dashboard_html():
 
         function updateClock() {
             const now = new Date();
-            document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', {
+            const timeStr = now.toLocaleTimeString('en-US', {
                 hour: 'numeric', minute: '2-digit', hour12: true
             });
-            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', {
+            const dateStr = now.toLocaleDateString('en-US', {
                 weekday: 'short', month: 'short', day: 'numeric'
             });
+            // Update sidebar (if visible)
+            const sidebarTime = document.getElementById('currentTime');
+            const sidebarDate = document.getElementById('currentDate');
+            if (sidebarTime) sidebarTime.textContent = timeStr;
+            if (sidebarDate) sidebarDate.textContent = dateStr;
+            // Update header
+            const headerTime = document.getElementById('headerTime');
+            const headerDate = document.getElementById('headerDate');
+            if (headerTime) headerTime.textContent = timeStr;
+            if (headerDate) headerDate.textContent = dateStr;
         }
 
         async function fetchWeather() {
             try {
                 const res = await fetch('/api/weather');
                 const weather = await res.json();
-                
+
                 if (weather.current) {
                     document.getElementById('weatherTemp').textContent = weather.current.temp + '°F';
                     document.getElementById('weatherDesc').textContent = weather.current.emoji;
+                    // Update header weather
+                    const headerTemp = document.getElementById('headerWeatherTemp');
+                    const headerIcon = document.getElementById('headerWeatherIcon');
+                    if (headerTemp) headerTemp.textContent = weather.current.temp + '°';
+                    if (headerIcon) headerIcon.textContent = weather.current.emoji;
                     
                     // Render forecast
                     const forecastHtml = weather.forecast.map(day => `
@@ -3415,6 +3549,9 @@ def get_dashboard_html():
             document.getElementById('monthNav').innerHTML = monthAbbrev.map((m, i) => `
                 <button class="month-btn ${i === expandedMonth ? 'current' : ''}" onclick="openMonth(${i})">${m}</button>
             `).join('');
+            // Also update header dropdown
+            const monthSelect = document.getElementById('monthSelect');
+            if (monthSelect) monthSelect.value = expandedMonth;
         }
 
         function openMonth(month) {
@@ -3449,6 +3586,7 @@ def get_dashboard_html():
             const calendarNav = document.getElementById('calendarNav');
             const pageTitle = document.getElementById('pageTitle');
             const todayBtn = document.getElementById('todayBtn');
+            const monthSelectWrapper = document.getElementById('monthSelectWrapper');
 
             const titles = {
                 'calendar': '',
@@ -3461,6 +3599,7 @@ def get_dashboard_html():
                 if (calendarNav) calendarNav.style.display = 'flex';
                 if (pageTitle) pageTitle.style.display = 'none';
                 if (todayBtn) todayBtn.style.display = '';
+                if (monthSelectWrapper) monthSelectWrapper.style.display = '';
             } else {
                 if (calendarNav) calendarNav.style.display = 'none';
                 if (pageTitle) {
@@ -3468,13 +3607,15 @@ def get_dashboard_html():
                     pageTitle.textContent = titles[panel] || panel;
                 }
                 if (todayBtn) todayBtn.style.display = 'none';
+                if (monthSelectWrapper) monthSelectWrapper.style.display = 'none';
             }
 
             // Update header nav buttons - show all except current screen
             const navCalendar = document.getElementById('navCalendar');
             const navMeals = document.getElementById('navMeals');
             const navShopping = document.getElementById('navShopping');
-            const navKids = document.getElementById('navKids');
+            const navLiv = document.getElementById('navLiv');
+            const navJane = document.getElementById('navJane');
             const navEvent = document.getElementById('navEvent');
 
             // Show Calendar button only when NOT on calendar
@@ -3482,9 +3623,31 @@ def get_dashboard_html():
             // Hide the button for current panel
             if (navMeals) navMeals.style.display = (panel === 'meals') ? 'none' : '';
             if (navShopping) navShopping.style.display = (panel === 'shopping') ? 'none' : '';
-            if (navKids) navKids.style.display = (panel === 'kids') ? 'none' : '';
+            // Hide both kid buttons when on kids panel
+            if (navLiv) navLiv.style.display = (panel === 'kids') ? 'none' : '';
+            if (navJane) navJane.style.display = (panel === 'kids') ? 'none' : '';
             // Event button only shows on calendar
             if (navEvent) navEvent.style.display = (panel === 'calendar') ? '' : 'none';
+        }
+
+        // Show kids panel with specific kid selected
+        function showKidPanel(kid) {
+            selectedKid = kid;
+            showPanel('kids');
+            // Update kid card selection
+            document.getElementById('livCard').classList.toggle('selected', kid === 'liv');
+            document.getElementById('janeCard').classList.toggle('selected', kid === 'jane');
+            renderKids();
+        }
+
+        // Jump to month from dropdown
+        function jumpToMonth(month) {
+            expandedMonth = parseInt(month);
+            renderMonthNav();
+            renderCalendar();
+            // Update dropdown to match
+            const monthSelect = document.getElementById('monthSelect');
+            if (monthSelect) monthSelect.value = month;
         }
 
         // Calendar - ONLY show the expanded month (no collapsed months)

@@ -90,6 +90,38 @@ function renderCalendar() {
     document.getElementById('yearTitle').textContent = currentYear;
     renderPreview(today);
     document.getElementById('yearCalendar').innerHTML = renderExpandedMonth(currentYear, expandedMonth, today);
+
+    // Dynamically set grid rows based on actual weeks needed
+    const calendarGrid = document.querySelector('.calendar-grid');
+    if (calendarGrid) {
+        const firstDay = new Date(currentYear, expandedMonth, 1);
+        const lastDay = new Date(currentYear, expandedMonth + 1, 0);
+        const startDay = firstDay.getDay();
+        const daysInMonth = lastDay.getDate();
+
+        // Calculate actual number of rows needed
+        const totalCells = startDay + daysInMonth;
+        const numRows = Math.ceil(totalCells / 7);
+
+        // Calculate which row today is in (if viewing current month)
+        let currentWeekRow = -1;
+        if (today.getFullYear() === currentYear && today.getMonth() === expandedMonth) {
+            const todayDate = today.getDate();
+            const cellIndex = startDay + todayDate - 1;
+            currentWeekRow = Math.floor(cellIndex / 7);
+        }
+
+        // Build grid-template-rows: auto for header, 1fr for current/next week, 0.67fr for others
+        let rows = ['auto'];
+        for (let i = 0; i < numRows; i++) {
+            if (i === currentWeekRow || i === currentWeekRow + 1) {
+                rows.push('1fr');
+            } else {
+                rows.push('0.67fr');
+            }
+        }
+        calendarGrid.style.gridTemplateRows = rows.join(' ');
+    }
 }
 
 function renderPreview(today) {
@@ -177,6 +209,14 @@ function renderExpandedMonth(year, month, today) {
         html += `<div class="calendar-day other-month"><div class="day-num">${d}</div></div>`;
     }
 
+    // Calculate current week row for priority sizing
+    let currentWeekRow = -1;
+    if (today.getFullYear() === year && today.getMonth() === month) {
+        const todayDate = today.getDate();
+        const cellIndex = startDay + todayDate - 1;
+        currentWeekRow = Math.floor(cellIndex / 7);
+    }
+
     // Current month days
     for (let day = 1; day <= daysInMonth; day++) {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
@@ -192,6 +232,11 @@ function renderExpandedMonth(year, month, today) {
         const breakfast = lunch ? data.breakfast[dayOfWeek] : null; // Only show breakfast on school days
         const hasSchoolMeals = lunch && !isWeekend;
 
+        // Calculate which row this day is in
+        const cellIndex = startDay + day - 1;
+        const rowIndex = Math.floor(cellIndex / 7);
+        const isPriorityRow = (rowIndex === currentWeekRow || rowIndex === currentWeekRow + 1);
+
         // Normalize both dates to midnight for accurate day comparison
         const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
         const dateMidnight = new Date(year, month, day);
@@ -200,6 +245,7 @@ function renderExpandedMonth(year, month, today) {
 
         // Build day classes based on distance from today
         let dayClasses = 'calendar-day';
+        if (isPriorityRow) dayClasses += ' priority-row';
         if (isToday) {
             dayClasses += ' today';
         } else if (daysFromToday === 1) {
@@ -250,11 +296,11 @@ function renderExpandedMonth(year, month, today) {
                     </div>
                     <div class="today-chores-container">
                         <div class="chore-column kid1">
-                            <div class="chore-column-header">Emma</div>
+                            <div class="chore-column-header">Liv</div>
                             <div id="kid1Chores"></div>
                         </div>
                         <div class="chore-column kid2">
-                            <div class="chore-column-header">Sophie</div>
+                            <div class="chore-column-header">Jane</div>
                             <div id="kid2Chores"></div>
                         </div>
                     </div>

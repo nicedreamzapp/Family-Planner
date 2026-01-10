@@ -74,6 +74,9 @@ async function init() {
     renderKids();
     updateRewardsDisplay();
     fetchWeather();
+
+    // Refresh weather every 10 minutes
+    setInterval(fetchWeather, 600000);
 }
 
 // ==============================================
@@ -81,12 +84,22 @@ async function init() {
 // ==============================================
 function updateClock() {
     const now = new Date();
-    document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', {
+    const timeStr = now.toLocaleTimeString('en-US', {
         hour: 'numeric', minute: '2-digit', hour12: true
     });
-    document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', {
+    const dateStr = now.toLocaleDateString('en-US', {
         weekday: 'short', month: 'short', day: 'numeric'
     });
+    // Update sidebar (if visible)
+    const sidebarTime = document.getElementById('currentTime');
+    const sidebarDate = document.getElementById('currentDate');
+    if (sidebarTime) sidebarTime.textContent = timeStr;
+    if (sidebarDate) sidebarDate.textContent = dateStr;
+    // Update header
+    const headerTime = document.getElementById('headerTime');
+    const headerDate = document.getElementById('headerDate');
+    if (headerTime) headerTime.textContent = timeStr;
+    if (headerDate) headerDate.textContent = dateStr;
 }
 
 // ==============================================
@@ -94,10 +107,20 @@ function updateClock() {
 // ==============================================
 async function fetchWeather() {
     try {
+        console.log('Fetching weather...');
         const res = await fetch('/api/weather');
         const weather = await res.json();
+        console.log('Weather data:', weather);
 
         if (weather.current) {
+            // Update header weather
+            const headerTemp = document.getElementById('headerWeatherTemp');
+            const headerIcon = document.getElementById('headerWeatherIcon');
+            console.log('Elements:', headerTemp, headerIcon);
+            if (headerTemp) headerTemp.textContent = weather.current.temp + '°';
+            if (headerIcon) headerIcon.textContent = weather.current.emoji;
+            console.log('Weather updated:', weather.current.temp, weather.current.emoji);
+
             // Store forecast by date for calendar day cards
             weatherForecastByDate = {};
             const today = new Date();
@@ -130,7 +153,10 @@ async function fetchWeather() {
             renderCalendar();
         }
     } catch (e) {
-        console.error("Weather load failed", e);
+        console.error("Weather load failed:", e);
+        // Show error in UI for debugging
+        const headerTemp = document.getElementById('headerWeatherTemp');
+        if (headerTemp) headerTemp.textContent = 'ERR';
     }
 }
 
@@ -148,6 +174,7 @@ function showPanel(panel) {
     const calendarNav = document.getElementById('calendarNav');
     const pageTitle = document.getElementById('pageTitle');
     const todayBtn = document.getElementById('todayBtn');
+    const monthSelectWrapper = document.getElementById('monthSelectWrapper');
 
     const titles = {
         'calendar': '',
@@ -160,6 +187,7 @@ function showPanel(panel) {
         if (calendarNav) calendarNav.style.display = 'flex';
         if (pageTitle) pageTitle.style.display = 'none';
         if (todayBtn) todayBtn.style.display = '';
+        if (monthSelectWrapper) monthSelectWrapper.style.display = '';
     } else {
         if (calendarNav) calendarNav.style.display = 'none';
         if (pageTitle) {
@@ -167,20 +195,56 @@ function showPanel(panel) {
             pageTitle.textContent = titles[panel] || panel;
         }
         if (todayBtn) todayBtn.style.display = 'none';
+        if (monthSelectWrapper) monthSelectWrapper.style.display = 'none';
     }
 
     // Update nav buttons visibility
     const navCalendar = document.getElementById('navCalendar');
     const navMeals = document.getElementById('navMeals');
     const navShopping = document.getElementById('navShopping');
-    const navKids = document.getElementById('navKids');
+    const navLiv = document.getElementById('navLiv');
+    const navJane = document.getElementById('navJane');
     const navEvent = document.getElementById('navEvent');
 
     if (navCalendar) navCalendar.style.display = (panel === 'calendar') ? 'none' : '';
     if (navMeals) navMeals.style.display = (panel === 'meals') ? 'none' : '';
     if (navShopping) navShopping.style.display = (panel === 'shopping') ? 'none' : '';
-    if (navKids) navKids.style.display = (panel === 'kids') ? 'none' : '';
+    // Hide both kid buttons when on kids panel
+    if (navLiv) navLiv.style.display = (panel === 'kids') ? 'none' : '';
+    if (navJane) navJane.style.display = (panel === 'kids') ? 'none' : '';
     if (navEvent) navEvent.style.display = (panel === 'calendar') ? '' : 'none';
+}
+
+// Show kids panel with specific kid selected
+function showKidPanel(kid) {
+    // Map 'liv' and 'jane' to 'kid1' and 'kid2' for the existing system
+    if (kid === 'liv') selectedKid = 'kid1';
+    else if (kid === 'jane') selectedKid = 'kid2';
+    else selectedKid = kid;
+
+    showPanel('kids');
+    // Update kid card selection using IDs (more reliable)
+    const kid1Card = document.getElementById('kid1Card');
+    const kid2Card = document.getElementById('kid2Card');
+    if (kid1Card) {
+        kid1Card.classList.remove('selected');
+        if (selectedKid === 'kid1') kid1Card.classList.add('selected');
+    }
+    if (kid2Card) {
+        kid2Card.classList.remove('selected');
+        if (selectedKid === 'kid2') kid2Card.classList.add('selected');
+    }
+    renderKids();
+}
+
+// Jump to month from dropdown
+function jumpToMonth(month) {
+    expandedMonth = parseInt(month);
+    renderMonthNav();
+    renderCalendar();
+    // Update dropdown to match
+    const monthSelect = document.getElementById('monthSelect');
+    if (monthSelect) monthSelect.value = month;
 }
 
 // ==============================================
@@ -281,6 +345,14 @@ function showRewardAnimation() {
     el.textContent = emoji;
     document.body.appendChild(el);
     setTimeout(() => el.remove(), 800);
+}
+
+// ==============================================
+// DirecTV App/Browser Launch
+// ==============================================
+function openDirectTV() {
+    // Universal - just open the web stream, works on all devices
+    window.open('https://stream.directv.com/watchnow', '_blank');
 }
 
 // ==============================================

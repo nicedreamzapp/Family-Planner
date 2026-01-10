@@ -356,8 +356,14 @@ function createJanuaryBackgroundVideo() {
     video.src = '/static/january-bg.mp4';
     console.log('[Theme] Video source set to /static/january-bg.mp4');
 
+    // Slow down to 1/3 speed (0.33x)
     video.addEventListener('loadeddata', () => {
-        console.log('[Theme] January video loaded');
+        video.playbackRate = 0.33;
+        console.log('[Theme] January video loaded, playback rate set to 0.33');
+    });
+
+    video.addEventListener('play', () => {
+        video.playbackRate = 0.33;
     });
 
     video.addEventListener('error', (e) => {
@@ -368,13 +374,15 @@ function createJanuaryBackgroundVideo() {
     document.body.insertBefore(video, document.body.firstChild);
     console.log('[Theme] January video element inserted into DOM');
 
-    // Start playing
+    // Start playing at 1/3 speed
     video.play().then(() => {
-        console.log('[Theme] January video playing');
+        video.playbackRate = 0.33;
+        console.log('[Theme] January video playing at 0.33x speed');
     }).catch(e => {
         console.log('[Theme] January background video autoplay blocked:', e);
         document.addEventListener('click', () => {
             video.play();
+            video.playbackRate = 0.33;
         }, { once: true });
     });
 }

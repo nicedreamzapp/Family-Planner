@@ -145,7 +145,7 @@ async function toggleChore(choreId) {
 
     // Show celebration for completed tasks
     if (!isCompleted) {
-        const kidName = selectedKid === 'kid1' ? 'Emma' : 'Sophie';
+        const kidName = selectedKid === 'kid1' ? 'Liv' : 'Jane';
         showCelebration(kidName);
     }
 
@@ -173,7 +173,7 @@ function renderTodayChores() {
 
     const completedToday = data.chores.completed.filter(c => c.date === today);
 
-    // Render Emma's chores
+    // Render Liv's chores
     const kid1Chores = data.chores.chores.filter(c => c.assignedTo.includes('kid1'));
     const kid1CompletedIds = completedToday.filter(c => c.person === 'kid1').map(c => c.choreId);
     kid1Container.innerHTML = kid1Chores.slice(0, 5).map(c => `
@@ -184,7 +184,7 @@ function renderTodayChores() {
         </div>
     `).join('');
 
-    // Render Sophie's chores
+    // Render Jane's chores
     const kid2Chores = data.chores.chores.filter(c => c.assignedTo.includes('kid2'));
     const kid2CompletedIds = completedToday.filter(c => c.person === 'kid2').map(c => c.choreId);
     kid2Container.innerHTML = kid2Chores.slice(0, 5).map(c => `
@@ -219,7 +219,7 @@ async function toggleCalendarChore(choreId, person) {
             data.chores.completed.push({ choreId, person, date: today });
 
             // Show celebration!
-            const kidName = person === 'kid1' ? 'Emma' : 'Sophie';
+            const kidName = person === 'kid1' ? 'Liv' : 'Jane';
             showCelebration(kidName);
         } else {
             // Task uncompleted

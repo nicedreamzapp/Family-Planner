@@ -12,11 +12,12 @@ function renderMeals() {
 
     document.getElementById('mealWeek').innerHTML = days.map(day => {
         const meal = data.meals.thisWeek[day];
+        const isEmpty = !meal?.name;
         return `
-            <div class="meal-day ${day === today ? 'today' : ''}" onclick="showMealPicker('${day}')">
+            <div class="meal-day ${day === today ? 'today' : ''} ${isEmpty ? 'empty' : ''}" onclick="showMealPicker('${day}')">
+                <span class="meal-icon">${meal?.icon || '➕'}</span>
                 <span class="day-name">${day.charAt(0).toUpperCase() + day.slice(1)}</span>
                 <span class="meal-name">${meal?.name || 'Tap to plan'}</span>
-                <span class="meal-icon">${meal?.icon || '\u2795'}</span>
             </div>
         `;
     }).join('');

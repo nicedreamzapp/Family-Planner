@@ -47,16 +47,16 @@
     --text-glow: 0 0 10px rgba(255,255,255,0.9), 0 0 20px rgba(255,255,255,0.6);
 
     /* ===== VIEWPORT-BASED TYPOGRAPHY ===== */
-    /* Using vmin with READABLE minimums - never go below 9px */
-    --fs-xxs: clamp(9px, 1vmin, 14px);
-    --fs-xs: clamp(10px, 1.1vmin, 16px);
-    --fs-sm: clamp(11px, 1.3vmin, 18px);
-    --fs-base: clamp(12px, 1.5vmin, 22px);
-    --fs-md: clamp(13px, 1.7vmin, 24px);
-    --fs-lg: clamp(14px, 2vmin, 28px);
-    --fs-xl: clamp(16px, 2.4vmin, 34px);
-    --fs-xxl: clamp(20px, 3vmin, 50px);
-    --fs-huge: clamp(28px, 4.5vmin, 70px);
+    /* Using vmin with READABLE minimums - BIGGER for tablets */
+    --fs-xxs: clamp(11px, 1.2vmin, 16px);
+    --fs-xs: clamp(12px, 1.4vmin, 18px);
+    --fs-sm: clamp(13px, 1.6vmin, 20px);
+    --fs-base: clamp(14px, 1.8vmin, 24px);
+    --fs-md: clamp(15px, 2vmin, 26px);
+    --fs-lg: clamp(16px, 2.2vmin, 30px);
+    --fs-xl: clamp(18px, 2.6vmin, 36px);
+    --fs-xxl: clamp(22px, 3.2vmin, 52px);
+    --fs-huge: clamp(30px, 5vmin, 72px);
 
     /* ===== VIEWPORT-BASED LAYOUT ===== */
     --sidebar-width: clamp(120px, 18vw, 350px);

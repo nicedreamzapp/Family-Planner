@@ -25,21 +25,10 @@ html, body {
 }
 
 /* ==============================================
-   SIDEBAR - Bigger and more readable
+   SIDEBAR - HIDDEN for full-width calendar
    ============================================== */
 .sidebar {
-    width: clamp(135px, 16vw, 240px);
-    min-width: 135px;
-    max-width: 240px;
-    height: 100vh;
-    height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    padding: clamp(6px, 1vmin, 14px);
-    gap: clamp(6px, 1vmin, 12px);
-    overflow-y: auto;
-    overflow-x: hidden;
-    flex-shrink: 0;
+    display: none !important;
 }
 
 .sidebar-header {
@@ -142,7 +131,7 @@ html, body {
     height: 100dvh;
     display: flex;
     flex-direction: column;
-    padding: clamp(2px, 0.4vmin, 6px);
+    padding: 2px 2px 0 2px;
     overflow: hidden;
     min-width: 0;
 }
@@ -199,24 +188,35 @@ html, body {
     font-size: clamp(14px, 1.8vmin, 20px);
 }
 
-/* Header Actions - Compact horizontal row */
+/* Header Actions - Single horizontal row on tablets/computers */
 .header-actions {
     display: flex;
-    gap: clamp(4px, 0.6vmin, 8px);
-    flex-wrap: nowrap;
+    gap: clamp(4px, 0.8vmin, 10px);
+    flex-wrap: nowrap !important;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 }
 
 .action-pill {
-    padding: clamp(6px, 1vmin, 12px) clamp(10px, 1.5vmin, 18px) !important;
-    font-size: clamp(12px, 1.6vmin, 18px) !important;
-    border-radius: clamp(8px, 1.2vmin, 16px) !important;
+    padding: clamp(8px, 1.5vmin, 18px) clamp(12px, 2vmin, 28px) !important;
+    font-size: clamp(14px, 2vmin, 24px) !important;
+    border-radius: clamp(10px, 1.5vmin, 20px) !important;
     white-space: nowrap;
+    font-weight: 700 !important;
 }
 
 .today-btn {
-    padding: clamp(6px, 1vmin, 12px) clamp(10px, 1.5vmin, 18px) !important;
-    font-size: clamp(12px, 1.6vmin, 18px) !important;
-    border-radius: clamp(8px, 1.2vmin, 16px) !important;
+    padding: clamp(8px, 1.5vmin, 18px) clamp(12px, 2vmin, 28px) !important;
+    font-size: clamp(14px, 2vmin, 24px) !important;
+    border-radius: clamp(10px, 1.5vmin, 20px) !important;
+    font-weight: 700 !important;
+}
+
+/* Kid buttons slightly bigger */
+.action-pill.kid-btn {
+    padding: clamp(10px, 1.8vmin, 20px) clamp(16px, 2.5vmin, 32px) !important;
+    font-size: clamp(16px, 2.2vmin, 26px) !important;
 }
 
 /* ==============================================
@@ -229,10 +229,12 @@ html, body {
 
 #calendarPanel.active {
     display: flex !important;
-    flex: 1;
+    flex: 1 1 0;
     flex-direction: column;
     min-height: 0;
+    height: 100%;
     overflow: hidden;
+    padding: 0;
 }
 
 /* Kids Panel - Only show when active */
@@ -249,19 +251,21 @@ html, body {
 }
 
 #yearCalendar {
-    flex: 1;
+    flex: 1 1 0;
     display: flex;
     flex-direction: column;
     min-height: 0;
+    height: 100%;
     overflow: hidden;
 }
 
 .expanded-month {
-    flex: 1;
+    flex: 1 1 0;
     display: flex;
     flex-direction: column;
     min-height: 0;
-    padding: clamp(2px, 0.3vmin, 4px) !important;
+    height: 100%;
+    padding: 0 !important;
     overflow: hidden;
 }
 
@@ -272,7 +276,7 @@ html, body {
     justify-content: center;
     gap: clamp(2px, 0.3vmin, 6px);
     padding: 0;
-    margin-bottom: clamp(1px, 0.2vmin, 3px);
+    margin: 0;
     flex-shrink: 0;
 }
 
@@ -290,12 +294,13 @@ html, body {
    CALENDAR GRID - Fills remaining space
    ============================================== */
 .calendar-grid {
-    flex: 1;
+    flex: 1 1 0;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: auto 1fr 1fr 1fr 1fr 1fr 1fr;
     gap: clamp(1px, 0.15vmin, 2px);
     min-height: 0;
+    height: 100%;
     overflow: hidden;
 }
 
@@ -322,29 +327,21 @@ html, body {
     opacity: 0.85;
 }
 
-/* TODAY - BIGGEST with emphasis */
+/* TODAY - no scaling, just normal size */
 .calendar-day.today {
-    transform: scale(1.08) !important;
-    transform-origin: center;
     z-index: 10 !important;
 }
 
-/* Current week (tomorrow, near-future-close, near-future) - BIG */
+/* Current week - no scaling */
 .calendar-day.tomorrow {
-    transform: scale(1.04);
-    transform-origin: center;
     z-index: 5;
 }
 
 .calendar-day.near-future-close {
-    transform: scale(1.02);
-    transform-origin: center;
     z-index: 4;
 }
 
 .calendar-day.near-future {
-    transform: scale(1.0);
-    transform-origin: center;
     z-index: 3;
 }
 
@@ -376,6 +373,7 @@ html, body {
     display: flex;
     flex-direction: column;
     min-height: 0;
+    height: 100%;
 }
 
 .day-num {
@@ -531,33 +529,64 @@ html, body {
 }
 
 /* ==============================================
-   MEALS PANEL - Compact
+   MEALS PANEL - Nice Card Grid
    ============================================== */
 #mealsPanel .voice-command-bar {
-    margin-bottom: clamp(4px, 0.6vmin, 10px);
+    margin-bottom: clamp(8px, 1vmin, 16px);
 }
 
 .meal-week {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(2px, 0.3vmin, 6px);
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: clamp(8px, 1vmin, 16px);
+    padding: clamp(8px, 1vmin, 16px);
 }
 
 .meal-day {
-    padding: clamp(4px, 0.6vmin, 10px) clamp(6px, 1vmin, 14px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(12px, 1.5vmin, 24px) clamp(8px, 1vmin, 16px);
+    min-height: clamp(80px, 12vmin, 140px);
+    background: linear-gradient(135deg, #FFFBF5, #FFF8E1);
+    border-radius: clamp(10px, 1.2vmin, 18px);
+    border: 2px solid var(--border-light);
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.meal-day .day-name {
-    font-size: clamp(10px, 1.2vmin, 15px);
-    width: clamp(40px, 6vmin, 70px);
+.meal-day:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-color: var(--border-gold);
+}
+
+.meal-day.today {
+    border-color: var(--accent-orange);
+    background: linear-gradient(135deg, #FFF5F2, #FFE8E0);
 }
 
 .meal-day .meal-icon {
-    font-size: clamp(16px, 2.2vmin, 28px);
+    font-size: clamp(24px, 4vmin, 48px);
+    margin-bottom: clamp(4px, 0.5vmin, 10px);
+    order: 1;
+}
+
+.meal-day .day-name {
+    font-size: clamp(10px, 1.2vmin, 14px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: clamp(2px, 0.3vmin, 6px);
+    order: 2;
 }
 
 .meal-day .meal-name {
-    font-size: clamp(11px, 1.3vmin, 16px);
+    font-size: clamp(9px, 1.1vmin, 13px);
+    color: var(--text-muted);
+    line-height: 1.2;
+    order: 3;
 }
 
 /* ==============================================
@@ -653,20 +682,7 @@ html, body {
     }
 
     .sidebar {
-        width: 100vw !important;
-        max-width: 100vw !important;
-        min-width: 100vw !important;
-        height: auto !important;
-        max-height: none !important;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: center;
-        justify-content: space-between;
-        border-right: none;
-        border-bottom: 2px solid #B8860B;
-        padding: clamp(4px, 1vmin, 8px) clamp(8px, 2vmin, 16px);
-        overflow: visible;
-        gap: clamp(8px, 2vmin, 16px);
+        display: none !important;
     }
 
     .sidebar-header {
@@ -751,12 +767,11 @@ html, body {
 }
 
 /* ==============================================
-   PHONE - Super compact horizontal bar
+   PHONE - Compact stacking buttons
    ============================================== */
 @media (max-width: 600px) {
     .sidebar {
-        padding: clamp(3px, 1vw, 6px) clamp(6px, 2vw, 12px) !important;
-        gap: clamp(6px, 2vw, 12px) !important;
+        display: none !important;
     }
 
     .current-time {
@@ -790,25 +805,49 @@ html, body {
     .year-header {
         flex-wrap: wrap;
         justify-content: center;
+        gap: 4px;
+        padding: 4px !important;
     }
 
     .header-voice {
         display: none;
     }
 
+    /* Buttons grid on phone - 3 columns */
     .header-actions {
-        flex: 1 1 100%;
-        justify-content: center;
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px !important;
+        width: 100%;
+        order: 10;
     }
 
     .action-pill {
-        padding: clamp(3px, 0.8vw, 6px) clamp(6px, 1.5vw, 10px) !important;
-        font-size: clamp(8px, 2vw, 12px) !important;
+        padding: 6px 4px !important;
+        font-size: clamp(10px, 2.8vw, 14px) !important;
+        border-radius: 8px !important;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .action-pill.kid-btn {
+        padding: 6px 4px !important;
+        font-size: clamp(11px, 3vw, 15px) !important;
+    }
+
+    .today-btn {
+        padding: 6px 4px !important;
+        font-size: clamp(10px, 2.8vw, 14px) !important;
+    }
+
+    /* Hide some buttons on very small phones */
+    .action-pill#navFullscreen {
+        display: none !important;
     }
 }
 
 /* ==============================================
-   LANDSCAPE PHONE - Side by side, minimal
+   LANDSCAPE PHONE - Horizontal row, compact
    ============================================== */
 @media (max-height: 500px) and (orientation: landscape) {
     .app-container {
@@ -816,20 +855,7 @@ html, body {
     }
 
     .sidebar {
-        width: clamp(80px, 12vw, 120px) !important;
-        min-width: 80px !important;
-        max-width: 120px !important;
-        height: 100vh !important;
-        height: 100dvh !important;
-        flex-direction: column;
-        border-right: 2px solid #B8860B;
-        border-bottom: none;
-        padding: clamp(4px, 1vmin, 8px);
-    }
-
-    .month-nav,
-    .today-section {
-        display: none;
+        display: none !important;
     }
 
     .helpers-widget {
@@ -842,16 +868,36 @@ html, body {
     }
 
     .year-header {
-        padding: clamp(1px, 0.3vh, 4px) 0;
+        padding: 2px 4px !important;
+        gap: 4px;
     }
 
     .year-title {
         font-size: clamp(14px, 4vh, 22px) !important;
     }
 
+    /* Landscape phone - single row, smaller buttons */
+    .header-actions {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        gap: 4px !important;
+    }
+
     .action-pill {
-        padding: clamp(2px, 0.5vh, 6px) clamp(6px, 1.5vh, 12px) !important;
-        font-size: clamp(9px, 2vh, 12px) !important;
+        padding: 4px 8px !important;
+        font-size: clamp(9px, 2.5vh, 13px) !important;
+        border-radius: 6px !important;
+    }
+
+    .action-pill.kid-btn {
+        padding: 4px 10px !important;
+        font-size: clamp(10px, 3vh, 14px) !important;
+    }
+
+    /* Hide less important buttons in landscape phone */
+    .action-pill#navFullscreen,
+    .action-pill.ocean {
+        display: none !important;
     }
 }
 
@@ -860,17 +906,16 @@ html, body {
    ============================================== */
 @media (min-width: 900px) and (max-width: 1200px) and (orientation: landscape) {
     .sidebar {
-        width: clamp(120px, 14vw, 180px);
+        display: none !important;
     }
 }
 
 /* ==============================================
-   LARGE SCREENS - More breathing room
+   LARGE SCREENS - Big buttons, horizontal row
    ============================================== */
 @media (min-width: 1400px) {
     .sidebar {
-        width: clamp(160px, 14vw, 240px);
-        padding: clamp(8px, 1vmin, 16px);
+        display: none !important;
     }
 
     .main-content {
@@ -887,6 +932,54 @@ html, body {
         padding: clamp(3px, 0.4vmin, 6px) clamp(5px, 0.6vmin, 10px) !important;
         font-size: clamp(11px, 1.3vmin, 16px) !important;
         font-weight: 700;
+    }
+
+    .header-actions {
+        flex-wrap: nowrap !important;
+        gap: 12px;
+    }
+
+    /* Large buttons on big screens - still horizontal */
+    .action-pill {
+        padding: 16px 32px !important;
+        font-size: 22px !important;
+        border-radius: 18px !important;
+    }
+
+    .action-pill.kid-btn {
+        padding: 18px 38px !important;
+        font-size: 26px !important;
+    }
+
+    .today-btn {
+        padding: 16px 32px !important;
+        font-size: 22px !important;
+    }
+}
+
+/* ==============================================
+   TABLET - Medium buttons, horizontal row
+   ============================================== */
+@media (min-width: 768px) and (max-width: 1399px) {
+    .header-actions {
+        flex-wrap: nowrap !important;
+        gap: 8px;
+    }
+
+    .action-pill {
+        padding: 12px 20px !important;
+        font-size: 18px !important;
+        border-radius: 14px !important;
+    }
+
+    .action-pill.kid-btn {
+        padding: 14px 24px !important;
+        font-size: 20px !important;
+    }
+
+    .today-btn {
+        padding: 12px 20px !important;
+        font-size: 18px !important;
     }
 }
 
@@ -933,4 +1026,86 @@ html, body {
     .calendar-grid {
         height: auto !important;
     }
+}
+
+/* ==============================================
+   FORCE CALENDAR TO FILL SCREEN - PROPER FLEXBOX
+   ============================================== */
+html, body {
+    height: 100vh !important;
+    height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+.app-container {
+    height: 100vh !important;
+    height: 100dvh !important;
+    display: flex !important;
+    overflow: hidden !important;
+}
+
+.main-content {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    padding: 2px !important;
+}
+
+.year-header {
+    flex-shrink: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+#calendarPanel.active {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+
+#yearCalendar {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
+.expanded-month {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+}
+
+.expanded-header {
+    flex-shrink: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.calendar-grid {
+    flex: 1 !important;
+    min-height: 0 !important;
+    display: grid !important;
+    border: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.calendar-day {
+    min-height: 0 !important;
+    overflow: hidden !important;
 }

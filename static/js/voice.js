@@ -4,6 +4,22 @@
    ============================================== */
 
 // ==============================================
+// Refresh All Data Function
+// ==============================================
+function refreshAllData() {
+    /**
+     * Refresh all dashboard data after Fia makes changes.
+     * Called after confirmation of actions.
+     */
+    console.log('[Voice] Refreshing all data...');
+    if (typeof renderCalendar === 'function') renderCalendar();
+    if (typeof renderShopping === 'function') renderShopping();
+    if (typeof renderMeals === 'function') renderMeals();
+    if (typeof renderChores === 'function') renderChores();
+    if (typeof updatePointsDisplay === 'function') updatePointsDisplay();
+}
+
+// ==============================================
 // Speech Recognition Setup
 // ==============================================
 let recognition = null;
@@ -199,7 +215,7 @@ async function processTextCommand(context, text) {
                 renderKids();
                 setTimeout(() => setVoiceStatus(context, '', ''), 3000);
             } else {
-                setVoiceStatus(context, 'Could not understand. Try: "Emma made her bed"', 'error');
+                setVoiceStatus(context, 'Could not understand. Try: "Liv made her bed"', 'error');
             }
         }
     } catch (err) {
@@ -209,64 +225,179 @@ async function processTextCommand(context, text) {
 }
 
 // ==============================================
-// Natural Language Parsing
+// Natural Language Parsing - SMART DATE RANGES
 // ==============================================
 function parseEventText(text) {
+    // This now returns an ARRAY of events to support date ranges
+    const events = parseEventsWithDateRange(text);
+    // For backward compatibility, return first event if only one
+    return events.length === 1 ? events[0] : events;
+}
+
+function parseEventsWithDateRange(text) {
     const now = new Date();
+    const currentYear = now.getFullYear();
     let title = text;
-    let date = now.toISOString().split('T')[0];
+    let startDate = null;
+    let endDate = null;
     let time = '';
+    let endTime = '';
 
     const monthMap = { jan:0, feb:1, mar:2, apr:3, may:4, jun:5, jul:6, aug:7, sep:8, oct:9, nov:10, dec:11 };
+    const monthNames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
-    // Check for month + day pattern
-    const monthDayMatch = text.match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(\d{1,2})(?:st|nd|rd|th)?/i);
-    if (monthDayMatch) {
-        const month = monthMap[monthDayMatch[1].toLowerCase().substring(0,3)];
-        const day = parseInt(monthDayMatch[2]);
-        const eventDate = new Date(now.getFullYear(), month, day);
-        if (eventDate < now) eventDate.setFullYear(now.getFullYear() + 1);
-        date = eventDate.toISOString().split('T')[0];
-        title = text.replace(monthDayMatch[0], '').trim();
+    // Extract time range first (e.g., "9am to 1pm", "9:00 AM - 1:00 PM")
+    const timeRangeMatch = text.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\s*(?:to|-|through|until)\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i);
+    if (timeRangeMatch) {
+        let startHours = parseInt(timeRangeMatch[1]);
+        const startMins = timeRangeMatch[2] || '00';
+        const startAmpm = (timeRangeMatch[3] || timeRangeMatch[6] || 'am').toLowerCase();
+
+        let endHours = parseInt(timeRangeMatch[4]);
+        const endMins = timeRangeMatch[5] || '00';
+        const endAmpm = (timeRangeMatch[6] || 'pm').toLowerCase();
+
+        // Handle AM/PM
+        if (startAmpm === 'pm' && startHours < 12) startHours += 12;
+        if (startAmpm === 'am' && startHours === 12) startHours = 0;
+        if (endAmpm === 'pm' && endHours < 12) endHours += 12;
+        if (endAmpm === 'am' && endHours === 12) endHours = 0;
+
+        time = startHours.toString().padStart(2, '0') + ':' + startMins;
+        endTime = endHours.toString().padStart(2, '0') + ':' + endMins;
+        title = title.replace(timeRangeMatch[0], '').trim();
     } else {
-        // Check for "on the 15th" pattern
-        const dayMatch = text.match(/(?:on\s+)?(?:the\s+)?(\d{1,2})(?:st|nd|rd|th)/i);
-        if (dayMatch) {
-            const day = parseInt(dayMatch[1]);
-            const eventDate = new Date(now.getFullYear(), now.getMonth(), day);
-            if (eventDate < now) eventDate.setMonth(eventDate.getMonth() + 1);
-            date = eventDate.toISOString().split('T')[0];
-            title = text.replace(dayMatch[0], '').trim();
+        // Single time extraction
+        const timeMatch = text.match(/(?:at\s+)?(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i);
+        if (timeMatch) {
+            let hours = parseInt(timeMatch[1]);
+            const minutes = timeMatch[2] || '00';
+            const ampm = timeMatch[3].toLowerCase();
+            if (ampm === 'pm' && hours < 12) hours += 12;
+            if (ampm === 'am' && hours === 12) hours = 0;
+            time = hours.toString().padStart(2, '0') + ':' + minutes;
+            title = title.replace(timeMatch[0], '').trim();
         }
     }
 
-    // Check for tomorrow
-    if (/tomorrow/i.test(text)) {
-        const tomorrow = new Date(now);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        date = tomorrow.toISOString().split('T')[0];
-        title = text.replace(/tomorrow/i, '').trim();
+    // DATE RANGE PATTERNS
+    // Pattern 1: "December 29 through 31", "Dec 29-31", "December 29th to the 31st"
+    const dateRangeMatch = text.match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(\d{1,2})(?:st|nd|rd|th)?\s*(?:through|thru|to|-)\s*(?:the\s+)?(\d{1,2})(?:st|nd|rd|th)?/i);
+    if (dateRangeMatch) {
+        const month = monthMap[dateRangeMatch[1].toLowerCase().substring(0,3)];
+        const startDay = parseInt(dateRangeMatch[2]);
+        const endDay = parseInt(dateRangeMatch[3]);
+
+        startDate = new Date(currentYear, month, startDay);
+        endDate = new Date(currentYear, month, endDay);
+
+        // If dates are in the past, use next year
+        if (endDate < now) {
+            startDate.setFullYear(currentYear + 1);
+            endDate.setFullYear(currentYear + 1);
+        }
+
+        title = title.replace(dateRangeMatch[0], '').trim();
     }
 
-    // Extract time patterns
-    const timeMatch = text.match(/at\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i) ||
-                      text.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i);
-    if (timeMatch) {
-        let hours = parseInt(timeMatch[1]);
-        const minutes = timeMatch[2] || '00';
-        const ampm = timeMatch[3]?.toLowerCase();
-        if (ampm === 'pm' && hours < 12) hours += 12;
-        if (ampm === 'am' && hours === 12) hours = 0;
-        time = hours.toString().padStart(2, '0') + ':' + minutes;
-        title = title.replace(timeMatch[0], '').trim();
+    // Pattern 2: "Dec 29, 30, and 31" or "December 29 30 31"
+    const multiDayMatch = text.match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(\d{1,2})(?:st|nd|rd|th)?(?:\s*,?\s*(?:and\s+)?(\d{1,2})(?:st|nd|rd|th)?)+/i);
+    if (!dateRangeMatch && multiDayMatch) {
+        const month = monthMap[multiDayMatch[1].toLowerCase().substring(0,3)];
+        const daysStr = multiDayMatch[0].replace(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*/i, '');
+        const days = daysStr.match(/\d+/g).map(d => parseInt(d));
+
+        if (days.length > 1) {
+            startDate = new Date(currentYear, month, Math.min(...days));
+            endDate = new Date(currentYear, month, Math.max(...days));
+            if (endDate < now) {
+                startDate.setFullYear(currentYear + 1);
+                endDate.setFullYear(currentYear + 1);
+            }
+            title = title.replace(multiDayMatch[0], '').trim();
+        }
+    }
+
+    // Pattern 3: Single date "December 29th" or "Dec 29"
+    if (!startDate) {
+        const singleDateMatch = text.match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(\d{1,2})(?:st|nd|rd|th)?/i);
+        if (singleDateMatch) {
+            const month = monthMap[singleDateMatch[1].toLowerCase().substring(0,3)];
+            const day = parseInt(singleDateMatch[2]);
+            startDate = new Date(currentYear, month, day);
+            if (startDate < now) startDate.setFullYear(currentYear + 1);
+            title = title.replace(singleDateMatch[0], '').trim();
+        }
+    }
+
+    // Pattern 4: "tomorrow", "today"
+    if (!startDate && /tomorrow/i.test(text)) {
+        startDate = new Date(now);
+        startDate.setDate(startDate.getDate() + 1);
+        title = title.replace(/tomorrow/i, '').trim();
+    }
+    if (!startDate && /today/i.test(text)) {
+        startDate = new Date(now);
+        title = title.replace(/today/i, '').trim();
+    }
+
+    // Pattern 5: Day of week - "next Monday", "this Tuesday"
+    const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const dayMatch = text.match(/(?:this|next)?\s*(monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i);
+    if (!startDate && dayMatch) {
+        const targetDay = dayNames.indexOf(dayMatch[1].toLowerCase());
+        startDate = new Date(now);
+        const currentDay = startDate.getDay();
+        let daysUntil = targetDay - currentDay;
+        if (daysUntil <= 0) daysUntil += 7;
+        if (/next/i.test(dayMatch[0]) && daysUntil < 7) daysUntil += 7;
+        startDate.setDate(startDate.getDate() + daysUntil);
+        title = title.replace(dayMatch[0], '').trim();
+    }
+
+    // Default to today if no date found
+    if (!startDate) {
+        startDate = new Date(now);
     }
 
     // Clean up title
-    title = title.replace(/^(add|create|schedule|set|put)\s+/i, '').trim();
+    title = title.replace(/\b(each|every)\s+(day|morning|afternoon|evening)\b/gi, '').trim();
+    title = title.replace(/^(add|create|schedule|set|put|have|got)\s+/i, '').trim();
+    title = title.replace(/\s+(on|for|at)\s*$/i, '').trim();
     title = title.replace(/\s+/g, ' ').trim();
     if (!title) title = 'Event';
+    // Capitalize first letter
+    title = title.charAt(0).toUpperCase() + title.slice(1);
 
-    return { title, date, time, person: 'family' };
+    // Generate events array
+    const events = [];
+    const formatDate = (d) => d.toISOString().split('T')[0];
+
+    if (endDate && endDate > startDate) {
+        // Create event for each day in range
+        const current = new Date(startDate);
+        while (current <= endDate) {
+            events.push({
+                title: title,
+                date: formatDate(current),
+                time: time,
+                endTime: endTime,
+                person: 'family'
+            });
+            current.setDate(current.getDate() + 1);
+        }
+    } else {
+        // Single event
+        events.push({
+            title: title,
+            date: formatDate(startDate),
+            time: time,
+            endTime: endTime,
+            person: 'family'
+        });
+    }
+
+    return events;
 }
 
 function parseMealText(text) {
@@ -494,44 +625,509 @@ function hideSmartVoiceStatus() {
 }
 
 // ==============================================
-// Smart Intent Detection & Routing
+// Smart Intent Detection & Routing - FIA BRAIN INTEGRATION
 // ==============================================
-async function processSmartVoiceCommand(text) {
-    const intent = detectIntent(text);
-    console.log('Detected intent:', intent.type, 'from:', text);
 
+// Use Fia's LLM brain for intelligent command processing
+let useFiaBrain = true;  // Set to false to use legacy regex mode
+let awaitingConfirmation = false;
+let pendingAction = null;  // Store parsed action for direct execution
+
+async function processWithFiaBrain(text) {
+    /**
+     * Send command to Fia's brain for intelligent processing.
+     * Fia will:
+     * 1. Understand complex multi-date/multi-item requests
+     * 2. Fetch current family state for context
+     * 3. Ask for confirmation before executing
+     * 4. Return structured response
+     */
     try {
-        switch (intent.type) {
-            case 'chore':
-                await handleChoreIntent(intent);
-                break;
-            case 'shopping':
-                await handleShoppingIntent(intent);
-                break;
-            case 'calendar':
-                await handleCalendarIntent(intent);
-                break;
-            case 'meal':
-                await handleMealIntent(intent);
-                break;
-            default:
-                const msg = 'I\'m not sure what to do with that. Try saying something like: Add milk to the shopping list, or Emma brushed her teeth, or Dentist on Tuesday at 3 PM.';
-                showSmartVoiceStatus('🤔 Not sure what to do with that. Try being more specific.', 'error');
-                speakConfirmation(msg);
-                setTimeout(() => hideSmartVoiceStatus(), 5000);
+        showSmartVoiceStatus('🧠 Thinking...', 'processing');
+
+        // Use VPS proxy endpoint instead of localhost (avoids ad blocker issues)
+        const response = await fetch('/api/fia-chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text })
+        });
+
+        if (!response.ok) {
+            throw new Error('Fia unavailable');
         }
+
+        const result = await response.json();
+        const fiaResponse = result.response || '';
+
+        console.log('[Fia Brain] Response:', fiaResponse);
+
+        // Check if Fia is asking for confirmation
+        if (fiaResponse.includes('confirm') || fiaResponse.includes('?')) {
+            awaitingConfirmation = true;
+
+            // Parse the action from the response
+            pendingAction = parseActionFromResponse(fiaResponse);
+            console.log('[Fia] Parsed action:', pendingAction);
+
+            showFiaConfirmation(fiaResponse);
+            speakConfirmation(extractSpokenPart(fiaResponse));
+            return true;
+        }
+
+        // Check if action was completed
+        if (fiaResponse.includes('Done!') || fiaResponse.includes('Added') || fiaResponse.includes('Set') || fiaResponse.includes('Marked')) {
+            awaitingConfirmation = false;
+            showSmartVoiceStatus(fiaResponse, 'success');
+            speakConfirmation(fiaResponse);
+
+            // Refresh the dashboard
+            setTimeout(() => {
+                hideSmartVoiceStatus();
+                refreshAllData();
+            }, 3000);
+            return true;
+        }
+
+        // Check if cancelled
+        if (fiaResponse.includes('cancelled') || fiaResponse.includes('Okay,')) {
+            awaitingConfirmation = false;
+            showSmartVoiceStatus(fiaResponse, 'info');
+            speakConfirmation(fiaResponse);
+            setTimeout(() => hideSmartVoiceStatus(), 3000);
+            return true;
+        }
+
+        // Check for clarification or error
+        if (fiaResponse.includes('trouble') || fiaResponse.includes('rephrase') || fiaResponse.includes('not sure')) {
+            showSmartVoiceStatus('🤔 ' + fiaResponse, 'error');
+            speakConfirmation(fiaResponse);
+            setTimeout(() => hideSmartVoiceStatus(), 5000);
+            return true;
+        }
+
+        // General response from Fia
+        showSmartVoiceStatus(fiaResponse, 'info');
+        speakConfirmation(fiaResponse);
+        setTimeout(() => hideSmartVoiceStatus(), 5000);
+        return true;
+
     } catch (err) {
-        console.error('Smart voice error:', err);
-        showSmartVoiceStatus('❌ Error: ' + err.message, 'error');
-        setTimeout(() => hideSmartVoiceStatus(), 3000);
+        console.log('[Fia Brain] Error:', err.message, '- falling back to regex');
+        return false;  // Fall back to regex mode
     }
+}
+
+function parseActionFromResponse(response) {
+    /**
+     * Parse the action from Fia's confirmation message.
+     * Examples:
+     * - "🍽️ Set Wednesday's dinner to 'Tacos'?" -> {type: 'meal', day: 'wednesday', meal: 'Tacos'}
+     * - "📅 Add 'Swim Camp' on 2025-12-31?" -> {type: 'calendar', title: 'Swim Camp', dates: ['2025-12-31']}
+     * - "🛒 Add 'Milk' to shopping list?" -> {type: 'shopping', items: ['Milk']}
+     */
+    const lower = response.toLowerCase();
+
+    // MEAL: "Set Wednesday's dinner (2024-12-31) to 'Tacos'" or "Set Wednesday's dinner to 'Tacos'"
+    const mealMatch = response.match(/Set (\w+)'s dinner(?: \((\d{4}-\d{2}-\d{2})\))? to ['"]([^'"]+)['"]/i);
+    if (mealMatch) {
+        let date = mealMatch[2] || null;
+        const day = mealMatch[1].toLowerCase();
+
+        // If no date, calculate from day name
+        if (!date) {
+            const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const targetDay = days.indexOf(day);
+            if (targetDay >= 0) {
+                const now = new Date();
+                const currentDay = now.getDay();
+                let daysAhead = targetDay - currentDay;
+                if (daysAhead <= 0) daysAhead += 7;
+                const targetDate = new Date(now);
+                targetDate.setDate(now.getDate() + daysAhead);
+                date = targetDate.toISOString().split('T')[0];
+            }
+        }
+
+        return {
+            type: 'meal',
+            day: day,
+            date: date,
+            meal: mealMatch[3]
+        };
+    }
+
+    // CALENDAR: "Add 'Event Title' on 2025-12-31" or "Add 'Event' on 3 days"
+    const calendarMatch = response.match(/Add ['"]([^'"]+)['"] on (\d{4}-\d{2}-\d{2})/i);
+    if (calendarMatch) {
+        return {
+            type: 'calendar',
+            title: calendarMatch[1],
+            dates: [calendarMatch[2]]
+        };
+    }
+
+    // CALENDAR with multiple dates: "Add 'Event' on 3 days"
+    const multiCalMatch = response.match(/Add ['"]([^'"]+)['"] on (\d+) days/i);
+    if (multiCalMatch) {
+        // We need to extract dates from the original parsed data
+        // For now, return what we can
+        return {
+            type: 'calendar',
+            title: multiCalMatch[1],
+            dates: []  // Will need to be filled in from context
+        };
+    }
+
+    // SHOPPING: "Add 'Milk' to shopping list" or "Add 3 items to shopping"
+    const shoppingMatch = response.match(/Add ['"]([^'"]+)['"] to shopping/i);
+    if (shoppingMatch) {
+        return {
+            type: 'shopping',
+            items: [shoppingMatch[1]]
+        };
+    }
+
+    // SHOPPING multiple: "Add 3 items to shopping: Milk, Eggs, Bread"
+    const multiShopMatch = response.match(/Add \d+ items to shopping[^:]*:\s*(.+)\?/i);
+    if (multiShopMatch) {
+        const itemsStr = multiShopMatch[1];
+        const items = itemsStr.split(/,\s*/).map(s => s.trim());
+        return {
+            type: 'shopping',
+            items: items
+        };
+    }
+
+    console.log('[Parse] Could not parse action from:', response);
+    return null;
+}
+
+function showFiaConfirmation(message) {
+    /**
+     * Show Fia's confirmation request in a nice UI.
+     */
+    // Create or update confirmation modal
+    let modal = document.getElementById('fiaConfirmModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'fiaConfirmModal';
+        modal.className = 'fia-confirm-modal';
+        modal.innerHTML = `
+            <div class="fia-confirm-content">
+                <div class="fia-confirm-message"></div>
+                <div class="fia-confirm-buttons">
+                    <button class="fia-confirm-yes" onclick="confirmFiaAction()">✓ Yes</button>
+                    <button class="fia-confirm-mic" onclick="startConfirmMic()">🎤</button>
+                    <button class="fia-confirm-no" onclick="cancelFiaAction()">✗ No</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    // Format the message nicely
+    const formattedMessage = message
+        .replace(/\n/g, '<br>')
+        .replace(/📋|📅|🛒|🍽️|✅/g, '<span class="fia-emoji">$&</span>');
+
+    modal.querySelector('.fia-confirm-message').innerHTML = formattedMessage;
+    modal.classList.add('show');
+}
+
+function hideFiaConfirmation() {
+    const modal = document.getElementById('fiaConfirmModal');
+    if (modal) {
+        modal.classList.remove('show');
+    }
+}
+
+async function confirmFiaAction() {
+    hideFiaConfirmation();
+
+    // Execute action directly on VPS instead of going through Fia again
+    if (pendingAction) {
+        showSmartVoiceStatus('⏳ Saving...', 'processing');
+        try {
+            const result = await executeActionDirectly(pendingAction);
+            showSmartVoiceStatus(result, 'success');
+            speakConfirmation(result);
+            pendingAction = null;
+            awaitingConfirmation = false;
+            setTimeout(() => {
+                hideSmartVoiceStatus();
+                refreshAllData();
+            }, 2000);
+        } catch (err) {
+            showSmartVoiceStatus('❌ ' + err.message, 'error');
+            pendingAction = null;
+            awaitingConfirmation = false;
+        }
+    } else {
+        // Fallback to Fia
+        await processWithFiaBrain('yes');
+    }
+}
+
+async function executeActionDirectly(action) {
+    /**
+     * Execute the action directly on the VPS - no round trip to Mac needed.
+     */
+    console.log('[Execute] Action:', action);
+
+    if (action.type === 'meal') {
+        // Set the meal
+        await fetch('/api/meals/set', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ day: action.day, meal: { name: action.meal, icon: '🍽️' } })
+        });
+
+        // Calculate date if not provided
+        let mealDate = action.date;
+        if (!mealDate && action.day) {
+            const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const targetDay = days.indexOf(action.day.toLowerCase());
+            if (targetDay >= 0) {
+                const now = new Date();
+                const currentDay = now.getDay();
+                let daysAhead = targetDay - currentDay;
+                if (daysAhead <= 0) daysAhead += 7;
+                const targetDate = new Date(now);
+                targetDate.setDate(now.getDate() + daysAhead);
+                mealDate = targetDate.toISOString().split('T')[0];
+            }
+        }
+
+        console.log('[Execute] Meal date:', mealDate);
+
+        // Add to calendar
+        if (mealDate) {
+            const calendarData = {
+                title: '🍽️ ' + action.meal,
+                date: mealDate,
+                time: '18:00',
+                person: 'family'
+            };
+            console.log('[Execute] Adding to calendar:', calendarData);
+            const calRes = await fetch('/api/calendar/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(calendarData)
+            });
+            console.log('[Execute] Calendar response:', calRes.status);
+        }
+
+        return `✅ Set ${action.day}'s dinner to '${action.meal}' (+ calendar)`;
+    }
+
+    if (action.type === 'calendar') {
+        for (const date of action.dates) {
+            await fetch('/api/calendar/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: action.title, date: date, person: 'family', time: action.time || '' })
+            });
+        }
+        return `✅ Added '${action.title}' to calendar`;
+    }
+
+    if (action.type === 'shopping') {
+        for (const item of action.items) {
+            await fetch('/api/shopping/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ item: item })
+            });
+        }
+        return `✅ Added ${action.items.length} item(s) to shopping`;
+    }
+
+    throw new Error('Unknown action type');
+}
+
+async function cancelFiaAction() {
+    hideFiaConfirmation();
+    pendingAction = null;
+    awaitingConfirmation = false;
+    showSmartVoiceStatus('Cancelled', 'info');
+    setTimeout(() => hideSmartVoiceStatus(), 2000);
+}
+
+async function startConfirmMic() {
+    // Use speech recognition for confirmation
+    if (!recognition) {
+        alert('Speech recognition not available');
+        return;
+    }
+
+    const micBtn = document.querySelector('.fia-confirm-mic');
+    if (micBtn) {
+        micBtn.classList.add('recording');
+        micBtn.textContent = '🔴';
+    }
+
+    recognition.onresult = async (event) => {
+        const transcript = event.results[event.results.length - 1][0].transcript.trim();
+        console.log('[Confirm Mic] Heard:', transcript);
+
+        if (micBtn) {
+            micBtn.classList.remove('recording');
+            micBtn.textContent = '🎤';
+        }
+
+        hideFiaConfirmation();
+        await processWithFiaBrain(transcript);
+    };
+
+    recognition.onerror = () => {
+        if (micBtn) {
+            micBtn.classList.remove('recording');
+            micBtn.textContent = '🎤';
+        }
+    };
+
+    recognition.onend = () => {
+        if (micBtn) {
+            micBtn.classList.remove('recording');
+            micBtn.textContent = '🎤';
+        }
+    };
+
+    recognition.start();
+}
+
+function extractSpokenPart(text) {
+    /**
+     * Extract the key part for text-to-speech (remove formatting).
+     */
+    return text
+        .replace(/📋|📅|🛒|🍽️|✅|\n/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+async function processSmartVoiceCommand(text) {
+    console.log('[Voice] Processing:', text);
+
+    // If we're awaiting confirmation, send directly to Fia
+    if (awaitingConfirmation) {
+        const success = await processWithFiaBrain(text);
+        if (success) return;
+    }
+
+    // Try Fia brain first if enabled
+    if (useFiaBrain) {
+        const success = await processWithFiaBrain(text);
+        if (success) return;
+        console.log('[Voice] Fia brain unavailable, using legacy regex mode');
+    }
+
+    // Legacy regex-based processing (fallback)
+    const intents = detectMultipleIntents(text);
+    console.log('Detected intents:', intents.map(i => i.type), 'from:', text);
+
+    if (intents.length === 0) {
+        const msg = 'I\'m not sure what to do with that. Try saying something like: Add milk to the shopping list, or Liv brushed her teeth, or Dentist on Tuesday at 3 PM.';
+        showSmartVoiceStatus('🤔 Not sure what to do with that. Try being more specific.', 'error');
+        speakConfirmation(msg);
+        setTimeout(() => hideSmartVoiceStatus(), 5000);
+        return;
+    }
+
+    const results = [];
+    for (const intent of intents) {
+        try {
+            switch (intent.type) {
+                case 'chore':
+                    await handleChoreIntent(intent);
+                    results.push('chore');
+                    break;
+                case 'shopping':
+                    await handleShoppingIntent(intent);
+                    results.push('shopping');
+                    break;
+                case 'calendar':
+                    await handleCalendarIntent(intent);
+                    results.push('calendar');
+                    break;
+                case 'meal':
+                    await handleMealIntent(intent);
+                    results.push('meal');
+                    break;
+            }
+        } catch (err) {
+            console.error('Intent error:', intent.type, err);
+        }
+    }
+
+    // If multiple intents were handled, show a summary
+    if (results.length > 1) {
+        setTimeout(() => {
+            showSmartVoiceStatus('✅ Done! Updated ' + results.join(' & '), 'success');
+            setTimeout(() => hideSmartVoiceStatus(), 3000);
+        }, 500);
+    }
+}
+
+// Detect multiple intents in a single sentence
+function detectMultipleIntents(text) {
+    const intents = [];
+
+    // Split by common conjunctions that indicate multiple actions
+    // "pork chops for Thursday and add milk to the shopping list"
+    // "swim camp Dec 29-31 and also get towels"
+    const parts = text.split(/\s+(?:and\s+)?(?:also\s+)?(?:then\s+)?(?:plus\s+)?/i)
+        .map(p => p.trim())
+        .filter(p => p.length > 2);
+
+    // If we have multiple distinct parts, try each
+    if (parts.length > 1) {
+        for (const part of parts) {
+            const intent = detectIntent(part);
+            if (intent.type !== 'unknown') {
+                intents.push(intent);
+            }
+        }
+    }
+
+    // If splitting didn't work well, check for compound intents
+    if (intents.length < 2) {
+        // Look for shopping keywords mixed with other content
+        const shoppingMatch = text.match(/(?:add|put|get)\s+(.+?)\s+(?:to|on)\s+(?:the\s+)?(?:shopping|grocery)\s*list/i);
+        const mealMatch = text.match(/(.+?)\s+(?:for|on)\s+(?:dinner|lunch|breakfast|tonight|monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i);
+        const calendarMatch = text.match(/(.+?)\s+(?:on|at)\s+(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|\d|tomorrow|monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i);
+
+        if (shoppingMatch && (mealMatch || calendarMatch)) {
+            // We have both shopping and something else
+            const shoppingText = shoppingMatch[0];
+            const otherText = text.replace(shoppingText, '').replace(/^\s*and\s*/i, '').trim();
+
+            if (otherText.length > 3) {
+                const otherIntent = detectIntent(otherText);
+                if (otherIntent.type !== 'unknown' && otherIntent.type !== 'shopping') {
+                    intents.push(otherIntent);
+                }
+            }
+            intents.push({ type: 'shopping', text: shoppingText });
+        }
+    }
+
+    // If we still don't have intents, try single intent detection
+    if (intents.length === 0) {
+        const intent = detectIntent(text);
+        if (intent.type !== 'unknown') {
+            intents.push(intent);
+        }
+    }
+
+    return intents;
 }
 
 function detectIntent(text) {
     const lower = text.toLowerCase();
 
     // CHORE PATTERNS - Kid completing a task
-    // "Emma brushed her teeth", "Sophie made her bed", "Emma did homework"
+    // "Liv brushed her teeth", "Jane made her bed", "Liv did homework"
     const chorePatterns = [
         /\b(kid1|kid2)\s+(brushed|made|cleaned|did|finished|completed|set|cleared|helped|practiced|was kind)/i,
         /\b(kid1|kid2)('s)?\s+(teeth|bed|room|homework|reading|table|dishes)/i,
@@ -626,7 +1222,7 @@ async function handleChoreIntent(intent) {
     else if (/\bkid2\b/i.test(text)) person = 'kid2';
 
     if (!person) {
-        const msg = 'Who completed the chore? Say Emma or Sophie.';
+        const msg = 'Who completed the chore? Say Liv or Jane.';
         showSmartVoiceStatus('❌ ' + msg, 'error');
         speakConfirmation(msg);
         setTimeout(() => hideSmartVoiceStatus(), 3000);
@@ -637,7 +1233,7 @@ async function handleChoreIntent(intent) {
     const choreMatch = findMatchingChore(text);
 
     if (!choreMatch) {
-        const msg = 'I could not find that chore. Try saying something like Emma brushed her teeth.';
+        const msg = 'I could not find that chore. Try saying something like Liv brushed her teeth.';
         showSmartVoiceStatus('❌ ' + msg, 'error');
         speakConfirmation(msg);
         setTimeout(() => hideSmartVoiceStatus(), 4000);
@@ -789,27 +1385,47 @@ async function handleShoppingIntent(intent) {
 }
 
 async function handleCalendarIntent(intent) {
-    const eventData = parseEventText(intent.text);
+    const events = parseEventsWithDateRange(intent.text);
 
-    const res = await fetch('/api/calendar/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(eventData)
-    });
+    // Add all events
+    let successCount = 0;
+    for (const eventData of events) {
+        const res = await fetch('/api/calendar/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(eventData)
+        });
+        if (res.ok) successCount++;
+    }
 
-    if (res.ok) {
+    if (successCount > 0) {
         const calData = await fetch('/api/calendar').then(r => r.json());
         data.calendar = calData;
         renderCalendar();
 
-        const dateObj = new Date(eventData.date + 'T12:00:00');
-        const dateStr = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-        const timeStr = eventData.time ? ' at ' + formatTimeForSpeech(eventData.time) : '';
-        const msg = 'Added ' + eventData.title + ' on ' + dateStr + timeStr + '.';
+        const firstEvent = events[0];
+        const lastEvent = events[events.length - 1];
+        const title = firstEvent.title;
+        const timeStr = firstEvent.time ? ' at ' + formatTimeForSpeech(firstEvent.time) : '';
 
-        showSmartVoiceStatus('📅 Added "' + eventData.title + '" on ' + dateStr + timeStr, 'success');
+        let msg, statusMsg;
+        if (events.length === 1) {
+            const dateObj = new Date(firstEvent.date + 'T12:00:00');
+            const dateStr = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+            msg = 'Added ' + title + ' on ' + dateStr + timeStr + '.';
+            statusMsg = '📅 Added "' + title + '" on ' + dateStr + timeStr;
+        } else {
+            const startDate = new Date(firstEvent.date + 'T12:00:00');
+            const endDate = new Date(lastEvent.date + 'T12:00:00');
+            const startStr = startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const endStr = endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            msg = 'Added ' + title + ' for ' + events.length + ' days, ' + startStr + ' through ' + endStr + timeStr + '.';
+            statusMsg = '📅 Added "' + title + '" for ' + events.length + ' days (' + startStr + ' - ' + endStr + ')' + timeStr;
+        }
+
+        showSmartVoiceStatus(statusMsg, 'success');
         speakConfirmation(msg);
-        setTimeout(() => hideSmartVoiceStatus(), 3000);
+        setTimeout(() => hideSmartVoiceStatus(), 4000);
     }
 }
 
