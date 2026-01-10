@@ -401,30 +401,26 @@ html, body {
 
 .header-actions {
     display: flex;
-    gap: var(--spacing-sm);
+    gap: 6px;
     align-items: center;
-    flex: 1;
     justify-content: center;
     flex-wrap: wrap;
-    max-width: 100%;
+    width: 100%;
+    order: 99;
 }
 
 .action-pill {
-    padding: 2px 8px;
+    padding: 4px 10px;
     border-radius: clamp(12px, 2vmin, 20px);
     border: none;
     background: linear-gradient(145deg, #ffffff, #f0f0f0);
     color: #333;
-    font-size: var(--fs-xs);
+    font-size: clamp(11px, 1.5vmin, 16px);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     white-space: nowrap;
-    flex-shrink: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .action-pill:hover {

@@ -188,27 +188,23 @@ html, body {
     font-size: clamp(14px, 1.8vmin, 20px);
 }
 
-/* Header Actions - Wrap to multiple lines if needed */
+/* Header Actions - Full width row below other header items */
 .header-actions {
     display: flex;
-    gap: clamp(4px, 0.8vmin, 10px);
+    gap: 6px;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    flex: 1;
-    max-width: 100%;
+    width: 100%;
+    order: 99;
 }
 
 .action-pill {
-    padding: clamp(4px, 1vmin, 18px) clamp(8px, 1.5vmin, 28px) !important;
-    font-size: clamp(12px, 1.8vmin, 24px) !important;
-    border-radius: clamp(10px, 1.5vmin, 20px) !important;
+    padding: clamp(4px, 0.8vmin, 12px) clamp(8px, 1.2vmin, 18px) !important;
+    font-size: clamp(11px, 1.5vmin, 18px) !important;
+    border-radius: clamp(10px, 1.5vmin, 18px) !important;
     white-space: nowrap;
-    font-weight: 700 !important;
-    flex-shrink: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-weight: 600 !important;
 }
 
 .today-btn {
