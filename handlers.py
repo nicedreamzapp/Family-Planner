@@ -16,6 +16,8 @@ MEALS_FILE = os.path.join(DATA_DIR, "meals.json")
 SHOPPING_FILE = os.path.join(DATA_DIR, "shopping.json")
 TVSHOWS_FILE = os.path.join(DATA_DIR, "tvshows.json")
 NOTES_FILE = os.path.join(DATA_DIR, "notes.json")
+POLLS_FILE = os.path.join(DATA_DIR, "polls.json")
+ROUTINES_FILE = os.path.join(DATA_DIR, "routines.json")
 
 
 def load_json(filepath, default):
@@ -138,3 +140,31 @@ def get_tvshows():
 
 def get_notes():
     return load_json(NOTES_FILE, {"notes": []})
+
+
+def get_polls():
+    return load_json(POLLS_FILE, {
+        "polls": [],
+        "votes": []
+    })
+
+
+def get_routines():
+    return load_json(ROUTINES_FILE, {
+        "routines": {
+            "kid1": {
+                "name": "Liv's Bedtime",
+                "tasks": [3],  # Brush teeth (night) by default
+                "icon": "🌙"
+            },
+            "kid2": {
+                "name": "Jane's Bedtime",
+                "tasks": [3],
+                "icon": "🌙"
+            }
+        },
+        "progress": {
+            "kid1": {"date": "", "completed": []},
+            "kid2": {"date": "", "completed": []}
+        }
+    })

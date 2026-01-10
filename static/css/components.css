@@ -2486,3 +2486,472 @@
     margin-bottom: 20px;
     max-width: 280px;
 }
+
+/* ==============================================
+   Polls Panel Styles
+   ============================================== */
+#pollsPanel {
+    padding: 20px;
+    gap: 16px;
+}
+
+.polls-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.create-poll-btn {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.2s;
+}
+
+.create-poll-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.polls-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.poll-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    border: 2px solid transparent;
+}
+
+.poll-card.closed {
+    opacity: 0.8;
+    background: #f8f8f8;
+}
+
+.poll-question {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.poll-meta {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 15px;
+}
+
+.poll-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.poll-option {
+    position: relative;
+    padding: 12px 16px;
+    background: #f5f5f5;
+    border-radius: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.poll-option:hover:not(.closed) {
+    background: #eef;
+}
+
+.poll-option.my-vote {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+    border: 2px solid #667eea;
+}
+
+.poll-option .option-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
+    z-index: 0;
+    transition: width 0.3s ease;
+}
+
+.poll-option .option-text {
+    position: relative;
+    z-index: 1;
+    font-weight: 500;
+    flex: 1;
+}
+
+.poll-option .option-count {
+    position: relative;
+    z-index: 1;
+    font-weight: 700;
+    color: #667eea;
+}
+
+.poll-option .option-voters {
+    position: relative;
+    z-index: 1;
+    font-size: 11px;
+    color: #999;
+    margin-left: 10px;
+}
+
+.poll-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.vote-count {
+    font-size: 13px;
+    color: #666;
+}
+
+.poll-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.poll-action-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: white;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.poll-action-btn:hover {
+    background: #f0f0f0;
+}
+
+.poll-action-btn.delete {
+    color: #e74c3c;
+    border-color: #e74c3c;
+}
+
+.poll-action-btn.delete:hover {
+    background: #e74c3c;
+    color: white;
+}
+
+.voter-selector {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed #ddd;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #666;
+}
+
+.voter-btn {
+    padding: 6px 12px;
+    border-radius: 15px;
+    border: 2px solid #ddd;
+    background: white;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.voter-btn.active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-color: #667eea;
+}
+
+.poll-option-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.poll-option-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+/* ==============================================
+   Bedtime Routine Panel Styles
+   ============================================== */
+#bedtimePanel {
+    padding: 20px;
+    gap: 16px;
+}
+
+.bedtime-header {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.bedtime-header .kid-card {
+    flex: 1;
+    padding: 15px;
+    border-radius: 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    background: linear-gradient(135deg, rgba(155, 89, 182, 0.3), rgba(142, 68, 173, 0.4));
+}
+
+.bedtime-header .kid-card.kid2 {
+    background: linear-gradient(135deg, rgba(243, 156, 18, 0.3), rgba(230, 126, 34, 0.4));
+}
+
+.bedtime-header .kid-card.selected {
+    border-color: #667eea;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    transform: scale(1.02);
+}
+
+.bedtime-progress {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255,255,255,0.8);
+    border-radius: 12px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 20px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    width: 0%;
+    transition: width 0.5s ease;
+    border-radius: 10px;
+}
+
+.progress-fill.complete {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    animation: progressPulse 1s ease-in-out infinite;
+}
+
+@keyframes progressPulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(76, 175, 80, 0.5); }
+    50% { box-shadow: 0 0 25px rgba(76, 175, 80, 0.8); }
+}
+
+.progress-text {
+    font-weight: 600;
+    color: #666;
+    white-space: nowrap;
+}
+
+.routine-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.routine-step {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 3px solid transparent;
+}
+
+.routine-step:hover {
+    transform: translateX(5px);
+    border-color: #667eea;
+}
+
+.routine-step.done {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.25));
+    border-color: #4CAF50;
+}
+
+.step-number {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.routine-step.done .step-number {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+}
+
+.step-icon {
+    font-size: 32px;
+}
+
+.step-name {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.step-check {
+    font-size: 24px;
+    color: #4CAF50;
+    font-weight: 700;
+}
+
+.setup-btn {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+/* Task Picker in Modal */
+.routine-task-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.task-picker-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    background: #f5f5f5;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+}
+
+.task-picker-item:hover {
+    background: #eef;
+}
+
+.task-picker-item.selected {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+    border-color: #667eea;
+}
+
+.task-picker-item input {
+    width: 20px;
+    height: 20px;
+    accent-color: #667eea;
+}
+
+.task-picker-item .task-icon {
+    font-size: 24px;
+}
+
+.task-picker-item .task-name {
+    font-weight: 500;
+}
+
+/* Bedtime Celebration Overlay */
+.bedtime-celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+.celebration-content {
+    text-align: center;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 40px;
+    border-radius: 24px;
+    color: white;
+    animation: bounceIn 0.5s ease;
+}
+
+.celebration-emoji {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: spin 2s linear infinite;
+}
+
+.celebration-content h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.celebration-content p {
+    font-size: 18px;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+
+.celebration-content button {
+    padding: 12px 30px;
+    background: white;
+    color: #667eea;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}

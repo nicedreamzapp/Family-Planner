@@ -20,6 +20,8 @@ let data = {
     rewards: { points: {}, rewards: [] },
     meals: { thisWeek: {}, favorites: [] },
     shopping: { items: [] },
+    polls: { polls: [], votes: [] },
+    routines: { routines: {}, progress: {} },
     family: {},
     holidays: {},
     lunches: {},
@@ -54,7 +56,7 @@ async function init() {
     setInterval(updateClock, 1000);
 
     // Fetch all data from APIs
-    const endpoints = ['calendar', 'chores', 'rewards', 'meals', 'shopping', 'family', 'holidays', 'lunches', 'breakfast', 'snacks'];
+    const endpoints = ['calendar', 'chores', 'rewards', 'meals', 'shopping', 'polls', 'routines', 'family', 'holidays', 'lunches', 'breakfast', 'snacks'];
     const results = await Promise.all(endpoints.map(e => fetch(`/api/${e}`).then(r => r.json())));
     endpoints.forEach((e, i) => data[e] = results[i]);
 
@@ -180,8 +182,17 @@ function showPanel(panel) {
         'calendar': '',
         'meals': '\uD83C\uDF7D\uFE0F Meal Planner',
         'shopping': '\uD83D\uDED2 Shopping List',
-        'kids': '\u2B50 Kids Corner'
+        'kids': '\u2B50 Kids Corner',
+        'polls': '\uD83D\uDDF3\uFE0F Family Polls',
+        'bedtime': '\uD83C\uDF19 Bedtime Routine'
     };
+
+    // Render panel-specific content
+    if (panel === 'polls' && typeof renderPolls === 'function') {
+        renderPolls();
+    } else if (panel === 'bedtime' && typeof renderBedtime === 'function') {
+        renderBedtime();
+    }
 
     if (panel === 'calendar') {
         if (calendarNav) calendarNav.style.display = 'flex';
@@ -205,6 +216,8 @@ function showPanel(panel) {
     const navLiv = document.getElementById('navLiv');
     const navJane = document.getElementById('navJane');
     const navEvent = document.getElementById('navEvent');
+    const navPolls = document.getElementById('navPolls');
+    const navBedtime = document.getElementById('navBedtime');
 
     if (navCalendar) navCalendar.style.display = (panel === 'calendar') ? 'none' : '';
     if (navMeals) navMeals.style.display = (panel === 'meals') ? 'none' : '';
@@ -213,6 +226,8 @@ function showPanel(panel) {
     if (navLiv) navLiv.style.display = (panel === 'kids') ? 'none' : '';
     if (navJane) navJane.style.display = (panel === 'kids') ? 'none' : '';
     if (navEvent) navEvent.style.display = (panel === 'calendar') ? '' : 'none';
+    if (navPolls) navPolls.style.display = (panel === 'polls') ? 'none' : '';
+    if (navBedtime) navBedtime.style.display = (panel === 'bedtime') ? 'none' : '';
 }
 
 // Show kids panel with specific kid selected

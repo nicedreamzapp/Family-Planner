@@ -32,10 +32,10 @@ from data import (
 )
 from handlers import (
     CALENDAR_FILE, CHORES_FILE, REWARDS_FILE, MEALS_FILE,
-    SHOPPING_FILE, TVSHOWS_FILE, NOTES_FILE,
+    SHOPPING_FILE, TVSHOWS_FILE, NOTES_FILE, POLLS_FILE, ROUTINES_FILE,
     load_json, save_json,
     get_calendar, get_chores, get_rewards, save_rewards, get_meals,
-    get_shopping, get_tvshows, get_notes
+    get_shopping, get_tvshows, get_notes, get_polls, get_routines
 )
 from html_template import get_dashboard_html
 
@@ -64,6 +64,10 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             self.send_json(get_tvshows())
         elif parsed.path == "/api/notes":
             self.send_json(get_notes())
+        elif parsed.path == "/api/polls":
+            self.send_json(get_polls())
+        elif parsed.path == "/api/routines":
+            self.send_json(get_routines())
         elif parsed.path == "/api/family":
             self.send_json(FAMILY)
         elif parsed.path == "/api/holidays":
@@ -374,6 +378,22 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             self._handle_tvshows_add(data)
         elif self.path == "/api/tvshows/move":
             self._handle_tvshows_move(data)
+        # Polls endpoints
+        elif self.path == "/api/polls/create":
+            self._handle_polls_create(data)
+        elif self.path == "/api/polls/vote":
+            self._handle_polls_vote(data)
+        elif self.path == "/api/polls/close":
+            self._handle_polls_close(data)
+        elif self.path == "/api/polls/delete":
+            self._handle_polls_delete(data)
+        # Routines endpoints
+        elif self.path == "/api/routines/setup":
+            self._handle_routines_setup(data)
+        elif self.path == "/api/routines/complete":
+            self._handle_routines_complete(data)
+        elif self.path == "/api/routines/reset":
+            self._handle_routines_reset(data)
         else:
             self.send_json({"error": "Unknown endpoint"})
 
@@ -809,6 +829,113 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                     self.send_json({"success": True})
                     return
         self.send_json({"success": False})
+
+    # ==================== POLLS HANDLERS ====================
+    def _handle_polls_create(self, data):
+        polls = get_polls()
+        max_id = max([p.get("id", 0) for p in polls["polls"]], default=0)
+        poll = {
+            "id": max_id + 1,
+            "question": data.get("question", ""),
+            "options": data.get("options", []),
+            "createdBy": data.get("person", "family"),
+            "created": datetime.now().isoformat(),
+            "closed": False
+        }
+        polls["polls"].append(poll)
+        save_json(POLLS_FILE, polls)
+        self.send_json({"success": True, "poll": poll})
+
+    def _handle_polls_vote(self, data):
+        polls = get_polls()
+        poll_id = data.get("pollId")
+        person = data.get("person")
+        option = data.get("option")
+
+        # Remove any existing vote by this person on this poll
+        polls["votes"] = [v for v in polls["votes"] if not (v["pollId"] == poll_id and v["person"] == person)]
+
+        # Add new vote
+        vote = {
+            "pollId": poll_id,
+            "person": person,
+            "option": option,
+            "timestamp": datetime.now().isoformat()
+        }
+        polls["votes"].append(vote)
+        save_json(POLLS_FILE, polls)
+        self.send_json({"success": True, "vote": vote})
+
+    def _handle_polls_close(self, data):
+        polls = get_polls()
+        poll_id = data.get("id")
+        for poll in polls["polls"]:
+            if poll["id"] == poll_id:
+                poll["closed"] = True
+                save_json(POLLS_FILE, polls)
+                self.send_json({"success": True})
+                return
+        self.send_json({"success": False, "error": "Poll not found"})
+
+    def _handle_polls_delete(self, data):
+        polls = get_polls()
+        poll_id = data.get("id")
+        polls["polls"] = [p for p in polls["polls"] if p["id"] != poll_id]
+        polls["votes"] = [v for v in polls["votes"] if v["pollId"] != poll_id]
+        save_json(POLLS_FILE, polls)
+        self.send_json({"success": True})
+
+    # ==================== ROUTINES HANDLERS ====================
+    def _handle_routines_setup(self, data):
+        routines = get_routines()
+        kid = data.get("kid")  # kid1 or kid2
+        tasks = data.get("tasks", [])  # list of chore IDs
+        name = data.get("name", routines["routines"].get(kid, {}).get("name", "Bedtime"))
+
+        routines["routines"][kid] = {
+            "name": name,
+            "tasks": tasks,
+            "icon": "🌙"
+        }
+        save_json(ROUTINES_FILE, routines)
+        self.send_json({"success": True, "routine": routines["routines"][kid]})
+
+    def _handle_routines_complete(self, data):
+        routines = get_routines()
+        kid = data.get("kid")
+        task_id = data.get("taskId")
+        today = datetime.now().strftime("%Y-%m-%d")
+
+        # Reset progress if it's a new day
+        if routines["progress"].get(kid, {}).get("date") != today:
+            routines["progress"][kid] = {"date": today, "completed": []}
+
+        # Toggle task completion
+        completed = routines["progress"][kid]["completed"]
+        if task_id in completed:
+            completed.remove(task_id)
+        else:
+            completed.append(task_id)
+
+        save_json(ROUTINES_FILE, routines)
+
+        # Check if all tasks are done
+        all_tasks = routines["routines"].get(kid, {}).get("tasks", [])
+        all_done = set(all_tasks) == set(completed)
+
+        self.send_json({"success": True, "completed": completed, "allDone": all_done})
+
+    def _handle_routines_reset(self, data):
+        routines = get_routines()
+        kid = data.get("kid")
+        if kid:
+            routines["progress"][kid] = {"date": "", "completed": []}
+        else:
+            # Reset all
+            for k in routines["progress"]:
+                routines["progress"][k] = {"date": "", "completed": []}
+        save_json(ROUTINES_FILE, routines)
+        self.send_json({"success": True})
 
     def send_json(self, data):
         self.send_response(200)
