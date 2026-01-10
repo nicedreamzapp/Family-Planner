@@ -252,9 +252,9 @@
 .day-events-modal .event-item .title {
     font-weight: 500;
     font-size: 14px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow: visible;
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 .day-events-modal .event-item .time {
@@ -714,48 +714,98 @@
     color: white;
 }
 
+/* Shopping Panel Background */
+#shoppingPanel {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 20px;
+    margin: 10px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+#shoppingPanel .shopping-item {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+#shoppingPanel .shopping-item:hover {
+    background: rgba(255, 248, 225, 0.95);
+}
+
+#shoppingPanel .empty-state {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    padding: 30px;
+}
+
 /* ==============================================
-   Meals Panel
+   Meals Panel - Card Grid Layout
    ============================================== */
 .meal-week {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    padding: 10px;
 }
 
 .meal-day {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    padding: 14px 18px;
-    background: white;
-    border-radius: 12px;
+    justify-content: center;
+    padding: 20px 16px;
+    background: linear-gradient(135deg, #FFFBF5, #FFF8E1);
+    border-radius: 16px;
     border: 2px solid var(--border-light);
     cursor: pointer;
     transition: all 0.2s;
+    min-height: 120px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .meal-day:hover {
     border-color: var(--border-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .meal-day.today {
     border-color: var(--accent-orange);
-    background: #FFF5F2;
+    background: linear-gradient(135deg, #FFF5F2, #FFE8E0);
+    box-shadow: 0 4px 15px rgba(255, 107, 74, 0.2);
 }
 
 .meal-day .day-name {
-    width: 90px;
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 14px;
     color: var(--text-dark);
-}
-
-.meal-day .meal-name {
-    flex: 1;
-    color: var(--text-muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .meal-day .meal-icon {
-    font-size: 24px;
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+
+.meal-day .meal-name {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.3;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.meal-day.empty .meal-name {
+    color: #ccc;
+    font-style: italic;
 }
 
 /* ==============================================
@@ -773,21 +823,94 @@
     border-radius: 14px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
     border: 3px solid transparent;
+    position: relative;
+    overflow: hidden;
 }
 
-.kid-card.liv {
-    background: linear-gradient(135deg, #F3E5F5, #E1BEE7);
-}
-
-.kid-card.jane {
-    background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+/* Non-selected kids get transparent purple */
+.kid-card.kid1,
+.kid-card.kid2 {
+    background: linear-gradient(135deg, rgba(155, 89, 182, 0.4), rgba(142, 68, 173, 0.5));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 3px solid rgba(155, 89, 182, 0.6);
 }
 
 .kid-card.selected {
-    border-color: var(--accent-orange);
     transform: scale(1.02);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+/* Selected kid gets transparent GREEN */
+.kid-card.kid1.selected,
+.kid-card.kid2.selected {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.55), rgba(56, 142, 60, 0.65)) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 4px solid rgba(76, 175, 80, 0.9) !important;
+    box-shadow: 0 8px 32px rgba(76, 175, 80, 0.5);
+    animation: selectedPulseGreen 2s ease-in-out infinite, selectedBounce 0.5s ease-out;
+}
+
+/* Pulsing glow animation for selected (green) */
+@keyframes selectedPulseGreen {
+    0%, 100% {
+        box-shadow:
+            0 8px 32px rgba(76, 175, 80, 0.5),
+            0 0 20px rgba(76, 175, 80, 0.4),
+            inset 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+    50% {
+        box-shadow:
+            0 12px 40px rgba(76, 175, 80, 0.7),
+            0 0 40px rgba(76, 175, 80, 0.6),
+            inset 0 0 30px rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* Bounce in animation when selected */
+@keyframes selectedBounce {
+    0% {
+        transform: scale(0.95);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+    75% {
+        transform: scale(1.0);
+    }
+    100% {
+        transform: scale(1.02);
+    }
+}
+
+/* Animated border shimmer for selected cards */
+.kid-card.selected::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 16px;
+    background: linear-gradient(45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.5) 50%,
+        transparent 70%);
+    background-size: 200% 200%;
+    animation: shimmer 2s linear infinite;
+    z-index: -1;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 200%;
+    }
+    100% {
+        background-position: -200% -200%;
+    }
 }
 
 .kid-card .emoji {
@@ -813,23 +936,28 @@
 }
 
 .chore-btn {
-    padding: 18px 12px;
+    padding: clamp(20px, 3vw, 50px) clamp(10px, 2vw, 30px);
     background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(240,240,255,0.8));
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 2px solid rgba(255,255,255,0.6);
-    border-radius: 18px;
+    border: 5px solid rgba(255,255,255,0.6);
+    border-radius: 36px;
     cursor: pointer;
     text-align: center;
     transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow:
-        0 8px 20px rgba(0,0,0,0.12),
-        0 4px 8px rgba(0,0,0,0.08),
+        0 14px 35px rgba(0,0,0,0.2),
+        0 8px 15px rgba(0,0,0,0.12),
         inset 0 2px 4px rgba(255,255,255,0.9),
         inset 0 -2px 4px rgba(0,0,0,0.05);
     transform: translateY(0) scale(1);
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+    min-height: clamp(280px, 35vh, 500px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .chore-btn::before {
@@ -877,17 +1005,45 @@
 }
 
 .chore-btn .icon {
-    font-size: 32px;
-    margin-bottom: 6px;
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.15));
+    font-size: clamp(80px, 12vw, 180px);
+    margin-bottom: 15px;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));
 }
 
 .chore-btn .name {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 4px;
-    text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(50px, 8vw, 140px);
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0;
+    letter-spacing: 1px;
+    line-height: 1.1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-width: 100%;
+    padding: 0 10px;
+    /* Fun 3D text effect with outlines */
+    text-shadow:
+        /* White outline */
+        -4px -4px 0 #fff,
+        4px -4px 0 #fff,
+        -4px 4px 0 #fff,
+        4px 4px 0 #fff,
+        -3px -3px 0 #fff,
+        3px -3px 0 #fff,
+        -3px 3px 0 #fff,
+        3px 3px 0 #fff,
+        /* 3D depth effect */
+        6px 6px 0 rgba(0,0,0,0.25),
+        8px 8px 0 rgba(0,0,0,0.18),
+        10px 10px 25px rgba(0,0,0,0.35);
+    /* Fun bouncy transform on parent hover */
+    transition: transform 0.2s ease;
+}
+
+.chore-btn:hover .name {
+    transform: scale(1.05);
 }
 
 .chore-btn .pts {
@@ -1879,6 +2035,21 @@
 .helper-kid:hover {
     transform: translateY(-3px) scale(1.05);
     box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* Selected state for helper-kid in sidebar */
+.helper-kid.selected.kid1 {
+    background: linear-gradient(145deg, rgba(155, 89, 182, 0.55), rgba(142, 68, 173, 0.65));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 6px 24px rgba(155, 89, 182, 0.4);
+}
+
+.helper-kid.selected.kid2 {
+    background: linear-gradient(145deg, rgba(243, 156, 18, 0.55), rgba(230, 126, 34, 0.65));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 6px 24px rgba(243, 156, 18, 0.4);
 }
 
 .helper-kid .kid-avatar {
