@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="/static/css/base.css?v=7">
     <link rel="stylesheet" href="/static/css/layout.css?v=7">
     <link rel="stylesheet" href="/static/css/calendar.css?v=13">
-    <link rel="stylesheet" href="/static/css/components.css?v=10">
+    <link rel="stylesheet" href="/static/css/components.css?v=11">
     <link rel="stylesheet" href="/static/css/themes.css?v=22">
     <link rel="stylesheet" href="/static/css/responsive.css?v=19">
 </head>
@@ -180,16 +180,6 @@
 
             <!-- Kids Panel -->
             <div id="kidsPanel" class="panel">
-                <!-- Voice Command Bar for Kids -->
-                <div class="voice-command-bar" id="kidsVoiceBar">
-                    <button class="mic-btn" id="kidsMic" onclick="startVoiceCommand('chores', this)">&#127908;</button>
-                    <div class="voice-input-area">
-                        <input type="text" class="voice-input" id="kidsVoiceInput" placeholder='Say: "Liv made her bed"' onkeypress="if(event.key==='Enter')processTextCommand('chores', this.value)">
-                        <div class="voice-status-text" id="kidsVoiceStatus"></div>
-                    </div>
-                    <button class="voice-submit-btn" onclick="processTextCommand('chores', document.getElementById('kidsVoiceInput').value)">Done</button>
-                </div>
-
                 <div class="kids-header">
                     <div class="kid-card kid1 selected" id="kid1Card" onclick="selectKid('kid1')">
                         <span class="emoji">&#128103;</span>
