@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="/static/css/base.css?v=7">
     <link rel="stylesheet" href="/static/css/layout.css?v=7">
     <link rel="stylesheet" href="/static/css/calendar.css?v=13">
-    <link rel="stylesheet" href="/static/css/components.css?v=12">
+    <link rel="stylesheet" href="/static/css/components.css?v=13">
     <link rel="stylesheet" href="/static/css/themes.css?v=22">
     <link rel="stylesheet" href="/static/css/responsive.css?v=19">
 </head>
@@ -134,7 +134,6 @@
                     <button class="action-pill" id="navShopping" onclick="showPanel('shopping')">&#128722; Shop</button>
                     <button class="action-pill kid-btn liv" id="navLiv" onclick="showKidPanel('liv')">Liv</button>
                     <button class="action-pill kid-btn jane" id="navJane" onclick="showKidPanel('jane')">Jane</button>
-                    <button class="action-pill" id="navPolls" onclick="showPanel('polls')">🗳️ Poll</button>
                     <button class="action-pill" id="navBedtime" onclick="showPanel('bedtime')">🌙 Bedtime</button>
                     <button class="action-pill news" onclick="openDirectTV()">📺 TV</button>
                     <a class="action-pill pandora" href="https://www.pandora.com/collection" target="_blank">🎵 Pandora</a>
@@ -202,17 +201,6 @@
                 <div class="chore-grid" id="choreGrid"></div>
             </div>
 
-            <!-- Polls Panel -->
-            <div id="pollsPanel" class="panel">
-                <div class="polls-header">
-                    <button class="create-poll-btn" onclick="openCreatePollModal()">+ New Poll</button>
-                </div>
-                <div class="section-title">Active Polls</div>
-                <div class="polls-grid" id="pollsGrid"></div>
-                <div class="section-title" style="margin-top:20px;">Closed Polls</div>
-                <div class="polls-history" id="pollsHistory"></div>
-            </div>
-
             <!-- Bedtime Routine Panel -->
             <div id="bedtimePanel" class="panel">
                 <div class="bedtime-header">
@@ -236,23 +224,6 @@
                     <button onclick="openRoutineSetupModal()" style="padding:6px 12px; background:rgba(100,100,255,0.2); border:2px solid #667eea; border-radius:8px; color:#667eea; font-size:12px; font-weight:600; cursor:pointer;">⚙️ Edit</button>
                 </div>
                 <div class="routine-steps" id="routineSteps"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Create Poll Modal -->
-    <div class="modal" id="createPollModal">
-        <div class="modal-content">
-            <h2>🗳️ Create Poll</h2>
-            <input type="text" id="pollQuestion" placeholder="What's your question?">
-            <div class="poll-options-inputs" id="pollOptionsInputs">
-                <input type="text" class="poll-option-input" placeholder="Option 1">
-                <input type="text" class="poll-option-input" placeholder="Option 2">
-            </div>
-            <button onclick="addPollOption()" style="width:100%; padding:10px; margin-bottom:15px; background:#f0f0f0; border:2px dashed #ccc; border-radius:8px; cursor:pointer;">+ Add Option</button>
-            <div class="modal-btns">
-                <button class="btn-secondary" onclick="closeModal('createPollModal')">Cancel</button>
-                <button class="btn-primary" onclick="createPoll()">Create Poll</button>
             </div>
         </div>
     </div>
@@ -440,7 +411,6 @@
     <script src="/static/js/themes.js?v=2"></script>
     <script src="/static/js/screensaver.js?v=2"></script>
     <script src="/static/js/ocr.js?v=2"></script>
-    <script src="/static/js/polls.js?v=1"></script>
     <script src="/static/js/routines.js?v=1"></script>
 </body>
 </html>
