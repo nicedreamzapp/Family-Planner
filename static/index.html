@@ -134,7 +134,6 @@
                     <button class="action-pill" id="navShopping" onclick="showPanel('shopping')">&#128722; Shop</button>
                     <button class="action-pill kid-btn liv" id="navLiv" onclick="showKidPanel('liv')">Liv</button>
                     <button class="action-pill kid-btn jane" id="navJane" onclick="showKidPanel('jane')">Jane</button>
-                    <button class="action-pill" id="navBedtime" onclick="showPanel('bedtime')">🌙 Bedtime</button>
                     <button class="action-pill news" onclick="openDirectTV()">📺 TV</button>
                     <a class="action-pill pandora" href="https://www.pandora.com/collection" target="_blank">🎵 Pandora</a>
                     <button class="action-pill ocean" id="navOcean" onclick="showMonthlyPreview()">🎬 ScrSvr</button>
@@ -201,43 +200,6 @@
                 <div class="chore-grid" id="choreGrid"></div>
             </div>
 
-            <!-- Bedtime Routine Panel -->
-            <div id="bedtimePanel" class="panel">
-                <div class="bedtime-header">
-                    <div class="kid-card kid1" id="bedtimeKid1" onclick="selectBedtimeKid('kid1')">
-                        <span class="emoji">👧</span>
-                        <div class="name">Liv</div>
-                    </div>
-                    <div class="kid-card kid2" id="bedtimeKid2" onclick="selectBedtimeKid('kid2')">
-                        <span class="emoji">👧</span>
-                        <div class="name">Jane</div>
-                    </div>
-                </div>
-                <div class="bedtime-progress">
-                    <div class="progress-bar" id="bedtimeProgressBar">
-                        <div class="progress-fill" id="bedtimeProgressFill"></div>
-                    </div>
-                    <span class="progress-text" id="bedtimeProgressText">0 of 0 done</span>
-                </div>
-                <div class="section-title">
-                    <span>Tonight's Routine</span>
-                    <button onclick="openRoutineSetupModal()" style="padding:6px 12px; background:rgba(100,100,255,0.2); border:2px solid #667eea; border-radius:8px; color:#667eea; font-size:12px; font-weight:600; cursor:pointer;">⚙️ Edit</button>
-                </div>
-                <div class="routine-steps" id="routineSteps"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Routine Setup Modal -->
-    <div class="modal" id="routineSetupModal">
-        <div class="modal-content">
-            <h2>🌙 Setup Bedtime Routine</h2>
-            <p style="color:#666; margin-bottom:15px;">Select tasks for <span id="routineSetupKidName">this kid's</span> bedtime:</p>
-            <div class="routine-task-picker" id="routineTaskPicker"></div>
-            <div class="modal-btns">
-                <button class="btn-secondary" onclick="closeModal('routineSetupModal')">Cancel</button>
-                <button class="btn-primary" onclick="saveRoutineSetup()">Save</button>
-            </div>
         </div>
     </div>
 
@@ -411,6 +373,5 @@
     <script src="/static/js/themes.js?v=2"></script>
     <script src="/static/js/screensaver.js?v=2"></script>
     <script src="/static/js/ocr.js?v=2"></script>
-    <script src="/static/js/routines.js?v=1"></script>
 </body>
 </html>
