@@ -188,22 +188,24 @@ html, body {
     font-size: clamp(14px, 1.8vmin, 20px);
 }
 
-/* Header Actions - Single horizontal row on tablets/computers */
+/* Header Actions - Auto-fit row on tablets/computers */
 .header-actions {
     display: flex;
     gap: clamp(4px, 0.8vmin, 10px);
-    flex-wrap: nowrap !important;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     flex: 1;
+    max-width: 100%;
 }
 
 .action-pill {
-    padding: clamp(8px, 1.5vmin, 18px) clamp(12px, 2vmin, 28px) !important;
-    font-size: clamp(14px, 2vmin, 24px) !important;
+    padding: clamp(4px, 1vmin, 18px) clamp(8px, 1.5vmin, 28px) !important;
+    font-size: clamp(12px, 1.8vmin, 24px) !important;
     border-radius: clamp(10px, 1.5vmin, 20px) !important;
     white-space: nowrap;
     font-weight: 700 !important;
+    flex-shrink: 1;
 }
 
 .today-btn {
@@ -876,10 +878,10 @@ html, body {
         font-size: clamp(14px, 4vh, 22px) !important;
     }
 
-    /* Landscape phone - single row, smaller buttons */
+    /* Landscape phone - auto-fit row, smaller buttons */
     .header-actions {
         display: flex !important;
-        flex-wrap: nowrap !important;
+        flex-wrap: wrap;
         gap: 4px !important;
     }
 
@@ -887,6 +889,7 @@ html, body {
         padding: 4px 8px !important;
         font-size: clamp(9px, 2.5vh, 13px) !important;
         border-radius: 6px !important;
+        flex-shrink: 1;
     }
 
     .action-pill.kid-btn {
@@ -895,8 +898,7 @@ html, body {
     }
 
     /* Hide less important buttons in landscape phone */
-    .action-pill#navFullscreen,
-    .action-pill.ocean {
+    .action-pill#navFullscreen {
         display: none !important;
     }
 }
@@ -935,15 +937,16 @@ html, body {
     }
 
     .header-actions {
-        flex-wrap: nowrap !important;
+        flex-wrap: wrap;
         gap: 12px;
     }
 
-    /* Large buttons on big screens - still horizontal */
+    /* Large buttons on big screens */
     .action-pill {
-        padding: 16px 32px !important;
-        font-size: 22px !important;
+        padding: 12px 24px !important;
+        font-size: 18px !important;
         border-radius: 18px !important;
+        flex-shrink: 1;
     }
 
     .action-pill.kid-btn {
@@ -958,23 +961,24 @@ html, body {
 }
 
 /* ==============================================
-   TABLET - Medium buttons, horizontal row
+   TABLET - Medium buttons, auto-fit row
    ============================================== */
 @media (min-width: 768px) and (max-width: 1399px) {
     .header-actions {
-        flex-wrap: nowrap !important;
+        flex-wrap: wrap;
         gap: 8px;
     }
 
     .action-pill {
-        padding: 12px 20px !important;
-        font-size: 18px !important;
+        padding: 8px 14px !important;
+        font-size: 14px !important;
         border-radius: 14px !important;
+        flex-shrink: 1;
     }
 
     .action-pill.kid-btn {
-        padding: 14px 24px !important;
-        font-size: 20px !important;
+        padding: 10px 18px !important;
+        font-size: 16px !important;
     }
 
     .today-btn {
