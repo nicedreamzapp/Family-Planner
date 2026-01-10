@@ -405,7 +405,7 @@ html, body {
     align-items: center;
     flex: 1;
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     max-width: 100%;
     overflow: hidden;
 }
@@ -423,7 +423,7 @@ html, body {
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     white-space: nowrap;
     flex-shrink: 1;
-    min-width: fit-content;
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
 }

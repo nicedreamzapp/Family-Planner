@@ -188,15 +188,16 @@ html, body {
     font-size: clamp(14px, 1.8vmin, 20px);
 }
 
-/* Header Actions - Auto-fit row on tablets/computers */
+/* Header Actions - Single row, buttons shrink to fit */
 .header-actions {
     display: flex;
     gap: clamp(4px, 0.8vmin, 10px);
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
     flex: 1;
     max-width: 100%;
+    overflow: hidden;
 }
 
 .action-pill {
@@ -206,6 +207,9 @@ html, body {
     white-space: nowrap;
     font-weight: 700 !important;
     flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .today-btn {
@@ -878,11 +882,12 @@ html, body {
         font-size: clamp(14px, 4vh, 22px) !important;
     }
 
-    /* Landscape phone - auto-fit row, smaller buttons */
+    /* Landscape phone - single row, buttons shrink */
     .header-actions {
         display: flex !important;
-        flex-wrap: wrap;
+        flex-wrap: nowrap !important;
         gap: 4px !important;
+        overflow: hidden;
     }
 
     .action-pill {
@@ -890,6 +895,7 @@ html, body {
         font-size: clamp(9px, 2.5vh, 13px) !important;
         border-radius: 6px !important;
         flex-shrink: 1;
+        min-width: 0;
     }
 
     .action-pill.kid-btn {
@@ -937,8 +943,9 @@ html, body {
     }
 
     .header-actions {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: 12px;
+        overflow: hidden;
     }
 
     /* Large buttons on big screens */
@@ -947,6 +954,7 @@ html, body {
         font-size: 18px !important;
         border-radius: 18px !important;
         flex-shrink: 1;
+        min-width: 0;
     }
 
     .action-pill.kid-btn {
@@ -961,12 +969,13 @@ html, body {
 }
 
 /* ==============================================
-   TABLET - Medium buttons, auto-fit row
+   TABLET - Medium buttons, single row shrink
    ============================================== */
 @media (min-width: 768px) and (max-width: 1399px) {
     .header-actions {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: 8px;
+        overflow: hidden;
     }
 
     .action-pill {
@@ -974,6 +983,7 @@ html, body {
         font-size: 14px !important;
         border-radius: 14px !important;
         flex-shrink: 1;
+        min-width: 0;
     }
 
     .action-pill.kid-btn {
