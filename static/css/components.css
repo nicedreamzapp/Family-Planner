@@ -912,6 +912,41 @@
     }
 }
 
+/* Floating hearts for selected kid cards - Mommy & Daddy love */
+.kid-card.selected::before {
+    content: '💕 💖 💕';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    opacity: 0.85;
+    animation: floatHearts 4s ease-in-out infinite;
+    z-index: 1;
+    pointer-events: none;
+    white-space: nowrap;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes floatHearts {
+    0%, 100% {
+        transform: translate(-50%, -50%) translateY(0px) scale(1);
+        opacity: 0.85;
+    }
+    25% {
+        transform: translate(-50%, -50%) translateY(-8px) translateX(10px) scale(1.1);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) translateY(-5px) scale(1.05);
+        opacity: 0.9;
+    }
+    75% {
+        transform: translate(-50%, -50%) translateY(-10px) translateX(-10px) scale(1.15);
+        opacity: 1;
+    }
+}
+
 .kid-card .emoji {
     font-size: 40px;
 }
