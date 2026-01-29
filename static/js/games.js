@@ -23,7 +23,7 @@ function openGame(gameType) {
     gameScore = 0;
     document.getElementById('gameScore').textContent = '0';
     document.getElementById('gameTimer').textContent = '';
-    document.getElementById('gamesModal').classList.add('active');
+    document.getElementById('gamesModal').classList.add('show');
 
     const titles = {
         'memory': '🧠 Memory Match',
@@ -43,7 +43,7 @@ function openGame(gameType) {
 }
 
 function closeGame() {
-    document.getElementById('gamesModal').classList.remove('active');
+    document.getElementById('gamesModal').classList.remove('show');
     if (gameTimer) {
         clearInterval(gameTimer);
         gameTimer = null;
