@@ -75,9 +75,11 @@ HOLIDAYS = {
     "2026-02-09": {"name": "Last Quarter Moon", "emoji": "🌗", "color": "#7f8c8d"},
     "2026-02-14": {"name": "Valentine's Day | World Bonobo Day", "emoji": "💕", "color": "#e74c3c"},
     "2026-02-15": {"name": "Lupercalia | World Hippo Day", "emoji": "🦛", "color": "#9b59b6"},
-    "2026-02-17": {"name": "New Moon ♒ | Solar Eclipse | Mardi Gras", "emoji": "🌑", "color": "#9b59b6"},
-    "2026-02-18": {"name": "🌳 Ash Month Begins", "emoji": "🌿", "color": "#27ae60"},
-    "2026-02-19": {"name": "Chinese New Year 🐴", "emoji": "🐴", "color": "#e74c3c"},
+    "2026-02-16": {"name": "President's Week - No School", "emoji": "🏫", "color": "#95a5a6"},
+    "2026-02-17": {"name": "President's Week - No School | New Moon ♒ | Solar Eclipse | Mardi Gras", "emoji": "🏫", "color": "#95a5a6"},
+    "2026-02-18": {"name": "President's Week - No School | 🌳 Ash Month Begins", "emoji": "🏫", "color": "#95a5a6"},
+    "2026-02-19": {"name": "President's Week - No School | Chinese New Year 🐴", "emoji": "🏫", "color": "#95a5a6"},
+    "2026-02-20": {"name": "President's Week - No School", "emoji": "🏫", "color": "#95a5a6"},
     "2026-02-24": {"name": "First Quarter Moon", "emoji": "🌓", "color": "#7f8c8d"},
     "2026-02-27": {"name": "International Polar Bear Day", "emoji": "🐻‍❄️", "color": "#00bcd4"},
     "2026-02-28": {"name": "Cake Day (Deity Offerings)", "emoji": "🍰", "color": "#e91e63"},
@@ -316,6 +318,27 @@ SCHOOL_LUNCHES = {
     "2026-01-28": "Tomato Soup (G,D)",
     "2026-01-29": "Tofu and Rice Bowl (V)",
     "2026-01-30": "Cheese Pizza (G,D)",
+
+    # ===== FEBRUARY 2026 =====
+    # Week 1 (Feb 2-6)
+    "2026-02-02": "Marinara Pasta",
+    "2026-02-03": "Berry Pancakes, Tofu Sausage",
+    "2026-02-04": "Butternut Squash Soup",
+    "2026-02-05": "Nachos and Black Beans",
+    "2026-02-06": "Hot Dog or Veggie Dog",
+    # Week 2 (Feb 9-13)
+    "2026-02-09": "Spinach Alfredo Bake",
+    "2026-02-10": "Hummus Pita, Cucumber Salad",
+    "2026-02-11": "Veggie Tortilla",
+    "2026-02-12": "Fried Rice",
+    "2026-02-13": "Cheese Pizza",
+    # Week 3 (Feb 16-20) - President's Week - No School
+    # Week 4 (Feb 23-27)
+    "2026-02-23": "Spinach Lasagna",
+    "2026-02-24": "Potato Enchiladas",
+    "2026-02-25": "Thai Corn Chowder",
+    "2026-02-26": "Chicken or Veggie Pot Pie",
+    "2026-02-27": "Hot Dog or Veggie Dog",
 }
 
 # Coastal Grove Weekly Breakfast/Snack Menu (same each week)
