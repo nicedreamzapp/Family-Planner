@@ -10,6 +10,14 @@ let gameTimeLeft = 0;
 // GAME CONTROLLER
 // ==================
 
+// Open game from celebration modal (closes celebration first)
+function openGameFromCelebration(gameType) {
+    // Close celebration modal
+    document.getElementById('celebrationModal').classList.remove('active');
+    // Open the game
+    openGame(gameType);
+}
+
 function openGame(gameType) {
     currentGame = gameType;
     gameScore = 0;
