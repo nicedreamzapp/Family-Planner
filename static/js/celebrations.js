@@ -124,6 +124,34 @@ function showCelebration(kidName) {
                     <div class="game-name">Pop Bubbles!</div>
                 </button>
             </div>
+            <div class="celeb-games" style="margin-top:10px;">
+                <button class="celeb-game-btn" onclick="closeCelebration();openGame('memory')">
+                    <div class="game-icon">🧠</div>
+                    <div class="game-name">Memory</div>
+                </button>
+                <button class="celeb-game-btn" onclick="closeCelebration();openGame('trivia')">
+                    <div class="game-icon">🤔</div>
+                    <div class="game-name">Trivia</div>
+                </button>
+                <button class="celeb-game-btn" onclick="closeCelebration();openGame('math')">
+                    <div class="game-icon">🔢</div>
+                    <div class="game-name">Math</div>
+                </button>
+            </div>
+            <div class="celeb-games" style="margin-top:10px;">
+                <button class="celeb-game-btn" onclick="closeCelebration();openGame('wordscramble')">
+                    <div class="game-icon">🔎</div>
+                    <div class="game-name">Words</div>
+                </button>
+                <button class="celeb-game-btn" onclick="closeCelebration();openGame('colorMatch')">
+                    <div class="game-icon">🎨</div>
+                    <div class="game-name">Colors</div>
+                </button>
+                <button class="celeb-game-btn" onclick="closeCelebration();openGame('reaction')">
+                    <div class="game-icon">⚡</div>
+                    <div class="game-name">Reaction</div>
+                </button>
+            </div>
 
             <div class="celeb-play-area" id="celebPlayArea">
                 <div class="play-prompt">👆 Tap a game to play! 👆</div>
