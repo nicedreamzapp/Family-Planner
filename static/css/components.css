@@ -2990,3 +2990,450 @@
     70% { transform: scale(1.1); }
     100% { transform: scale(1); opacity: 1; }
 }
+
+/* ==================== */
+/* KIDS GAMES SECTION   */
+/* ==================== */
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.game-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 12px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.game-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+.game-card:active {
+    transform: scale(0.98);
+}
+
+.game-card .game-icon {
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+
+.game-card .game-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+}
+
+/* Games Modal */
+.games-modal-content {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 24px;
+    padding: 0;
+    max-width: 500px;
+    width: 95%;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.games-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.games-modal-header h2 {
+    margin: 0;
+    color: white;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.games-close {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.2s;
+}
+
+.games-close:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.games-score-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.games-score, .games-timer {
+    font-size: 16px;
+    font-weight: 600;
+    color: #00ffcc;
+}
+
+.games-area {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+    min-height: 300px;
+}
+
+.games-controls {
+    padding: 20px 24px;
+    text-align: center;
+    background: rgba(0,0,0,0.2);
+}
+
+.games-controls .btn-primary {
+    padding: 14px 40px;
+    font-size: 18px;
+    border-radius: 30px;
+}
+
+/* Memory Game */
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #2d3436, #636e72);
+    border: 3px solid #00cec9;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.memory-card:hover {
+    transform: scale(1.05);
+    border-color: #00ffcc;
+}
+
+.memory-card.flipped {
+    background: linear-gradient(135deg, #00cec9, #0984e3);
+    border-color: #74b9ff;
+}
+
+.memory-card.matched {
+    background: linear-gradient(135deg, #00b894, #55efc4);
+    border-color: #55efc4;
+    animation: matchPop 0.3s ease;
+}
+
+@keyframes matchPop {
+    50% { transform: scale(1.2); }
+}
+
+/* Trivia Game */
+.trivia-question {
+    background: rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.trivia-question h3 {
+    color: white;
+    font-size: 20px;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.trivia-answers {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.trivia-btn {
+    padding: 16px 20px;
+    background: rgba(102, 126, 234, 0.2);
+    border: 2px solid #667eea;
+    border-radius: 12px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.trivia-btn:hover {
+    background: rgba(102, 126, 234, 0.4);
+    transform: translateX(8px);
+}
+
+.trivia-btn.correct {
+    background: rgba(0, 184, 148, 0.4);
+    border-color: #00b894;
+}
+
+.trivia-btn.wrong {
+    background: rgba(255, 107, 107, 0.4);
+    border-color: #ff6b6b;
+}
+
+/* Math Game */
+.math-problem {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.math-problem .equation {
+    font-size: 48px;
+    font-weight: 700;
+    color: #00ffcc;
+    margin-bottom: 20px;
+    font-family: 'Fredoka', sans-serif;
+}
+
+.math-answers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.math-btn {
+    padding: 20px;
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    border: none;
+    border-radius: 16px;
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.math-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(108, 92, 231, 0.4);
+}
+
+.math-btn.correct {
+    background: linear-gradient(135deg, #00b894, #55efc4);
+}
+
+.math-btn.wrong {
+    background: linear-gradient(135deg, #d63031, #ff7675);
+}
+
+/* Word Scramble */
+.scramble-word {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.scramble-word .letters {
+    font-size: 42px;
+    font-weight: 700;
+    color: #ffeaa7;
+    letter-spacing: 8px;
+    margin-bottom: 12px;
+}
+
+.scramble-word .hint {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+}
+
+.scramble-input {
+    width: 100%;
+    padding: 16px;
+    font-size: 24px;
+    text-align: center;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid #667eea;
+    border-radius: 12px;
+    color: white;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+.scramble-input:focus {
+    outline: none;
+    border-color: #00ffcc;
+}
+
+/* Color Match Game */
+.color-display {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.color-word {
+    font-size: 48px;
+    font-weight: 700;
+    padding: 30px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+}
+
+.color-instruction {
+    color: rgba(255,255,255,0.8);
+    font-size: 16px;
+}
+
+.color-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.color-btn {
+    padding: 20px;
+    border: none;
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.color-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Reaction Game */
+.reaction-area {
+    text-align: center;
+}
+
+.reaction-box {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+    transition: background 0.1s;
+    cursor: pointer;
+}
+
+.reaction-box.waiting {
+    background: #d63031;
+}
+
+.reaction-box.ready {
+    background: #00b894;
+}
+
+.reaction-box.clicked {
+    background: #0984e3;
+}
+
+.reaction-result {
+    font-size: 36px;
+    font-weight: 700;
+    color: #00ffcc;
+    margin-bottom: 12px;
+}
+
+.reaction-message {
+    color: rgba(255,255,255,0.8);
+    font-size: 18px;
+}
+
+/* Game Results */
+.game-result {
+    text-align: center;
+    padding: 20px;
+}
+
+.game-result .result-emoji {
+    font-size: 80px;
+    margin-bottom: 16px;
+    animation: bounceIn 0.5s ease;
+}
+
+.game-result h3 {
+    font-size: 28px;
+    color: #00ffcc;
+    margin-bottom: 8px;
+}
+
+.game-result p {
+    color: rgba(255,255,255,0.8);
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.game-result .play-again-btn {
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    border-radius: 25px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.game-result .play-again-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Responsive Games */
+@media (max-width: 600px) {
+    .games-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .game-card {
+        padding: 16px 10px;
+    }
+
+    .game-card .game-icon {
+        font-size: 30px;
+    }
+
+    .game-card .game-name {
+        font-size: 12px;
+    }
+
+    .memory-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .math-problem .equation {
+        font-size: 36px;
+    }
+}

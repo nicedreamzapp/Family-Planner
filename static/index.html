@@ -198,6 +198,37 @@
                     <button onclick="resetChores()" style="padding:6px 12px; background:rgba(255,107,107,0.2); border:2px solid #FF6B6B; border-radius:8px; color:#FF6B6B; font-size:12px; font-weight:600; cursor:pointer;">Reset</button>
                 </div>
                 <div class="chore-grid" id="choreGrid"></div>
+
+                <!-- Fun Games Section -->
+                <div class="section-title" style="margin-top:24px; margin-bottom:12px;">
+                    <span>&#127918; Fun Games</span>
+                </div>
+                <div class="games-grid">
+                    <button class="game-card" onclick="openGame('memory')">
+                        <span class="game-icon">&#129504;</span>
+                        <span class="game-name">Memory Match</span>
+                    </button>
+                    <button class="game-card" onclick="openGame('trivia')">
+                        <span class="game-icon">&#129300;</span>
+                        <span class="game-name">Trivia Quiz</span>
+                    </button>
+                    <button class="game-card" onclick="openGame('math')">
+                        <span class="game-icon">&#128290;</span>
+                        <span class="game-name">Math Challenge</span>
+                    </button>
+                    <button class="game-card" onclick="openGame('wordscramble')">
+                        <span class="game-icon">&#128300;</span>
+                        <span class="game-name">Word Scramble</span>
+                    </button>
+                    <button class="game-card" onclick="openGame('colorMatch')">
+                        <span class="game-icon">&#127912;</span>
+                        <span class="game-name">Color Match</span>
+                    </button>
+                    <button class="game-card" onclick="openGame('reaction')">
+                        <span class="game-icon">&#9889;</span>
+                        <span class="game-name">Reaction Time</span>
+                    </button>
+                </div>
             </div>
 
         </div>
@@ -321,6 +352,26 @@
         </div>
     </div>
 
+    <!-- Games Modal -->
+    <div class="modal" id="gamesModal">
+        <div class="modal-content games-modal-content">
+            <div class="games-modal-header">
+                <h2 id="gameTitle">&#127918; Game</h2>
+                <button class="games-close" onclick="closeGame()">&#10005;</button>
+            </div>
+            <div class="games-score-bar">
+                <div class="games-score">Score: <span id="gameScore">0</span></div>
+                <div class="games-timer" id="gameTimer"></div>
+            </div>
+            <div class="games-area" id="gameArea">
+                <!-- Game content loaded dynamically -->
+            </div>
+            <div class="games-controls" id="gameControls">
+                <button class="btn-primary" id="gameStartBtn" onclick="startCurrentGame()">Start Game!</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Camera/OCR Modal -->
     <div class="modal" id="cameraModal">
         <div class="modal-content camera-modal">
@@ -373,5 +424,6 @@
     <script src="/static/js/themes.js?v=2"></script>
     <script src="/static/js/screensaver.js?v=2"></script>
     <script src="/static/js/ocr.js?v=2"></script>
+    <script src="/static/js/games.js?v=1"></script>
 </body>
 </html>
