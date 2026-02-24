@@ -713,6 +713,182 @@
     /* Add Valentine's styling here */
 }
 
+/* ==============================================
+   LOVE WEEK - Feb 23-28, 2026
+   Hearts, warmth, family love
+   ============================================== */
+
+/* Soft warm glow on the whole app */
+.love-week-active {
+    background: linear-gradient(135deg, #FFF0F5 0%, #FFE4EC 30%, #FFF5F7 60%, #FFEEF3 100%) !important;
+}
+
+.love-week-active::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at 30% 20%, rgba(255, 105, 180, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(255, 182, 193, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Heart Rain Container */
+.love-heart-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.love-rain-heart {
+    position: absolute;
+    top: -30px;
+    animation: heartFall linear infinite;
+}
+
+@keyframes heartFall {
+    0% {
+        transform: translateY(-30px) rotate(0deg) scale(1);
+    }
+    50% {
+        transform: translateY(50vh) rotate(180deg) scale(1.1);
+    }
+    100% {
+        transform: translateY(105vh) rotate(360deg) scale(0.9);
+    }
+}
+
+/* Floating Love Messages */
+.love-float-msg {
+    position: fixed;
+    z-index: 3;
+    font-size: clamp(14px, 2vw, 20px);
+    font-weight: 600;
+    font-family: 'Fredoka', sans-serif;
+    color: rgba(219, 68, 117, 0.35);
+    white-space: nowrap;
+    pointer-events: none;
+    text-shadow: 0 0 20px rgba(255, 105, 180, 0.15);
+}
+
+.love-float-msg.love-float-left {
+    left: -300px;
+    animation: floatMsgLeft linear forwards;
+}
+
+.love-float-msg.love-float-right {
+    right: -300px;
+    animation: floatMsgRight linear forwards;
+}
+
+@keyframes floatMsgLeft {
+    0% { transform: translateX(0); opacity: 0; }
+    10% { opacity: 0.5; }
+    50% { opacity: 0.4; }
+    90% { opacity: 0.5; }
+    100% { transform: translateX(calc(100vw + 600px)); opacity: 0; }
+}
+
+@keyframes floatMsgRight {
+    0% { transform: translateX(0); opacity: 0; }
+    10% { opacity: 0.5; }
+    50% { opacity: 0.4; }
+    90% { opacity: 0.5; }
+    100% { transform: translateX(calc(-100vw - 600px)); opacity: 0; }
+}
+
+/* Surprise Heart Burst */
+.love-surprise-heart {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    animation: heartBurst 2s ease-out forwards;
+}
+
+@keyframes heartBurst {
+    0% {
+        transform: translate(0, 0) scale(0.3);
+        opacity: 1;
+    }
+    30% {
+        opacity: 1;
+        transform: translate(
+            calc(cos(var(--angle)) * var(--distance) * 0.5),
+            calc(sin(var(--angle)) * var(--distance) * 0.5)
+        ) scale(1.2);
+    }
+    100% {
+        transform: translate(
+            calc(cos(var(--angle)) * var(--distance)),
+            calc(sin(var(--angle)) * var(--distance) - 60px)
+        ) scale(0.4);
+        opacity: 0;
+    }
+}
+
+/* Love Week - Warmer calendar day cards */
+.love-week-active .calendar-day.today {
+    border-color: rgba(255, 105, 180, 0.5) !important;
+    box-shadow: 0 0 12px rgba(255, 105, 180, 0.25) !important;
+}
+
+/* Love Week - Warmer header */
+.love-week-active .year-header {
+    background: rgba(255, 240, 245, 0.9);
+}
+
+/* Love Week - Sidebar warmth */
+.love-week-active .sidebar {
+    background: linear-gradient(180deg, rgba(255, 240, 245, 0.95), rgba(255, 228, 236, 0.9));
+}
+
+/* Love Week - Kid cards get hearts */
+.love-week-active .kid-card::after {
+    content: '💕';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 18px;
+    animation: gentle-bounce 2s ease-in-out infinite;
+}
+
+.love-week-active .kid-card {
+    position: relative;
+    border-color: rgba(255, 105, 180, 0.3) !important;
+}
+
+/* Love Week - Helper motto override */
+.love-week-active .helpers-motto {
+    color: #DB4475 !important;
+}
+
+/* Love Week - Chore buttons warmer */
+.love-week-active .chore-btn.done {
+    background: linear-gradient(135deg, #FFB6C1, #FF69B4) !important;
+    border-color: #FF69B4 !important;
+}
+
+/* Love Week - Corner decorations pulse with love */
+.love-week-active .december-decorations {
+    animation: loveBeat 1.5s ease-in-out infinite !important;
+}
+
+@keyframes loveBeat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.15); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.1); }
+    60% { transform: scale(1); }
+}
+
 /* Spring Theme */
 .spring-theme {
     /* Add Spring styling here */

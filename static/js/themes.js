@@ -4,6 +4,148 @@
    ============================================== */
 
 // ==============================================
+// LOVE WEEK - Feb 23-28, 2026
+// Hearts, love, warmth, family
+// ==============================================
+function isLoveWeek() {
+    const now = new Date();
+    const y = now.getFullYear(), m = now.getMonth(), d = now.getDate();
+    return y === 2026 && m === 1 && d >= 23 && d <= 28;
+}
+
+let loveMessageTimer = null;
+let loveSurpriseTimer = null;
+let loveHeartRainActive = false;
+
+const LOVE_MESSAGES = [
+    'Mom & Dad love you so much',
+    'You are so loved',
+    'Mom & Dad love each other',
+    'We are so proud of you',
+    'Our family is everything',
+    'Mom & Dad are sorry',
+    'You make us so happy',
+    'We love you, Liv',
+    'We love you, Jane',
+    'Love is all around us',
+    'You are our whole world',
+    'Mom loves Dad, Dad loves Mom',
+    'We will always love you',
+    'You are enough, always',
+    'Our hearts belong to you',
+    'Family means love forever',
+];
+
+function startLoveWeek() {
+    document.body.classList.add('love-week-active');
+
+    // Override the family motto
+    const motto = document.querySelector('.helpers-motto');
+    if (motto) motto.textContent = '"Mom & Dad love you with all our hearts"';
+
+    // Override the family name
+    const familyName = document.querySelector('.family-name');
+    if (familyName) familyName.innerHTML = '💖 Our Loving Family 💖';
+
+    // Start floating love messages (subtle, every 12-20 seconds)
+    showLoveMessage();
+    loveMessageTimer = setInterval(() => {
+        showLoveMessage();
+    }, 14000 + Math.random() * 8000);
+
+    // Start surprise heart bursts (random, every 30-90 seconds)
+    scheduleSurpriseHearts();
+
+    // Create persistent heart rain
+    createHeartRain();
+
+    console.log('[Love Week] Active - hearts and love everywhere');
+}
+
+function stopLoveWeek() {
+    document.body.classList.remove('love-week-active');
+    if (loveMessageTimer) { clearInterval(loveMessageTimer); loveMessageTimer = null; }
+    if (loveSurpriseTimer) { clearTimeout(loveSurpriseTimer); loveSurpriseTimer = null; }
+    const rain = document.querySelector('.love-heart-rain');
+    if (rain) rain.remove();
+    document.querySelectorAll('.love-float-msg, .love-surprise-heart').forEach(el => el.remove());
+    loveHeartRainActive = false;
+}
+
+function showLoveMessage() {
+    const msg = document.createElement('div');
+    msg.className = 'love-float-msg';
+    msg.textContent = LOVE_MESSAGES[Math.floor(Math.random() * LOVE_MESSAGES.length)];
+
+    // Random position and style
+    const fromLeft = Math.random() > 0.5;
+    msg.style.top = (15 + Math.random() * 60) + '%';
+    msg.style.animationDuration = (10 + Math.random() * 6) + 's';
+
+    if (fromLeft) {
+        msg.classList.add('love-float-left');
+    } else {
+        msg.classList.add('love-float-right');
+    }
+
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 18000);
+}
+
+function createHeartRain() {
+    if (loveHeartRainActive) return;
+    loveHeartRainActive = true;
+
+    let container = document.querySelector('.love-heart-rain');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'love-heart-rain';
+        document.body.appendChild(container);
+    }
+
+    const hearts = ['❤️', '💕', '💗', '💖', '💝', '💞', '🩷', '♥️', '🤍', '🩵'];
+    for (let i = 0; i < 30; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'love-rain-heart';
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.fontSize = (10 + Math.random() * 14) + 'px';
+        heart.style.opacity = Math.random() * 0.4 + 0.15;
+        heart.style.animationDuration = (12 + Math.random() * 16) + 's';
+        heart.style.animationDelay = (Math.random() * 14) + 's';
+        container.appendChild(heart);
+    }
+}
+
+function scheduleSurpriseHearts() {
+    const delay = 30000 + Math.random() * 60000;
+    loveSurpriseTimer = setTimeout(() => {
+        surpriseHeartBurst();
+        if (isLoveWeek()) scheduleSurpriseHearts();
+    }, delay);
+}
+
+function surpriseHeartBurst() {
+    const hearts = ['❤️', '💕', '💗', '💖', '💝', '💞', '🩷', '♥️'];
+    const cx = 20 + Math.random() * 60; // % from left
+    const cy = 20 + Math.random() * 50; // % from top
+
+    for (let i = 0; i < 15; i++) {
+        const h = document.createElement('div');
+        h.className = 'love-surprise-heart';
+        h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        h.style.left = cx + '%';
+        h.style.top = cy + '%';
+        h.style.fontSize = (16 + Math.random() * 20) + 'px';
+        h.style.setProperty('--angle', (Math.random() * 360) + 'deg');
+        h.style.setProperty('--distance', (80 + Math.random() * 140) + 'px');
+        h.style.animationDelay = (Math.random() * 0.3) + 's';
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 3000);
+    }
+}
+
+// ==============================================
 // Monthly Theme Configuration - Earthy & Womanly
 // Inspired by Humboldt County, Redwood Coast, Pacific NW
 // ==============================================
@@ -16,13 +158,13 @@ const MONTH_THEMES = {
         particles: ['✨', '⭐', '🌟', '💫'],
         description: 'Wolf Moon & New Beginnings'
     },
-    1: { // February - Imbolc, Snow Moon, Brigid
+    1: { // February - Imbolc, Snow Moon, Brigid (+ Love Week Feb 23-28)
         name: 'february',
         emoji: ['🕯️', '🌸', '💜'],
-        cornerEmojis: ['🕯️', '💕', '🌷'],
+        cornerEmojis: ['💖', '💕', '💗'],
         colors: { primary: '#E91E63', accent: '#9C27B0', bg: '#FCE4EC' },
-        particles: ['💗', '🌸', '✨', '💜'],
-        description: 'Imbolc & Goddess Brigid'
+        particles: ['❤️', '💕', '💗', '💖', '💝', '💞', '🩷'],
+        description: 'Love & Light'
     },
     2: { // March - Spring Equinox, Ostara, Rebirth
         name: 'march',
@@ -143,6 +285,13 @@ function applySeasonalTheme(viewingMonth) {
         createDecemberBackgroundVideo();
     } else if (month === 0) {
         createJanuaryBackgroundVideo();
+    }
+
+    // LOVE WEEK - Feb 23-28, 2026
+    if (isLoveWeek() && month === 1) {
+        startLoveWeek();
+    } else {
+        stopLoveWeek();
     }
 
     console.log(`[Theme] Applied ${theme.name} theme: ${theme.description}`);

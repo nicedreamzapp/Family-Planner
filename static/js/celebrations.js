@@ -99,14 +99,28 @@ function playSound(type) {
 // ==============================================
 function showCelebration(kidName) {
     playSound('celebrate');
+
+    // Love Week special messages
+    const loveWeek = typeof isLoveWeek === 'function' && isLoveWeek();
+    const loveMessages = [
+        'Mom & Dad love you SO much, ' + kidName + '!',
+        'You make our family beautiful, ' + kidName + '!',
+        'We are so proud of you, ' + kidName + '!',
+        kidName + ', you are our sunshine!',
+        'Mom & Dad think you are amazing, ' + kidName + '!',
+    ];
+    const loveMsg = loveWeek ? loveMessages[Math.floor(Math.random() * loveMessages.length)] : '';
+    const stars = loveWeek ? '💖 💕 ❤️ 💕 💖' : '⭐ ✨ 🌟 ✨ ⭐';
+
     // Create full-screen celebration overlay
     const overlay = document.createElement('div');
     overlay.id = 'celebrationOverlay';
     overlay.innerHTML = `
         <div class="celeb-container">
             <div class="celeb-header">
-                <div class="celeb-stars">⭐ ✨ 🌟 ✨ ⭐</div>
+                <div class="celeb-stars">${stars}</div>
                 <h1 class="celeb-title">AMAZING JOB, ${kidName.toUpperCase()}!</h1>
+                ${loveMsg ? `<div class="celeb-love-msg">${loveMsg}</div>` : ''}
                 <div class="celeb-subtitle">Pick a celebration game!</div>
             </div>
 
@@ -559,6 +573,20 @@ celebStyles.textContent = `
 .celeb-subtitle {
     font-size: clamp(14px, 2.5vw, 18px);
     color: rgba(255,255,255,0.9);
+}
+
+.celeb-love-msg {
+    font-size: clamp(15px, 2.8vw, 20px);
+    color: #FFB6C1;
+    font-weight: 600;
+    margin: 6px 0;
+    animation: lovePulse 2s ease-in-out infinite;
+    text-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+}
+
+@keyframes lovePulse {
+    0%, 100% { opacity: 0.8; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
 }
 
 /* Game Selection Buttons */
