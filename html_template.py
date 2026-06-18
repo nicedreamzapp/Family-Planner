@@ -4,7 +4,7 @@ HTML template for Family Family Hub dashboard.
 
 
 def get_dashboard_html():
-    return '''<!DOCTYPE html>
+    return r'''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -2971,9 +2971,9 @@ def get_dashboard_html():
             </div>
 
             <div class="fia-quick-actions">
-                <button onclick="sendQuickFia('What\\'s on the calendar today?')">📅 Today</button>
-                <button onclick="sendQuickFia('What\\'s for dinner?')">🍽️ Dinner</button>
-                <button onclick="sendQuickFia('What\\'s on the shopping list?')">🛒 Shopping</button>
+                <button onclick="sendQuickFia('What\'s on the calendar today?')">📅 Today</button>
+                <button onclick="sendQuickFia('What\'s for dinner?')">🍽️ Dinner</button>
+                <button onclick="sendQuickFia('What\'s on the shopping list?')">🛒 Shopping</button>
                 <button onclick="sendQuickFia('How are the kids doing with chores?')">⭐ Chores</button>
             </div>
         </div>
