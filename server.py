@@ -18,6 +18,47 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 import urllib.parse
 import urllib.request
 
+
+def load_dotenv(path=None):
+    """Load environment variables from a .env file without overriding existing ones.
+
+    Supports `KEY=value`, optional `export ` prefix, single/double quoted values,
+    and inline `# comments`. Lines that are blank or start with `#` are ignored.
+    """
+    if path is None:
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')
+    if not os.path.exists(path):
+        return
+
+    with open(path, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            if line.startswith('export '):
+                line = line[len('export '):]
+            if '=' not in line:
+                continue
+
+            key, _, value = line.partition('=')
+            key = key.strip()
+            value = value.strip()
+
+            # Quoted value: take everything up to the matching closing quote and
+            # discard any trailing inline comment. Unquoted: trim inline comments.
+            if value and value[0] in ('"', "'"):
+                quote = value[0]
+                end = value.find(quote, 1)
+                value = value[1:end] if end != -1 else value[1:]
+            else:
+                value = value.split('#', 1)[0].strip()
+
+            # Don't override variables already set in the real environment.
+            os.environ.setdefault(key, value)
+
+
+load_dotenv()
+
 # OpenAI API key for Whisper transcription
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
 
