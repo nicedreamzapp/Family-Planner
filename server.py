@@ -203,8 +203,12 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                     self.wfile.write(f.read())
             else:
                 self.send_error(404, "File not found")
+        except (BrokenPipeError, ConnectionResetError):
+            # Client closed the connection mid-transfer (common when the
+            # browser aborts a video/range request). Nothing to send back.
+            return
         except Exception as e:
-            self.send_error(500, str(e))
+            self._safe_send_error(500, str(e))
 
     def _serve_html(self):
         """Serve the main HTML dashboard."""
@@ -348,8 +352,11 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                     self.wfile.write(f.read())
             else:
                 self.send_error(404, "Video not found")
+        except (BrokenPipeError, ConnectionResetError):
+            # Client aborted the download (e.g. browser canceled a range request).
+            return
         except Exception as e:
-            self.send_error(500, str(e))
+            self._safe_send_error(500, str(e))
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
@@ -977,6 +984,13 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                 routines["progress"][k] = {"date": "", "completed": []}
         save_json(ROUTINES_FILE, routines)
         self.send_json({"success": True})
+
+    def _safe_send_error(self, code, message):
+        """Send an error response, ignoring failures from an already-closed socket."""
+        try:
+            self.send_error(code, message)
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
     def send_json(self, data):
         self.send_response(200)
