@@ -193,7 +193,7 @@ export ANTHROPIC_API_KEY="your-key"   # For OCR and Fia chat
 python3 server.py
 ```
 
-Open `http://localhost:8080` in your browser.
+Open `http://localhost:8766` in your browser.
 
 ### 4. Install as PWA (Optional)
 
