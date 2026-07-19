@@ -466,7 +466,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             self.send_json(result)
 
         except ConnectionRefusedError:
-            self.send_json({"error": "Fia not connected. Run tunnel_to_vps.sh on your Mac."})
+            self.send_json({"error": "Voice/OCR/chat need the optional Fia backend (a separate speech/AI server, not included in this repo) reachable on localhost:8765. The core planner works without it. See issue #4."})
         except Exception as e:
             print(f"Transcription error: {e}")
             self.send_json({"error": f"Transcription failed: {str(e)}"})
@@ -505,7 +505,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             })
 
         except ConnectionRefusedError:
-            self.send_json({"error": "Fia not connected. Run fia_server.py on your Mac."})
+            self.send_json({"error": "Voice/OCR/chat need the optional Fia backend (a separate speech/AI server, not included in this repo) reachable on localhost:8765. The core planner works without it. See issue #4."})
         except Exception as e:
             print(f"OCR error: {e}")
             self.send_json({"error": f"OCR failed: {str(e)}"})
@@ -528,7 +528,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             self.send_json(result)
 
         except ConnectionRefusedError:
-            self.send_json({"status": "error", "response": "Fia not connected. Make sure Launch Family Planner is running on your Mac."})
+            self.send_json({"status": "error", "response": "Voice/OCR/chat need the optional Fia backend (a separate speech/AI server, not included in this repo) reachable on localhost:8765. The core planner works without it. See issue #4."})
         except Exception as e:
             print(f"Fia chat error: {e}")
             self.send_json({"status": "error", "response": f"Chat failed: {str(e)}"})
