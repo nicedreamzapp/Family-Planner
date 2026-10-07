@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#FF5722">
+    <link rel="manifest" href="/static/manifest.json">
+    <title>Family Planner Dashboard</title>
+
+    <!-- Fun Kids Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/static/css/variables.css?v=6">
+    <link rel="stylesheet" href="/static/css/base.css?v=7">
+    <link rel="stylesheet" href="/static/css/layout.css?v=11">
+    <link rel="stylesheet" href="/static/css/calendar.css?v=100">
+    <link rel="stylesheet" href="/static/css/components.css?v=18">
+    <link rel="stylesheet" href="/static/css/themes.css?v=24">
+    <link rel="stylesheet" href="/static/css/responsive.css?v=25">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style id="family-glow">
+/* ===== FAMILY LIGHT GLOW — same layout + month themes; pastel aurora, glass cells, glowing pills ===== */
+body{ font-family:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif !important;
+  background:
+    radial-gradient(55% 50% at 0% 0%, rgba(167,139,250,.55), transparent 70%),
+    radial-gradient(50% 45% at 100% 0%, rgba(103,232,249,.50), transparent 70%),
+    radial-gradient(55% 50% at 100% 100%, rgba(244,114,182,.40), transparent 70%),
+    radial-gradient(55% 50% at 0% 100%, rgba(253,224,71,.38), transparent 70%),
+    linear-gradient(160deg,#f1ecff 0%,#e8f4ff 50%,#fdf0f8 100%) !important;
+  background-attachment:fixed !important; }
+
+/* header boxes: frosted glass, crisp white rim, colored halo */
+.header-time-date{ background:linear-gradient(160deg, rgba(255,255,255,.85), rgba(237,233,254,.70)) !important; border:1px solid #fff !important; border-radius:18px !important;
+  box-shadow:inset 0 1px 0 #fff, 0 0 0 1px rgba(139,92,246,.30), 0 0 22px rgba(139,92,246,.35), 0 8px 20px -8px rgba(80,60,160,.35) !important; }
+.header-time-date .header-time{ background:none !important; border:0 !important; box-shadow:none !important; color:#2e1065 !important; text-shadow:0 1px 0 #fff, 0 0 18px rgba(139,92,246,.35) !important; }
+.header-weather{ background:linear-gradient(160deg, rgba(255,255,255,.85), rgba(224,242,254,.72)) !important; border:1px solid #fff !important; border-radius:18px !important;
+  box-shadow:inset 0 1px 0 #fff, 0 0 0 1px rgba(56,189,248,.35), 0 0 22px rgba(56,189,248,.40), 0 8px 20px -8px rgba(30,90,160,.35) !important; }
+.header-voice{ background:linear-gradient(115deg, rgba(254,249,195,.90), rgba(254,215,170,.75) 45%, rgba(251,207,232,.75) 75%, rgba(221,214,254,.85)) !important; border:1px solid #fff !important;
+  box-shadow:inset 0 1px 0 #fff, 0 0 22px rgba(253,224,71,.45), 18px 0 34px -12px rgba(244,114,182,.45), 0 8px 20px -8px rgba(160,90,40,.25) !important; }
+.header-voice-input{ background:rgba(255,255,255,.92) !important; border:1px solid rgba(255,255,255,.95) !important; box-shadow:inset 0 2px 4px rgba(80,60,120,.12) !important; }
+.header-voice-go{ background:linear-gradient(180deg,#4ade80,#16a34a) !important; border:1px solid rgba(255,255,255,.6) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55), inset 0 -2px 0 rgba(0,0,0,.15), 0 0 14px rgba(34,197,94,.55) !important; }
+.header-mic{ box-shadow:inset 0 1px 0 rgba(255,255,255,.5), inset 0 -2px 0 rgba(0,0,0,.18), 0 0 12px rgba(234,88,12,.55) !important; }
+.year-title{ background:linear-gradient(135deg,#6d28d9,#2563eb); -webkit-background-clip:text; background-clip:text; color:transparent !important; }
+.month-select{ background:rgba(255,255,255,.85) !important; border:1px solid #fff !important; box-shadow:inset 0 1px 0 #fff, 0 0 0 1px rgba(139,92,246,.25), 0 0 10px rgba(139,92,246,.2) !important; }
+
+/* action pills: raised, each with its own glow */
+.action-pill{ border:1px solid rgba(255,255,255,.9) !important; border-radius:999px !important;
+  background:linear-gradient(180deg,#ffffff,#f1effc) !important;
+  box-shadow:inset 0 1px 0 #fff, inset 0 -2px 0 rgba(80,70,140,.10), 0 0 0 1px rgba(139,92,246,.18), 0 4px 12px -3px rgba(99,72,200,.35) !important; }
+.action-pill:hover{ transform:translateY(-2px); }
+.action-pill.kid1{ background:linear-gradient(180deg,#f5e8ff,#e4c8ff) !important; box-shadow:inset 0 1px 0 #fff, 0 0 0 1px rgba(168,85,247,.45), 0 0 16px rgba(168,85,247,.5) !important; }
+.action-pill.kid2{ background:linear-gradient(180deg,#fff1e6,#ffd7b8) !important; box-shadow:inset 0 1px 0 #fff, 0 0 0 1px rgba(249,115,22,.45), 0 0 16px rgba(249,115,22,.45) !important; }
+.action-pill.pandora{ background:linear-gradient(180deg,#4f6bff,#2a3ec9) !important; box-shadow:inset 0 1px 0 rgba(255,255,255,.45), 0 0 16px rgba(59,91,255,.6) !important; }
+
+/* calendar frame + cells: glass with crisp rims */
+.expanded-month{ border-radius:20px !important; overflow:hidden; border:1px solid #fff !important;
+  box-shadow:inset 0 1px 0 #fff, 0 0 0 1px rgba(139,92,246,.22), 0 0 30px rgba(139,92,246,.22), 0 14px 34px -10px rgba(80,60,160,.35) !important; }
+.calendar-day{ background:linear-gradient(160deg, rgba(255,255,255,.88), rgba(255,255,255,.66)) !important;
+  border-right:1px solid rgba(255,255,255,.95) !important; border-bottom:1px solid rgba(255,255,255,.95) !important;
+  box-shadow:inset 0 1px 0 #fff, inset 0 -1px 0 rgba(120,100,180,.12), inset 1px 0 0 rgba(255,255,255,.7) !important; }
+.calendar-day.weekend{ background:linear-gradient(160deg, rgba(255,250,252,.9), rgba(252,231,243,.62)) !important; }
+.calendar-day.other-month{ background:rgba(240,238,250,.55) !important; }
+.calendar-day:hover{ background:linear-gradient(160deg,#fff, rgba(237,233,254,.85)) !important; }
+.day-num{ font-weight:800 !important; color:#1e1b4b !important; }
+
+/* event pills: same person colors, crisp + glowing */
+.event-pill{ border:1px solid rgba(255,255,255,.75) !important; border-radius:8px !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5), inset 0 -2px 0 rgba(0,0,0,.18), 0 0 10px var(--pg, rgba(34,197,94,.55)), 0 2px 5px rgba(0,0,0,.18) !important; }
+.event-pill.family { background:linear-gradient(180deg,#5fd88a,#22a35a) !important; --pg:rgba(34,197,94,.55); }
+.event-pill.kid1    { background:linear-gradient(180deg,#c47ef0,#8b3fc4) !important; --pg:rgba(168,85,247,.6); }
+.event-pill.kid2   { background:linear-gradient(180deg,#ff9a66,#ea6a1c) !important; --pg:rgba(249,115,22,.55); }
+.event-pill.dad   { background:linear-gradient(180deg,#5aa8ff,#2563eb) !important; --pg:rgba(37,99,235,.55); }
+.event-pill.mom{ background:linear-gradient(180deg,#f77fae,#d6336c) !important; --pg:rgba(236,72,153,.55); }
+.day-weather-card{ background:rgba(255,255,255,.85) !important; border:1px solid #fff !important; box-shadow:0 0 0 1px rgba(56,189,248,.3), 0 0 8px rgba(56,189,248,.3) !important; border-radius:8px !important; }
+
+</style>
+</head>
+<body>
+    <!-- Screensaver -->
+    <div class="screensaver" id="screensaver">
+        <video id="screensaverVideo" muted playsinline>
+            <source src="" type="video/mp4">
+        </video>
+        <div class="pixel-overlay" id="pixelOverlay"></div>
+    </div>
+
+    <!-- Monthly Video Preview -->
+    <div class="monthly-preview" id="monthlyPreview">
+        <video id="monthlyPreviewVideo" muted loop playsinline></video>
+        <div class="monthly-preview-close" onclick="closeMonthlyPreview()">✕ Close</div>
+    </div>
+
+    <div class="app-container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="current-time" id="currentTime">12:00</div>
+                <div class="current-date" id="currentDate">Monday, Dec 9</div>
+                <div class="family-name">Our Family</div>
+            </div>
+
+            <!-- Jump to Month -->
+            <div class="month-nav">
+                <div class="month-nav-title">Jump to Month</div>
+                <div class="month-grid" id="monthNav"></div>
+            </div>
+
+            <div class="today-section">
+                <div class="section-title">Today</div>
+                <div id="todayEvents"></div>
+            </div>
+
+
+
+            <!-- Family Helpers Widget -->
+            <div class="helpers-widget">
+                <div class="helpers-title">&#127775; Family Helpers &#127775;</div>
+                <div class="helpers-kids">
+                    <div class="helper-kid kid1" onclick="showKidPanel('kid1')">
+                        <div class="kid-avatar">&#128103;</div>
+                        <div class="kid-name">Kid 1</div>
+                        <div class="kid-status" id="kid1Status">Ready to help!</div>
+                    </div>
+                    <div class="helper-kid kid2" onclick="showKidPanel('kid2')">
+                        <div class="kid-avatar">&#128103;</div>
+                        <div class="kid-name">Kid 2</div>
+                        <div class="kid-status" id="kid2Status">Ready to help!</div>
+                    </div>
+                </div>
+                <div class="helpers-motto">"We all help because we're family!"</div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Global Header -->
+            <div class="year-header">
+                <!-- Left: Compact Time, Date, Weather -->
+                <div class="header-info">
+                    <div class="header-time-date">
+                        <div class="header-time" id="headerTime">12:00</div>
+                        <div class="header-date" id="headerDate">Mon, Dec 9</div>
+                    </div>
+                    <a href="https://www.wunderground.com/" target="_blank" class="header-weather" id="headerWeather">
+                        <span class="header-weather-icon" id="headerWeatherIcon">☀️</span>
+                        <span class="header-weather-temp" id="headerWeatherTemp">--°</span>
+                    </a>
+                </div>
+
+                <div class="year-nav" id="calendarNav">
+                    <button class="year-arrow" onclick="changeYear(-1)">&#9664;</button>
+                    <h1 class="year-title" id="yearTitle">2025</h1>
+                    <button class="year-arrow" onclick="changeYear(1)">&#9654;</button>
+                </div>
+                <h1 class="page-title" id="pageTitle" style="display:none;"></h1>
+
+                <!-- Month Skip Dropdown -->
+                <div class="month-select-wrapper" id="monthSelectWrapper">
+                    <select class="month-select" id="monthSelect" onchange="jumpToMonth(this.value)">
+                        <option value="0">Jan</option>
+                        <option value="1">Feb</option>
+                        <option value="2">Mar</option>
+                        <option value="3">Apr</option>
+                        <option value="4">May</option>
+                        <option value="5">Jun</option>
+                        <option value="6">Jul</option>
+                        <option value="7">Aug</option>
+                        <option value="8">Sep</option>
+                        <option value="9">Oct</option>
+                        <option value="10">Nov</option>
+                        <option value="11">Dec</option>
+                    </select>
+                </div>
+
+                <!-- Compact Voice Controls in Header -->
+                <div class="header-voice" id="headerVoice">
+                    <button class="header-mic" id="calendarMic" onclick="startSmartVoice(this)">&#127908;</button>
+                    <button class="header-mic" id="calendarCamera" onclick="openCameraModal()">&#128247;</button>
+                    <input type="text" class="header-voice-input" id="calendarVoiceInput" placeholder="Events, chores, shopping, meals..." onkeypress="if(event.key==='Enter')processSmartTextCommand(this.value)">
+                    <button class="header-voice-go" onclick="processSmartTextCommand(document.getElementById('calendarVoiceInput').value)">Go</button>
+                </div>
+                <div class="header-actions" id="headerActions">
+                    <button class="action-pill" id="navCalendar" onclick="showPanel('calendar')" style="display:none;">&#128197; Calendar</button>
+                    <button class="action-pill" id="navMeals" onclick="showPanel('meals')">&#127869; Meals</button>
+                    <button class="action-pill" id="navEvent" onclick="showAddEvent()">&#10133; Event</button>
+                    <button class="action-pill" id="navShopping" onclick="showPanel('shopping')">&#128722; Shop</button>
+                    <button class="action-pill" id="navSchool" onclick="showPanel('school')">&#127979; School</button>
+                    <button class="action-pill kid-btn kid1" id="navKid1" onclick="showKidPanel('kid1')">Kid 1</button>
+                    <button class="action-pill kid-btn kid2" id="navKid2" onclick="showKidPanel('kid2')">Kid 2</button>
+                    <button class="action-pill news" onclick="openDirectTV()">📺 TV</button>
+                    <a class="action-pill pandora" href="https://www.pandora.com/collection" target="_blank">🎵 Pandora</a>
+                    <button class="action-pill ocean" id="navOcean" onclick="showMonthlyPreview()">🎬 ScrSvr</button>
+                    <button class="action-pill" id="navFullscreen" onclick="toggleFullscreen()">&#9974; Fullscreen</button>
+                </div>
+            </div>
+
+            <!-- Calendar Panel (Default) -->
+            <div id="calendarPanel" class="panel active">
+                <!-- Preview Grid -->
+                <div class="preview-section">
+                    <div class="preview-grid" id="previewGrid"></div>
+                </div>
+
+                <div id="yearCalendar"></div>
+            </div>
+
+            <!-- Shopping Panel -->
+            <div id="shoppingPanel" class="panel">
+                <div style="display:flex; gap:10px; margin-bottom:20px;">
+                    <div style="position:relative; flex:1;">
+                        <input type="text" id="newItem" placeholder="Add item..." onkeypress="if(event.key==='Enter')addShoppingItem()" style="padding-right: 50px; margin-bottom:0; width:100%; padding:12px 16px; border:2px solid var(--border-light); border-radius:10px; font-size:15px;">
+                        <button onclick="startVoiceCommand('shopping', this)" style="position:absolute; right:5px; top:50%; transform:translateY(-50%); width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, var(--accent-orange), #E55D3A); border:2px solid var(--accent-orange); font-size:16px; cursor:pointer; color:white; display:flex; align-items:center; justify-content:center;">&#127908;</button>
+                    </div>
+                    <button class="btn-primary" style="width:auto; padding:12px 20px;" onclick="addShoppingItem()">+</button>
+                </div>
+                <div id="shoppingList" style="display:grid; gap:10px;"></div>
+            </div>
+
+            <!-- Meals Panel -->
+            <div id="mealsPanel" class="panel">
+                <!-- Voice Command Bar for Meals -->
+                <div class="voice-command-bar" id="mealsVoiceBar">
+                    <button class="mic-btn" id="mealsMic" onclick="startVoiceCommand('meals', this)">&#127908;</button>
+                    <div class="voice-input-area">
+                        <input type="text" class="voice-input" id="mealsVoiceInput" placeholder='Say: "Plan tacos for Friday"' onkeypress="if(event.key==='Enter')processTextCommand('meals', this.value)">
+                        <div class="voice-status-text" id="mealsVoiceStatus"></div>
+                    </div>
+                    <button class="voice-submit-btn" onclick="processTextCommand('meals', document.getElementById('mealsVoiceInput').value)">Set</button>
+                </div>
+
+                <div class="meal-week" id="mealWeek"></div>
+            </div>
+
+            <!-- Kids Panel -->
+            <!-- School email card, dressed in the
+                 planner's own language: gold border, kid colours. -->
+            <style>
+            /* html and body are locked overflow:hidden for the kiosk, so this
+               panel is the scroll container. It must be a block, not the flex
+               column .panel.active makes, or a phone will not drag it. */
+            /* A definite height has to come from the flex algorithm, not from
+               height:100%. iOS Safari resolves a percentage height on a flex item
+               to auto, so the panel grew to its full content height, overflowed
+               .main-content (which responsive.css pins to overflow:hidden
+               !important) and had nothing left to scroll. !important because that
+               same block would otherwise win. */
+            #schoolPanel.panel.active{display:block !important;flex:1 1 0% !important;
+              min-height:0 !important;height:auto !important;
+              overflow-y:auto !important;overflow-x:hidden !important;
+              -webkit-overflow-scrolling:touch;touch-action:pan-y;
+              overscroll-behavior:contain}
+            .sw-wrap{width:100%;max-width:820px;margin:0 auto;padding:clamp(6px,1.4vmin,16px)
+              clamp(6px,1.4vmin,14px) clamp(14px,3vmin,28px)}
+            .sw-card{background:var(--bg-cream,#fff);border:3px solid var(--border-gold,#C9A66B);
+              border-radius:clamp(12px,2vmin,20px);box-shadow:0 6px 18px var(--shadow,rgba(0,0,0,.12))}
+            .sw-top{display:flex;align-items:center;gap:clamp(8px,1.4vmin,12px);
+              padding:clamp(10px,1.8vmin,16px) clamp(12px,2vmin,18px);
+              background:linear-gradient(135deg,#FFF6E9,#FDEDF4);
+              border-bottom:2px solid var(--border-light,#D4D4D4);flex-wrap:wrap}
+            .sw-badge{flex:0 0 auto;width:clamp(34px,5vmin,46px);height:clamp(34px,5vmin,46px);
+              display:flex;align-items:center;justify-content:center;font-size:clamp(18px,2.8vmin,26px);
+              background:#fff;border:2px solid var(--border-gold,#C9A66B);border-radius:50%;
+              box-shadow:0 2px 6px var(--shadow,rgba(0,0,0,.12))}
+            .sw-titles{flex:1 1 140px;min-width:0}
+            .sw-title{font-size:var(--fs-lg,18px);font-weight:800;color:var(--text-dark,#1A1A1A);
+              line-height:1.2}
+            .sw-sub{font-size:var(--fs-xxs,11px);color:var(--text-muted,#4A4A4A);margin-top:2px}
+            .sw-chips{display:flex;gap:5px;flex:0 0 auto}
+            .sw-chip{font-size:var(--fs-xxs,11px);font-weight:800;color:#fff;
+              padding:3px clamp(8px,1.2vmin,12px);border-radius:999px;white-space:nowrap}
+            .sw-chip.kid1{background:var(--kid1,#9C27B0)}
+            .sw-chip.kid2{background:var(--kid2,#FF6D00)}
+
+            .sw-body{padding:clamp(10px,1.8vmin,16px) clamp(10px,1.8vmin,18px)
+              clamp(12px,2vmin,20px)}
+            .sw-sec+.sw-sec{margin-top:clamp(12px,2vmin,20px)}
+            .sw-lbl{display:flex;align-items:center;gap:6px;font-size:var(--fs-xxs,11px);
+              letter-spacing:.08em;text-transform:uppercase;font-weight:800;
+              color:var(--text-muted,#4A4A4A);margin-bottom:clamp(5px,1vmin,9px)}
+            .sw-lbl::after{content:"";flex:1;height:1px;background:var(--border-light,#D4D4D4)}
+
+            .sw-item{display:flex;gap:clamp(6px,1.2vmin,10px);align-items:flex-start;
+              background:var(--bg-warm,#F8F9FA);border:1px solid var(--border-light,#D4D4D4);
+              border-left:5px solid var(--border-light,#D4D4D4);
+              border-radius:clamp(8px,1.4vmin,14px);
+              padding:clamp(8px,1.4vmin,13px) clamp(9px,1.6vmin,15px);
+              font-size:var(--fs-sm,13px);line-height:1.5;color:var(--text-dark,#1A1A1A)}
+            .sw-item+.sw-item{margin-top:clamp(5px,1vmin,9px)}
+            .sw-item.kid1{border-left-color:var(--kid1,#9C27B0)}
+            .sw-item.kid2{border-left-color:var(--kid2,#FF6D00)}
+            .sw-who{flex:0 0 auto;font-size:var(--fs-xxs,11px);font-weight:800;
+              text-transform:uppercase;letter-spacing:.05em;padding-top:1px}
+            .sw-item.kid1 .sw-who{color:var(--kid1,#9C27B0)}
+            .sw-item.kid2 .sw-who{color:var(--kid2,#FF6D00)}
+            .sw-txt{min-width:0;overflow-wrap:anywhere}
+
+            /* the things that cost something if they are missed */
+            .sw-sec.todo .sw-item{background:#FFF8E6;border-color:#F0D9A0;
+              box-shadow:0 2px 6px rgba(201,166,107,.18)}
+            .sw-sec.todo .sw-lbl{color:var(--accent-orange,#D84315)}
+            .sw-sec.quiet .sw-item{background:#fff;font-size:var(--fs-xs,12px);
+              color:var(--text-muted,#4A4A4A)}
+            /* Weekly homework sheet - the page numbers, the reading
+               minutes and the spelling words, laid out as a table. */
+            .sw-sec.hw .sw-item{background:#F7F0FC;border-color:#DCC6EC;
+              border-left-color:var(--kid1,#9C27B0)}
+            .sw-sec.hw .sw-item.hw-past{opacity:.45}
+            .sw-sec.hw .sw-item.hw-today{background:#fff;border-color:var(--kid1,#9C27B0);
+              box-shadow:0 2px 8px rgba(156,39,176,.22)}
+            .hw-day{flex:0 0 auto;min-width:58px;font-size:var(--fs-xxs,11px);
+              font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+              color:var(--kid1,#9C27B0);padding-top:1px}
+            .hw-note{font-size:var(--fs-xxs,11px);text-transform:uppercase;
+              letter-spacing:.06em;font-weight:800;color:var(--text-muted,#4A4A4A);
+              margin:clamp(8px,1.4vmin,13px) 0 clamp(4px,.8vmin,7px)}
+            .hw-words{display:flex;flex-wrap:wrap;gap:clamp(4px,.8vmin,7px)}
+            .hw-word{font-size:var(--fs-xs,12px);font-weight:700;background:#fff;
+              border:1px solid #DCC6EC;border-radius:999px;
+              padding:3px clamp(8px,1.2vmin,12px);color:var(--text-dark,#1A1A1A)}
+            .hw-clubs{font-size:var(--fs-xs,12px);line-height:1.6;
+              color:var(--text-muted,#4A4A4A)}
+            .hw-clubs b{color:var(--text-dark,#1A1A1A)}
+            .sw-txt a{color:#1565C0;font-weight:700;text-decoration:underline;
+              text-underline-offset:2px;overflow-wrap:anywhere}
+            .sw-txt a.doc{display:inline-block;background:#E8F1FD;border:1px solid #B7D0F2;
+              border-radius:999px;padding:2px 10px;text-decoration:none;margin:2px 0;
+              font-size:var(--fs-xs,12px)}
+            .sw-txt .sw-time{font-weight:800;color:var(--text-dark,#1A1A1A);margin-right:6px}
+            /* one header per day, then that day's rows, so the girls' weeks read
+               in order instead of as one pile */
+            .sw-day{display:flex;align-items:baseline;gap:8px;margin:clamp(10px,1.8vmin,16px) 0
+              clamp(4px,.8vmin,7px);font-weight:800;color:var(--text-dark,#1A1A1A);
+              font-size:var(--fs-sm,13px)}
+            .sw-day:first-child{margin-top:0}
+            .sw-day .sw-dow{font-size:var(--fs-xxs,11px);text-transform:uppercase;
+              letter-spacing:.08em;color:var(--text-muted,#4A4A4A)}
+            .sw-day.today{color:var(--accent-orange,#D84315)}
+            .sw-day.today::after{content:"today";font-size:var(--fs-xxs,11px);
+              background:var(--accent-orange,#D84315);color:#fff;border-radius:999px;
+              padding:1px 8px;letter-spacing:.05em}
+            .sw-day.tomorrow::after{content:"tomorrow";font-size:var(--fs-xxs,11px);
+              background:#F0D9A0;color:#5a3d00;border-radius:999px;padding:1px 8px}
+            .sw-sec.later .sw-item{background:#fff;font-size:var(--fs-xs,12px)}
+            .sw-sec.later .sw-day{font-size:var(--fs-xs,12px);margin-top:clamp(6px,1vmin,10px)}
+            .sw-empty{font-size:var(--fs-sm,13px);color:var(--text-muted,#4A4A4A);
+              padding:clamp(10px,2vmin,18px);text-align:center}
+            .sw-hint{text-align:center;font-size:var(--fs-xxs,11px);
+              color:var(--text-muted,#4A4A4A);opacity:.75;margin-top:clamp(8px,1.4vmin,12px)}
+
+            /* A definite height from the flex algorithm, not height:100% —
+               iOS resolves a percentage height on a flex item to auto. */
+            #schoolPanel.panel.active{display:block !important;flex:1 1 0% !important;
+              min-height:0 !important;height:auto !important;
+              overflow-y:auto !important;overflow-x:hidden !important;
+              -webkit-overflow-scrolling:touch;touch-action:pan-y;
+              overscroll-behavior:contain}
+            @media (max-width:600px){
+              .sw-wrap{padding:6px 6px 18px}
+              .sw-card{border-width:2px;border-radius:14px}
+              .sw-top{padding:9px 10px;gap:8px}
+              .sw-title{font-size:clamp(15px,4.2vw,19px)}
+              .sw-sub{font-size:clamp(10px,2.8vw,12px)}
+              .sw-chip{font-size:clamp(9px,2.6vw,11px);padding:2px 8px}
+              .sw-body{padding:10px}
+              .sw-item{font-size:clamp(13px,3.6vw,15px);padding:9px 10px;
+                border-left-width:4px;gap:7px}
+              .sw-who{font-size:clamp(9px,2.6vw,11px)}
+              .sw-lbl{font-size:clamp(9px,2.6vw,11px)}
+            }
+            </style>
+            <div id="schoolPanel" class="panel">
+                <div class="sw-wrap">
+                    <div class="sw-card">
+                        <div class="sw-top">
+                            <span class="sw-badge">&#127979;</span>
+                            <div class="sw-titles">
+                                <div class="sw-title">School Email</div>
+                                <div class="sw-sub" id="schoolFoot">reading&hellip;</div>
+                            </div>
+                            <div class="sw-chips">
+                                <span class="sw-chip kid1">Kid 1</span>
+                                <span class="sw-chip kid2">Kid 2</span>
+                            </div>
+                        </div>
+                        <div class="sw-body" id="schoolBody">
+                            <div class="sw-empty">reading the school email&hellip;</div>
+                        </div>
+                    </div>
+                    <div class="sw-hint">both schools, read every evening &middot; in date order, today first</div>
+                </div>
+            </div>
+
+            <div id="kidsPanel" class="panel">
+                <div class="kids-header">
+                    <div class="kid-card kid1 selected" id="kid1Card" onclick="selectKid('kid1')">
+                        <span class="emoji">&#128103;</span>
+                        <div class="name">Kid 1</div>
+                        <div class="task-status" id="kid1TaskStatus">Ready to help!</div>
+                    </div>
+                    <div class="kid-card kid2" id="kid2Card" onclick="selectKid('kid2')">
+                        <span class="emoji">&#128103;</span>
+                        <div class="name">Kid 2</div>
+                        <div class="task-status" id="kid2TaskStatus">Ready to help!</div>
+                    </div>
+                </div>
+
+                <div class="section-title" style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>Today's Tasks</span>
+                    <button onclick="resetChores()" style="padding:6px 12px; background:rgba(255,107,107,0.2); border:2px solid #FF6B6B; border-radius:8px; color:#FF6B6B; font-size:12px; font-weight:600; cursor:pointer;">Reset</button>
+                </div>
+                <div class="chore-grid" id="choreGrid"></div>
+
+                <a class="kids-learn-link" id="kidsLearnLink" href="https://apps.apple.com/us/app/brainforest-kids-learning-k-4/id6788301765" target="_blank" rel="noopener">
+                    <span class="kll-icon">&#127795;</span>
+                    <span class="kll-text">
+                        <span class="kll-title">Open BrainForest</span>
+                        <span class="kll-sub">Math, reading &amp; games for kids</span>
+                    </span>
+                    <span class="kll-go">&#9654;</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div class="modal" id="eventModal">
+        <div class="modal-content">
+            <h2>Add Event</h2>
+            <div style="position:relative; margin-bottom:15px;">
+                <input type="text" id="eventTitle" placeholder="Event Name" style="margin-bottom:0; padding-right:50px;">
+                <button onclick="startVoiceCommand('calendar', this)" style="position:absolute; right:5px; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, var(--accent-orange), #E55D3A); border:2px solid var(--accent-orange); font-size:18px; cursor:pointer; color:white; display:flex; align-items:center; justify-content:center;">&#127908;</button>
+            </div>
+            <input type="date" id="eventDate">
+            <input type="time" id="eventTime">
+            <div id="personGrid" class="person-grid"></div>
+            <div class="modal-btns">
+                <button class="btn-secondary" onclick="closeModal('eventModal')">Cancel</button>
+                <button class="btn-primary" onclick="saveEvent()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day Detail Modal -->
+    <div class="modal" id="dayModal">
+        <div class="modal-content day-events-modal">
+            <h2 id="dayModalTitle">December 9</h2>
+            <div id="dayModalContent"></div>
+            <div class="modal-btns">
+                <button class="btn-secondary" onclick="closeModal('dayModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div class="modal" id="celebrationModal">
+        <div class="modal-content">
+            <div class="celebration-header">
+                <h2>&#127881; Great Job, <span id="celebrationKidName">Helper</span>! &#127881;</h2>
+            </div>
+            <div class="celebration-game-picker">
+                <button class="game-pick-btn" onclick="startSlotGame()" title="Slot Machine">&#127920;</button>
+                <button class="game-pick-btn" onclick="startConfettiGame()" title="Confetti Cannon">&#127882;</button>
+                <button class="game-pick-btn" onclick="startBubbleGame()" title="Bubble Pop">&#129531;</button>
+                <button class="game-pick-btn" onclick="openGameFromCelebration('memory')" title="Memory Match">&#129504;</button>
+                <button class="game-pick-btn" onclick="openGameFromCelebration('trivia')" title="Trivia Quiz">&#129300;</button>
+                <button class="game-pick-btn" onclick="openGameFromCelebration('math')" title="Math Challenge">&#128290;</button>
+                <button class="game-pick-btn" onclick="openGameFromCelebration('wordscramble')" title="Word Scramble">&#128300;</button>
+                <button class="game-pick-btn" onclick="openGameFromCelebration('colorMatch')" title="Color Match">&#127912;</button>
+                <button class="game-pick-btn" onclick="openGameFromCelebration('reaction')" title="Reaction Time">&#9889;</button>
+            </div>
+            <div id="celebrationGames">
+                <div style="text-align:center; color:white; padding:40px;">
+                    <div style="font-size:60px; margin-bottom:20px;">&#127881;</div>
+                    <div style="font-size:20px;">Pick a game above to celebrate!</div>
+                </div>
+            </div>
+            <div class="celebration-close">
+                <button onclick="closeCelebrationModal()">All Done!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meal Modal -->
+    <div class="modal" id="mealModal">
+        <div class="modal-content">
+            <h2 id="mealDayTitle">Pick Meal</h2>
+            <div id="mealPicker" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;"></div>
+            <div style="position:relative; margin-bottom:15px;">
+                <input type="text" id="customMeal" placeholder="Custom meal..." style="margin-bottom:0; padding-right:50px;">
+                <button onclick="startVoiceCommand('meals', this)" style="position:absolute; right:5px; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, var(--accent-orange), #E55D3A); border:2px solid var(--accent-orange); font-size:18px; cursor:pointer; color:white; display:flex; align-items:center; justify-content:center;">&#127908;</button>
+            </div>
+            <div class="modal-btns">
+                <button class="btn-secondary" onclick="closeModal('mealModal')">Cancel</button>
+                <button class="btn-primary" onclick="saveCustomMeal()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Status Modal -->
+    <div class="voice-status" id="voiceStatus">
+        <div class="listening-icon">&#127908;</div>
+        <div class="status-text">Listening...</div>
+        <div class="command-preview" id="voicePreview">Speak now</div>
+    </div>
+
+    <!-- Fia Chat Modal -->
+    <div class="modal" id="fiaModal">
+        <div class="modal-content fia-chat-modal">
+            <div class="fia-header">
+                <div class="fia-avatar">
+                    <span class="fia-icon">&#129302;</span>
+                    <span class="fia-pulse"></span>
+                </div>
+                <div class="fia-title">
+                    <h2>Fia</h2>
+                    <span class="fia-status">Family Assistant</span>
+                </div>
+                <button class="fia-close" onclick="closeModal('fiaModal')">&#10005;</button>
+            </div>
+
+            <div class="fia-messages" id="fiaMessages">
+                <div class="fia-message fia-response">
+                    <div class="message-avatar">&#129302;</div>
+                    <div class="message-bubble">
+                        Hi! I'm Fia, your family assistant. I can help with the calendar, shopping list, meal planning, and kids' chores. What can I help you with?
+                    </div>
+                </div>
+            </div>
+
+            <div class="fia-input-container">
+                <button class="fia-mic-btn" id="fiaChatMic" onclick="toggleFiaMic()">
+                    <span class="mic-icon">&#127908;</span>
+                </button>
+                <input type="text" id="fiaInput" placeholder="Type or tap mic to speak..." onkeypress="if(event.key==='Enter')sendFiaMessage()">
+                <button class="fia-send-btn" onclick="sendFiaMessage()">
+                    <span>&#10148;</span>
+                </button>
+            </div>
+
+            <div class="fia-quick-actions">
+                <button onclick="sendQuickFia('What\'s on the calendar today?')">&#128197; Today</button>
+                <button onclick="sendQuickFia('What\'s for dinner?')">&#127869; Dinner</button>
+                <button onclick="sendQuickFia('What\'s on the shopping list?')">&#128722; Shopping</button>
+                <button onclick="sendQuickFia('How are the kids doing with chores?')">&#11088; Chores</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Games Modal -->
+    <div class="modal" id="gamesModal">
+        <div class="modal-content games-modal-content">
+            <div class="games-modal-header">
+                <h2 id="gameTitle">&#127918; Game</h2>
+                <button class="games-close" onclick="closeGame()">&#10005;</button>
+            </div>
+            <div class="games-score-bar">
+                <div class="games-score">Score: <span id="gameScore">0</span></div>
+                <div class="games-timer" id="gameTimer"></div>
+            </div>
+            <div class="games-area" id="gameArea">
+                <!-- Game content loaded dynamically -->
+            </div>
+            <div class="games-controls" id="gameControls">
+                <button class="btn-primary" id="gameStartBtn" onclick="startCurrentGame()">Start Game!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera/OCR Modal -->
+    <div class="modal" id="cameraModal">
+        <div class="modal-content camera-modal">
+            <div class="camera-header">
+                <h2>&#128247; Scan Document</h2>
+                <button class="camera-close" onclick="closeCameraModal()">&#10005;</button>
+            </div>
+
+            <div class="camera-status" id="cameraStatus">Position document and tap capture</div>
+
+            <!-- Camera View -->
+            <div id="cameraView" class="camera-view">
+                <video id="cameraVideo" autoplay playsinline></video>
+                <canvas id="cameraCanvas" style="display:none;"></canvas>
+                <button class="camera-toggle-btn" id="cameraToggleBtn" onclick="toggleCamera()">&#128247; Rear</button>
+                <button class="capture-btn" onclick="capturePhoto()">
+                    <span class="capture-icon">&#9679;</span>
+                </button>
+            </div>
+
+            <!-- Preview View -->
+            <div id="previewView" class="preview-view" style="display:none;">
+                <img id="capturePreview" alt="Captured image">
+                <div class="preview-buttons">
+                    <button class="btn-secondary" id="retakePhotoBtn" onclick="retakePhoto()">&#128260; Retake</button>
+                    <button class="btn-primary" id="acceptPhotoBtn" onclick="acceptPhoto()">&#10003; Accept</button>
+                </div>
+            </div>
+
+            <!-- Results View -->
+            <div id="resultsView" class="results-view" style="display:none;">
+                <div id="ocrEventsList" class="ocr-events-list"></div>
+                <div class="results-buttons">
+                    <button class="btn-secondary" onclick="retakePhoto()">&#128260; Scan Another</button>
+                    <button class="btn-primary" onclick="addSelectedEvents()">&#10133; Add Selected</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/static/js/app.js?v=8"></script>
+    <script src="/static/js/calendar.js?v=7"></script>
+    <script src="/static/js/chores.js?v=2"></script>
+    <script src="/static/js/rewards.js?v=2"></script>
+    <script src="/static/js/meals.js?v=2"></script>
+    <script src="/static/js/shopping.js?v=2"></script>
+    <script src="/static/js/celebrations.js?v=3"></script>
+    <script src="/static/js/voice.js?v=5"></script>
+    <script src="/static/js/themes.js?v=99"></script>
+    <script src="/static/js/screensaver.js?v=2"></script>
+    <script src="/static/js/ocr.js?v=2"></script>
+    <script src="/static/js/games.js?v=2"></script>
+
+<script>
+// School email card — shows what an external watcher posted to /api/school/report.
+(function(){
+  var esc = function(t){ return String(t==null?'':t)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
+  var ago = function(ts){
+    if(!ts) return '';
+    var m = Math.round((Date.now()-new Date(ts))/60000);
+    if(isNaN(m)) return '';
+    if(m<1) return 'just now';
+    if(m<60) return m+'m ago';
+    if(m<2880) return Math.round(m/60)+'h ago';
+    return Math.round(m/1440)+'d ago';
+  };
+
+  // calendar lines start with a raw 2026-09-10; nobody reads a date that way
+  var DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function prettyDate(line){
+    return String(line||'').replace(/^(\d{4})-(\d{2})-(\d{2})\s*/, function(_, y, m, d){
+      var dt = new Date(+y, +m - 1, +d);
+      if(isNaN(dt.getTime())) return '';
+      return DOW[dt.getDay()] + ' ' + MON[+m - 1] + ' ' + (+d) + ' \u2014 ';
+    });
+  }
+
+  // A line arrives as "2026-09-10 kid2: ..." (dated) or "kid1: ..." (a plain
+  // note). Pull the date and the name off so each can be shown its own way.
+  function parse(line){
+    var rest = String(line||'').trim(), date = '';
+    var m = rest.match(/^(\d{4}-\d{2}-\d{2})\s+/);
+    if(m){ date = m[1]; rest = rest.slice(m[0].length); }
+    var who = '', i = rest.indexOf(':');
+    if(i > 0 && i <= 14){
+      var head = rest.slice(0, i).trim();
+      if(/^(kid1|kid2|school one|school two|classdojo|school)$/i.test(head)){
+        who = head; rest = rest.slice(i+1).trim();
+      }
+    }
+    var kid = /^kid1$|school one/i.test(who) ? 'kid1' : (/^kid2$|school two|dojo/i.test(who) ? 'kid2' : '');
+    return {date: date, kid: kid, text: rest};
+  }
+
+  // links come through as bare URLs; a doc link becomes a button, an address
+  // becomes mailto, and nothing is left for anyone to retype from a screen
+  function linkify(text){
+    var out = esc(text);
+    out = out.replace(/&lt;(https?:\/\/[^&\s]+)&gt;/g, '$1');           // <url> from the email
+    out = out.replace(/(https?:\/\/[^\s<>"']+)/g, function(u){
+      var clean = u.replace(/[.,;:)]+$/, ''), tail = u.slice(clean.length);
+      var label, kls = '';
+      if(/docs\.google\.com|drive\.google\.com/.test(clean)){ label = '📄 open the Google Doc'; kls = ' class="doc"'; }
+      else if(/forms\.gle|forms\.google/.test(clean)){ label = '📝 open the form'; kls = ' class="doc"'; }
+      else { label = clean.replace(/^https?:\/\//,'').replace(/\/.*$/,''); }
+      return '<a'+kls+' href="'+clean+'" target="_blank" rel="noopener">'+label+'</a>'+tail;
+    });
+    out = out.replace(/([\w.+-]+@[\w-]+\.[\w.-]+)/g, function(e){
+      return '<a href="mailto:'+e+'">'+e+'</a>'; });
+    return out;
+  }
+
+  function clock(t){                      // "17:30" -> "5:30pm"
+    var m = String(t||'').match(/^(\d{1,2}):(\d{2})/);
+    if(!m) return '';
+    var h = +m[1], mm = m[2];
+    return ((h % 12) || 12) + (mm === '00' ? '' : ':' + mm) + (h < 12 ? 'am' : 'pm');
+  }
+
+  function row(kid, text, time, extraClass){
+    return '<div class="sw-item '+(kid||'')+' '+(extraClass||'')+'">' +
+             (kid ? '<span class="sw-who">'+esc(kid)+'</span>' : '') +
+             '<span class="sw-txt">' + (time ? '<span class="sw-time">'+esc(time)+'</span>' : '') +
+             linkify(text) + '</span></div>';
+  }
+
+  function item(line, extraClass){
+    var p = parse(line);
+    var when = p.date ? prettyDate(p.date + ' ').replace(/ — $/, '') : '';
+    return row(p.kid, (when ? when + ' — ' : '') + p.text, '', extraClass);
+  }
+
+  function section(label, lines, kls){
+    if(!lines || !lines.length) return '';
+    return '<div class="sw-sec '+(kls||'')+'"><div class="sw-lbl">'+esc(label)+'</div>' +
+           lines.map(function(l){ return item(l); }).join('') + '</div>';
+  }
+
+  function dayHeader(date, today, tomorrow){
+    var p = date.split('-'), dt = new Date(+p[0], +p[1]-1, +p[2]);
+    var kls = date === today ? ' today' : (date === tomorrow ? ' tomorrow' : '');
+    return '<div class="sw-day'+kls+'"><span class="sw-dow">'+DOW[dt.getDay()]+'</span>' +
+           MON[dt.getMonth()] + ' ' + dt.getDate() + '</div>';
+  }
+
+  // The calendar already holds the dates the schools sent (the watcher puts
+  // them there). Soccer, birthdays and the homework rows are not school mail.
+  var SCHOOL_EMOJI = /^[🏫📸⚔🎭🏃🚌📋🍎]/;
+  function schoolEvents(events){
+    return (events||[]).filter(function(e){
+      var t = String(e.title||''), n = String(e.notes||'');
+      if(/⚽|📖|birthday/i.test(t)) return false;
+      return SCHOOL_EMOJI.test(t) || /school one|school two|classdojo/i.test(n) ||
+             /no school|minimum day|photo day|picture day|holiday/i.test(t);
+    }).map(function(e){
+      var t = String(e.title||'').replace(/^\S+️?\s*/, function(m){
+        return SCHOOL_EMOJI.test(m) ? '' : m; }).trim();
+      var n = String(e.notes||'').replace(/\s*-?\s*from ".*$/, '').replace(/^(school one|school two|classdojo)\s*(-\s*|$)/i,'').trim();
+      // rows with no name and no school tag are left unassigned
+      var kid = /\bkid2\b/i.test(t) ? 'kid2' : (/\bkid1\b/i.test(t) || /school one/i.test(e.notes||'') ? 'kid1'
+              : (/school two|classdojo/i.test(e.notes||'') ? 'kid2'
+              : ''));
+      t = t.replace(/^(kid1|kid2)\s*[-–:]\s*/i, '').replace(/\s*\((kid1|kid2)\)\s*$/i, '');
+      return {date: e.date, kid: kid, text: t + (n ? ' · ' + n : ''), time: clock(e.time), title: t};
+    });
+  }
+
+  function wordsOf(s){
+    return String(s||'').toLowerCase().match(/[a-z]{4,}/g) || [];
+  }
+  function overlaps(a, b){
+    var wa = wordsOf(a), wb = wordsOf(b);
+    if(!wa.length || !wb.length) return false;
+    var hit = 0;
+    wa.forEach(function(w){ if(wb.indexOf(w) >= 0) hit++; });
+    return hit / Math.min(wa.length, wb.length) >= 0.5;
+  }
+
+  // Everything with a date, both kids, in date order: the calendar's school
+  // rows plus any dated line from the email that the calendar does not already
+  // say. Grouped under one header per day so the week reads top to bottom.
+  function timeline(d, events, today){
+    var t = new Date(); t.setDate(t.getDate()+1); var tomorrow = iso(t);
+    var soon = new Date(); soon.setDate(soon.getDate()+21); var soonIso = iso(soon);
+    var far = new Date(); far.setDate(far.getDate()+75); var farIso = iso(far);
+    var rows = schoolEvents(events).filter(function(e){ return e.date >= today && e.date <= farIso; });
+    (d.summaries||[]).forEach(function(line){
+      var p = parse(line);
+      if(!p.date || p.date < today || p.date > farIso) return;
+      var dup = rows.some(function(r){ return r.date === p.date && overlaps(r.title + ' ' + r.text, p.text); });
+      if(!dup) rows.push({date: p.date, kid: p.kid, text: p.text, time: ''});
+    });
+    rows.sort(function(a, b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.time||'zz') < (b.time||'zz') ? -1 : 1; });
+    var near = rows.filter(function(r){ return r.date <= soonIso; });
+    var later = rows.filter(function(r){ return r.date > soonIso; });
+    function group(list){
+      var html = '', last = '';
+      list.forEach(function(r){
+        if(r.date !== last){ html += dayHeader(r.date, today, tomorrow); last = r.date; }
+        html += row(r.kid, r.text, r.time);
+      });
+      return html;
+    }
+    var html = '';
+    if(near.length) html += '<div class="sw-sec"><div class="sw-lbl">coming up</div>' + group(near) + '</div>';
+    else html += '<div class="sw-sec"><div class="sw-lbl">coming up</div><div class="sw-empty">nothing from the schools in the next three weeks</div></div>';
+    if(later.length) html += '<div class="sw-sec later"><div class="sw-lbl">later</div>' + group(later) + '</div>';
+    return {html: html, count: near.length};
+  }
+
+  function iso(dt){
+    return dt.getFullYear() + '-' + ('0'+(dt.getMonth()+1)).slice(-2) +
+           '-' + ('0'+dt.getDate()).slice(-2);
+  }
+
+  // The teacher mails a Monday-to-Friday table. It is shown as a table, not
+  // folded into a sentence - the page numbers are the whole point.
+  function homework(hw){
+    if(!hw || !hw.days || !hw.days.length) return '';
+    var today = iso(new Date());
+    var rows = hw.days.map(function(day){
+      var p = String(day.date).split('-');
+      var dt = new Date(+p[0], +p[1]-1, +p[2]);
+      var when = isNaN(dt.getTime()) ? day.dow
+               : DOW[dt.getDay()] + ' ' + MON[dt.getMonth()] + ' ' + dt.getDate();
+      var kls = day.date === today ? ' hw-today' : (day.date < today ? ' hw-past' : '');
+      return '<div class="sw-item kid1'+kls+'">' +
+               '<span class="hw-day">'+esc(when)+'</span>' +
+               '<span class="sw-txt">'+esc((day.items||[]).join(' \u00b7 '))+'</span></div>';
+    }).join('');
+    var extra = '';
+    if(hw.spelling && hw.spelling.length){
+      extra += '<div class="hw-note">spelling' +
+               (hw.spelling_focus ? ' \u2014 ' + esc(hw.spelling_focus) : '') + '</div>' +
+               '<div class="hw-words">' + hw.spelling.map(function(w){
+                 return '<span class="hw-word">'+esc(w)+'</span>'; }).join('') + '</div>';
+    }
+    if(hw.clubs && hw.clubs.length){
+      extra += '<div class="hw-note">after school</div><div class="hw-clubs">' +
+               hw.clubs.map(function(c){
+                 var i = c.indexOf(':');
+                 return i > 0 ? '<b>'+esc(c.slice(0,i))+'</b>'+esc(c.slice(i))
+                              : esc(c); }).join('<br>') + '</div>';
+    }
+    var wp = String(hw.week_of||'').split('-');
+    var wk = wp.length === 3 ? ' \u2014 week of ' + MON[+wp[1]-1] + ' ' + (+wp[2]) : '';
+    return '<div class="sw-sec hw"><div class="sw-lbl">' +
+           esc((hw.kid || 'this week') + "'s homework" + wk) + '</div>' +
+           rows + extra + '</div>';
+  }
+
+  function render(d, events){
+    var body = document.getElementById('schoolBody');
+    var foot = document.getElementById('schoolFoot');
+    if(!body) return;
+    var today = iso(new Date());
+
+    // needs you: deadline first, undated last, nothing already past
+    var todos = (d.todos||[]).map(parse).filter(function(p){ return !p.date || p.date >= today; });
+    todos.sort(function(a, b){ return (a.date||'9999') < (b.date||'9999') ? -1 : 1; });
+    var todoHtml = todos.map(function(p){
+      var when = p.date ? prettyDate(p.date + ' ').replace(/ — $/, '') : '';
+      return row(p.kid, p.text, when ? 'by ' + when : '', '');
+    }).join('');
+
+    // good to know: the undated notes (teacher, class rules, links)
+    // the homework headline is for the HQ feed; the sheet itself is shown below
+    var notes = (d.summaries||[]).map(parse).filter(function(p){
+      return !p.date && !/^home practice for the week/i.test(p.text); });
+
+    var tl = timeline(d, events, today);
+    var hasHw = d.homework && d.homework.days && d.homework.days.length;
+
+    if(!d.ts && !notes.length && !tl.count && !hasHw){
+      body.innerHTML = '<div class="sw-empty">nothing new from either school yet</div>';
+      if(foot) foot.textContent = 'checks every evening';
+      return;
+    }
+
+    var bits = [];
+    if(tl.count) bits.push(tl.count + ' coming up');
+    if(todos.length) bits.push(todos.length + ' needing you');
+    if(hasHw) bits.push('homework sheet in');
+    if(foot) foot.textContent = bits.join(' · ') + (bits.length ? ' · ' : '') + ago(d.ts);
+
+    var html = (todoHtml ? '<div class="sw-sec todo"><div class="sw-lbl">needs you</div>' + todoHtml + '</div>' : '') +
+               tl.html +
+               homework(d.homework) +
+               (notes.length ? '<div class="sw-sec quiet"><div class="sw-lbl">good to know</div>' +
+                 notes.map(function(p){ return row(p.kid, p.text, ''); }).join('') + '</div>' : '');
+    body.innerHTML = html || '<div class="sw-empty">read the school email, nothing to pass on</div>';
+  }
+
+  function load(){
+    Promise.all([
+      fetch('/api/school').then(function(r){ return r.json(); }),
+      fetch('/api/calendar').then(function(r){ return r.json(); }).catch(function(){ return {}; })
+    ]).then(function(res){ render(res[0], (res[1] && res[1].events) || []); }).catch(function(){});
+  }
+
+  // Watch the panel's own class rather than hooking showPanel, so this does not
+  // depend on which script loads first.
+  function watchPanel(){
+    var p = document.getElementById('schoolPanel');
+    if(!p) return;
+    var sync = function(){
+      var on = p.classList.contains('active');
+      document.documentElement.classList.toggle('school-scroll', on);
+      if(on){
+        // park the fixed panel just under whatever the header currently is
+        var hdr = document.querySelector('.year-header');
+        var top = hdr ? Math.round(hdr.getBoundingClientRect().bottom) : 150;
+        document.documentElement.style.setProperty('--sw-top', top + 'px');
+      } else {
+        window.scrollTo(0, 0);
+      }
+    };
+    window.addEventListener('resize', sync);
+    window.addEventListener('orientationchange', function(){ setTimeout(sync, 300); });
+    new MutationObserver(sync).observe(p, {attributes:true, attributeFilter:['class']});
+    sync();
+  }
+
+  // The girls' page opens BrainForest. If the app is installed the store link
+  // lands on its "Open" button; if not, it is the install page. No invented
+  // custom URL scheme — BrainForest does not publish one.
+  var STORES = {
+    ios: 'https://apps.apple.com/us/app/brainforest-kids-learning-k-4/id6788301765',
+    android: 'https://play.google.com/store/apps/details?id=com.brainforest.app'
+  };
+  function pointAtBrainForest(){
+    var a = document.getElementById('kidsLearnLink');
+    if(!a) return;
+    a.href = /android/i.test(navigator.userAgent) ? STORES.android : STORES.ios;
+  }
+
+  function start(){
+    load();
+    watchPanel();
+    pointAtBrainForest();
+    // /#school opens straight onto the card
+    if(location.hash === '#school' && typeof showPanel === 'function'){
+      setTimeout(function(){ showPanel('school'); }, 60);
+    }
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', start);
+  } else { start(); }
+  setInterval(load, 300000);
+})();
+</script>
+</body>
+</html>

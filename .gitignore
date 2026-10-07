@@ -1,0 +1,39 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Data files (contain personal info)
+*.json
+data/
+
+# Claude Code
+.claude/
+
+# Compressed archives
+*.tar.gz
+*.zip
+
+# Personal videos
+grok-video*.mp4
+
+# macOS
+.DS_Store
+*.command
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# API keys / secrets
+.env
+*_config.json
