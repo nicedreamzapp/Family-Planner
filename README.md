@@ -4,9 +4,9 @@
 
 > Built this because I wanted a fully customizable family hub that I control. Runs on a spare iPad and does everything - voice commands, document scanning, meal planning, chore tracking with celebrations, and ambient video screensavers. No subscriptions, no cloud dependency.
 
----
-
-## What It Does
+<a id="what-it-does"></a>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s01-banner-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s01-banner-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s01-banner.svg" width="100%" alt="01. What it does. A family command center on a spare iPad"></picture>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s01-r1-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s01-r1-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s01-r1.svg" width="100%" alt="Voice control. Talk to it on the calendar, meals, chores and shopping screens. OCR document scanning. Point the camera at a flyer and add its events to the calendar. AI assistant. Fia, a chat assistant powered by Claude, can change the calendar, shopping list and meal plan."></picture>
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -28,9 +28,11 @@
 └─────────────────────────────────────────────────────────────────┘
 ```
 
----
+<img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s01-rule.svg" width="100%" alt="">
 
-## Features
+<a id="features"></a>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s02-banner-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s02-banner-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s02-banner.svg" width="100%" alt="02. Features. Voice, scanning, chat, calendar, chores, meals, shopping, screensavers"></picture>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s02-r1-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s02-r1-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s02-r1.svg" width="100%" alt="Voice with Whisper fallback. Web Speech API first, OpenAI Whisper when it needs more accuracy. Chores without points. Tap a chore, get a celebration. The reward is the celebration. Seasonal calendar. Moon phases, a 7-day forecast, color-coded events and built-in US holidays."></picture>
 
 ### 🎙️ Voice Commands (Works Everywhere)
 Just talk to it. Uses Web Speech API with OpenAI Whisper fallback for accuracy.
@@ -94,9 +96,11 @@ Chores auto-reset daily. Parents can see progress at a glance.
 - **Monthly screensaver**: Click the button to see the current month's themed video
 - Videos play at 25% speed for ambient effect
 
----
+<img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s02-rule.svg" width="100%" alt="">
 
-## Tech Stack
+<a id="tech"></a>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s03-banner-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s03-banner-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s03-banner.svg" width="100%" alt="03. Tech stack and architecture. Python on the back, vanilla JS on the front"></picture>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s03-r1-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s03-r1-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s03-r1.svg" width="100%" alt="Python 3. Built-in HTTPServer on the backend. Vanilla JS and CSS. No frameworks, because it runs as a PWA on an old iPad. Under 100KB of JS. Data lives in simple, portable JSON files."></picture>
 
 | Layer | Technology |
 |-------|------------|
@@ -108,10 +112,6 @@ Chores auto-reset daily. Parents can see progress at a glance.
 | Data | JSON files (simple, portable) |
 
 **Why no frameworks?** This runs on an old iPad as a PWA. Every KB matters. Total JS is under 100KB.
-
----
-
-## Architecture
 
 ```
 ┌─────────────────────┐     ┌─────────────────────┐
@@ -129,9 +129,8 @@ Chores auto-reset daily. Parents can see progress at a glance.
             └───────────────┘               └───────────────┘
 ```
 
----
-
-## File Structure
+<details>
+<summary><b>File structure</b></summary>
 
 ```
 Family-Planner/
@@ -164,9 +163,13 @@ Family-Planner/
 └── *.json              # Data files (gitignored)
 ```
 
----
+</details>
 
-## Setup
+<img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s03-rule.svg" width="100%" alt="">
+
+<a id="setup"></a>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s04-banner-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s04-banner-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s04-banner.svg" width="100%" alt="04. Setup. Clone, add your keys, run"></picture>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s04-r1-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s04-r1-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s04-r1.svg" width="100%" alt="Python 3 with a venv. Install the anthropic and openai packages for the AI features. Two API keys. OpenAI for Whisper voice, Anthropic for OCR and Fia chat. Runs on port 8766. Open localhost:8766, or install it as a PWA from Safari."></picture>
 
 ### 1. Clone & Install
 
@@ -216,9 +219,11 @@ On iPad/iPhone Safari:
 2. Share → Add to Home Screen
 3. Now it runs like a native app
 
----
+<img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s04-rule.svg" width="100%" alt="">
 
-## Customization
+<a id="customize"></a>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s05-banner-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s05-banner-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s05-banner.svg" width="100%" alt="05. Customization and themes. Make it yours"></picture>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s05-r1-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s05-r1-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s05-r1.svg" width="100%" alt="Family members. Edit the FAMILY block in data.py. Monthly video backgrounds. Add a video, register it in themes.js, add a CSS theme. School menu. Replace the small example menu with your own."></picture>
 
 ### Change Family Members
 Edit `data.py`:
@@ -250,9 +255,10 @@ Replace them with your own school's menu (lunches are keyed by date, breakfast/s
 ### Modify Chores
 Edit `chores.json` or use the default in `handlers.py`.
 
----
+<details>
+<summary><b>Voice command examples and seasonal themes</b></summary>
 
-## Voice Command Examples
+### Voice Command Examples
 
 | Say This | Result |
 |----------|--------|
@@ -262,9 +268,7 @@ Edit `chores.json` or use the default in `handlers.py`.
 | "Tacos for Tuesday dinner" | Sets meal plan |
 | "What's happening tomorrow?" | Fia reads calendar |
 
----
-
-## Seasonal Themes
+### Seasonal Themes
 
 The calendar automatically applies themes based on the viewing month:
 
@@ -281,9 +285,13 @@ Each theme adjusts:
 - Color palette
 - Particle effects
 
----
+</details>
 
-## Why I Built This
+<img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s05-rule.svg" width="100%" alt="">
+
+<a id="why"></a>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s06-banner-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s06-banner-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s06-banner.svg" width="100%" alt="06. Why I built this. Full control over the family hub"></picture>
+<picture><source media="(max-width: 610px), (min-width: 768px) and (max-width: 895px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s06-r1-m.svg"><source media="(max-width: 1149px)" srcset="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s06-r1-mid.svg"><img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s06-r1.svg" width="100%" alt="Self-hosted. Runs locally, no cloud dependency. Fully customizable. Change anything in the code. No subscriptions. One-time setup, and it is open source under the MIT license."></picture>
 
 I wanted full control over my family's command center:
 - **Self-hosted** - runs locally, no cloud dependency
@@ -292,14 +300,10 @@ I wanted full control over my family's command center:
 - **No subscriptions** - one-time setup, runs forever
 - **Open source** - learn from it, modify it, make it yours
 
----
-
-## License
+### License
 
 MIT - Do whatever you want with it.
 
----
-
----
-
 Built with Claude Code assistance.
+
+<img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/main/assets/readme/s06-rule.svg" width="100%" alt="">
