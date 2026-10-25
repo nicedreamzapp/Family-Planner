@@ -304,6 +304,4 @@ I wanted full control over my family's command center:
 
 MIT - Do whatever you want with it.
 
-Built with Claude Code assistance.
-
 <img src="https://raw.githubusercontent.com/nicedreamzapp/Family-Planner/6a4bef0b434ce74049b96cfcc285ee6549d1b010/assets/readme/s06-rule.svg" width="100%" alt="">
